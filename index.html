@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIS 百科 - 地理信息系统完全指南</title>
+<meta name="description" content="GIS地理信息系统百科全书：定义、历史、核心技术、前沿方向、软件工具、应用领域与就业前景">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+/* ========== CSS Variables & Reset ========== */
+:root {
+  --bg-primary: #080e1a;
+  --bg-secondary: #0d1526;
+  --bg-card: #111d33;
+  --bg-card-hover: #162442;
+  --accent: #00e5b0;
+  --accent-dim: #00b88e;
+  --accent2: #f7b731;
+  --accent3: #5b8def;
+  --accent4: #e056a0;
+  --text-primary: #e4e8f1;
+  --text-secondary: #8b95a8;
+  --text-muted: #5a6478;
+  --border: #1e2d4a;
+  --gradient-1: linear-gradient(135deg, #00e5b0, #5b8def);
+  --gradient-2: linear-gradient(135deg, #f7b731, #e056a0);
+  --gradient-3: linear-gradient(135deg, #5b8def, #a855f7);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+a { color: var(--accent); text-decoration: none; transition: color .2s; }
+a:hover { color: var(--accent2); }
+img { max-width: 100%; height: auto; }
+
+/* ========== Topographic Background Pattern ========== */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0,229,176,.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(91,141,239,.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(247,183,49,.03) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ========== Scrollbar ========== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 3px; }
+
+/* ========== Navigation ========== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(8,14,26,.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all .3s;
+}
+.nav-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 70px;
+}
+.nav-logo {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.4rem;
+  background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+.nav-logo span { font-size: .7em; opacity: .6; -webkit-text-fill-color: var(--text-secondary); margin-left: .5rem; }
+.nav-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+.nav-links a {
+  color: var(--text-secondary); font-size: .85rem; font-weight: 500;
+  transition: color .2s; position: relative;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--accent); transition: width .3s;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+
+/* ========== Hero ========== */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; text-align: center;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80') center/cover no-repeat;
+}
+.hero-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,14,26,.7) 0%, rgba(8,14,26,.85) 60%, var(--bg-primary) 100%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,176,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,176,.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 60px); }
+}
+.hero-content { position: relative; z-index: 2; max-width: 900px; padding: 2rem; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: rgba(0,229,176,.1); border: 1px solid rgba(0,229,176,.25);
+  padding: .4rem 1.2rem; border-radius: 50px; font-size: .8rem;
+  color: var(--accent); margin-bottom: 2rem;
+  font-family: var(--font-mono);
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(1.5); }
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800; line-height: 1.05; letter-spacing: -2px;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .gradient-text {
+  background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p {
+  font-size: 1.15rem; color: var(--text-secondary); max-width: 600px;
+  margin: 0 auto 2.5rem; line-height: 1.8;
+}
+.hero-stats {
+  display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat-value {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+  background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-stat-label { font-size: .75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: .25rem; }
+.hero-scroll {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  z-index: 2; animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+}
+.hero-scroll svg { width: 24px; height: 24px; stroke: var(--accent); opacity: .6; }
+
+/* ========== Section Styles ========== */
+.section {
+  position: relative; z-index: 1;
+  padding: 6rem 2rem;
+}
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-header { text-align: center; margin-bottom: 4rem; }
+.section-tag {
+  display: inline-block; font-family: var(--font-mono); font-size: .75rem;
+  color: var(--accent); text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 1rem;
+  background: rgba(0,229,176,.08); padding: .3rem 1rem; border-radius: 4px;
+}
+.section-title {
+  font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700; letter-spacing: -1px; margin-bottom: 1rem;
+}
+.section-desc {
+  color: var(--text-secondary); max-width: 700px; margin: 0 auto;
+  font-size: 1.05rem;
+}
+.divider {
+  width: 60px; height: 3px; margin: 1.5rem auto 0;
+  background: var(--gradient-1); border-radius: 2px;
+}
+
+/* ========== Cards ========== */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2rem; transition: all .3s;
+  position: relative; overflow: hidden;
+}
+.card:hover {
+  border-color: rgba(0,229,176,.3); transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,.3);
+}
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gradient-1); opacity: 0; transition: opacity .3s;
+}
+.card:hover::before { opacity: 1; }
+
+/* ========== What is GIS ========== */
+.what-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+  align-items: center;
+}
+.what-image {
+  position: relative; border-radius: 20px; overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.what-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s;
+}
+.what-image:hover img { transform: scale(1.05); }
+.what-image::after {
+  content: ''; position: absolute; inset: 0;
+  border: 1px solid rgba(0,229,176,.2); border-radius: 20px;
+}
+.what-text h3 {
+  font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+  margin-bottom: 1rem;
+}
+.what-text p { color: var(--text-secondary); margin-bottom: 1rem; }
+.what-features {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  margin-top: 2rem;
+}
+.what-feature {
+  display: flex; align-items: flex-start; gap: .75rem;
+  padding: 1rem; background: rgba(0,229,176,.05);
+  border-radius: 12px; border: 1px solid rgba(0,229,176,.1);
+}
+.what-feature-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(0,229,176,.15); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; font-size: 1.1rem;
+}
+.what-feature-text h4 { font-size: .85rem; font-weight: 600; margin-bottom: .15rem; }
+.what-feature-text p { font-size: .75rem; margin: 0; }
+
+/* ========== Data Types ========== */
+.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.data-card { padding: 2.5rem; }
+.data-card .icon-wrap {
+  width: 60px; height: 60px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 1.5rem;
+}
+.data-card h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: .75rem; }
+.data-card p { color: var(--text-secondary); font-size: .95rem; }
+.data-card .tag-list { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.data-card .tag {
+  font-size: .7rem; padding: .25rem .6rem; border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+/* ========== Timeline ========== */
+.timeline { position: relative; padding: 2rem 0; }
+.timeline::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(to bottom, transparent, var(--accent), var(--accent-dim), transparent);
+  transform: translateX(-50%);
+}
+.timeline-item {
+  display: flex; align-items: flex-start;
+  margin-bottom: 3rem; position: relative;
+}
+.timeline-item:nth-child(odd) { flex-direction: row-reverse; }
+.timeline-item:nth-child(odd) .timeline-content { text-align: right; padding-right: 3rem; padding-left: 0; }
+.timeline-item:nth-child(even) .timeline-content { padding-left: 3rem; }
+.timeline-content { flex: 1; }
+.timeline-dot {
+  position: absolute; left: 50%; top: .5rem;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); border: 3px solid var(--bg-primary);
+  transform: translateX(-50%); z-index: 2;
+  box-shadow: 0 0 20px rgba(0,229,176,.4);
+}
+.timeline-year {
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 700;
+  color: var(--accent); margin-bottom: .25rem;
+}
+.timeline-title { font-weight: 600; font-size: 1.1rem; margin-bottom: .5rem; }
+.timeline-desc { color: var(--text-secondary); font-size: .9rem; }
+
+/* ========== Software ========== */
+.software-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.software-card { padding: 2rem; text-align: center; }
+.software-card .logo-wrap {
+  width: 80px; height: 80px; border-radius: 20px; margin: 0 auto 1.5rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 800; font-family: var(--font-display);
+}
+.software-card h3 { font-size: 1.2rem; margin-bottom: .5rem; }
+.software-card .software-type { font-size: .75rem; color: var(--accent); margin-bottom: 1rem; font-family: var(--font-mono); }
+.software-card p { color: var(--text-secondary); font-size: .9rem; }
+.software-card .software-tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; }
+.software-card .software-tag {
+  font-size: .65rem; padding: .2rem .5rem; border-radius: 3px;
+  background: rgba(91,141,239,.1); color: var(--accent3); border: 1px solid rgba(91,141,239,.2);
+}
+
+/* ========== Frontier Directions ========== */
+.frontier-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+.frontier-card {
+  padding: 2.5rem; position: relative; overflow: hidden;
+}
+.frontier-card .frontier-number {
+  position: absolute; top: -10px; right: 20px;
+  font-family: var(--font-display); font-size: 5rem; font-weight: 800;
+  opacity: .05; line-height: 1;
+}
+.frontier-card .frontier-icon {
+  width: 50px; height: 50px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 1.5rem;
+}
+.frontier-card h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: .5rem; }
+.frontier-card .frontier-en { font-size: .8rem; color: var(--accent); font-family: var(--font-mono); margin-bottom: 1rem; }
+.frontier-card p { color: var(--text-secondary); font-size: .9rem; margin-bottom: 1rem; }
+.frontier-card ul { list-style: none; }
+.frontier-card ul li {
+  padding: .4rem 0; font-size: .85rem; color: var(--text-secondary);
+  display: flex; align-items: flex-start; gap: .5rem;
+}
+.frontier-card ul li::before { content: '->'; color: var(--accent); font-family: var(--font-mono); font-size: .75rem; flex-shrink: 0; margin-top: 2px; }
+
+/* ========== Applications ========== */
+.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.app-card { padding: 1.5rem; text-align: center; cursor: default; }
+.app-card .app-icon {
+  width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 1rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+}
+.app-card h4 { font-size: 1rem; margin-bottom: .5rem; }
+.app-card p { color: var(--text-secondary); font-size: .8rem; }
+
+/* ========== Employment ========== */
+.employ-tabs {
+  display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem;
+}
+.employ-tab {
+  padding: .6rem 2rem; border-radius: 8px; cursor: pointer;
+  font-weight: 600; font-size: .95rem; transition: all .3s;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-secondary); font-family: var(--font-body);
+}
+.employ-tab.active {
+  background: rgba(0,229,176,.1); border-color: var(--accent);
+  color: var(--accent);
+}
+.employ-panel { display: none; }
+.employ-panel.active { display: block; }
+.employ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.chart-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2rem;
+}
+.chart-card h3 {
+  font-family: var(--font-display); font-size: 1.1rem;
+  margin-bottom: 1.5rem; text-align: center;
+}
+.chart-wrap { position: relative; max-height: 320px; }
+.stat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .75rem 0; border-bottom: 1px solid var(--border);
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-label { color: var(--text-secondary); font-size: .9rem; }
+.stat-value { font-weight: 600; font-family: var(--font-mono); }
+.stat-bar-wrap { flex: 1; margin: 0 1rem; height: 6px; background: rgba(0,229,176,.1); border-radius: 3px; }
+.stat-bar { height: 100%; border-radius: 3px; background: var(--gradient-1); transition: width 1s ease; }
+.employ-highlight {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+  margin-bottom: 2rem;
+}
+.highlight-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.5rem; text-align: center;
+}
+.highlight-card .h-value {
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 700;
+  margin-bottom: .25rem;
+}
+.highlight-card .h-label { font-size: .75rem; color: var(--text-secondary); }
+
+/* ========== Resources ========== */
+.resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.resource-card { padding: 1.5rem; }
+.resource-card .r-type {
+  font-size: .7rem; font-family: var(--font-mono); color: var(--accent2);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: .75rem;
+}
+.resource-card h4 { font-size: 1rem; margin-bottom: .5rem; }
+.resource-card p { color: var(--text-secondary); font-size: .85rem; }
+
+/* ========== Footer ========== */
+.footer {
+  border-top: 1px solid var(--border); padding: 3rem 2rem;
+  text-align: center; color: var(--text-muted); font-size: .85rem;
+}
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.footer-links a { color: var(--text-secondary); font-size: .8rem; }
+
+/* ========== Animations ========== */
+.fade-up {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+.fade-up.delay-1 { transition-delay: .1s; }
+.fade-up.delay-2 { transition-delay: .2s; }
+.fade-up.delay-3 { transition-delay: .3s; }
+.fade-up.delay-4 { transition-delay: .4s; }
+.fade-up.delay-5 { transition-delay: .5s; }
+
+/* ========== Responsive ========== */
+@media (max-width: 1024px) {
+  .frontier-grid { grid-template-columns: 1fr; }
+  .employ-grid { grid-template-columns: 1fr; }
+  .employ-highlight { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 70px; left: 0; right: 0;
+    background: rgba(8,14,26,.95); padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-toggle { display: block; }
+  .what-grid { grid-template-columns: 1fr; }
+  .data-grid { grid-template-columns: 1fr; }
+  .app-grid { grid-template-columns: 1fr 1fr; }
+  .resource-grid { grid-template-columns: 1fr; }
+  .timeline::before { left: 20px; }
+  .timeline-item, .timeline-item:nth-child(odd) { flex-direction: column; padding-left: 50px; }
+  .timeline-item:nth-child(odd) .timeline-content,
+  .timeline-item:nth-child(even) .timeline-content { text-align: left; padding: 0; }
+  .timeline-dot { left: 20px; }
+  .hero-stats { gap: 1.5rem; }
+  .employ-highlight { grid-template-columns: 1fr 1fr; }
+  .what-features { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .app-grid { grid-template-columns: 1fr; }
+  .employ-highlight { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== Navigation ========== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">GIS<span>Encyclopedia</span></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="#what">GIS 概述</a></li>
+      <li><a href="#history">发展历史</a></li>
+      <li><a href="#data">数据与技术</a></li>
+      <li><a href="#software">软件工具</a></li>
+      <li><a href="#frontier">前沿方向</a></li>
+      <li><a href="#applications">应用领域</a></li>
+      <li><a href="#employment">就业前景</a></li>
+      <li><a href="#resources">学习资源</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">GEOGRAPHIC INFORMATION SYSTEM</div>
+    <h1>理解世界的<br><span class="gradient-text">空间语言</span></h1>
+    <p>地理信息系统 (GIS) 是连接数据与地理空间的桥梁，它让我们以全新的视角理解世界万物之间的模式、关系与地理脉络。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">1963</div>
+        <div class="hero-stat-label">首个GIS诞生</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">$250B+</div>
+        <div class="hero-stat-label">全球市场规模</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">80%</div>
+        <div class="hero-stat-label">数据含空间属性</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">9%+</div>
+        <div class="hero-stat-label">年增长率</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- ========== What is GIS ========== -->
+<section class="section" id="what">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 01. Overview</div>
+      <h2 class="section-title">什么是 GIS？</h2>
+      <p class="section-desc">GIS 是一种用于创建、管理、分析和可视化所有类型数据的技术，通过将位置信息与描述性数据连接，揭示数据中的空间模式与关系。</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="what-grid">
+      <div class="what-image fade-up">
+        <img src="https://images.unsplash.com/photo-1569396116180-210c182bedb8?w=800&q=80" alt="GIS Map Visualization" loading="lazy">
+      </div>
+      <div class="what-text fade-up delay-1">
+        <h3>地理信息系统的核心定义</h3>
+        <p>GIS（Geographic Information System）即地理信息系统，是在计算机硬件和软件系统支持下，对整个或部分地球表层空间中的有关地理分布数据进行<strong>采集、储存、管理、运算、分析、显示和描述</strong>的技术系统。</p>
+        <p>GIS 的核心在于将<strong>位置</strong>作为关键索引变量，将不同类型的数据叠加到同一张地图上，使用户能够"看到、分析和理解"空间中的模式与关系。</p>
+        <div class="what-features">
+          <div class="what-feature">
+            <div class="what-feature-icon">&#x1F4CA;</div>
+            <div class="what-feature-text">
+              <h4>数据管理</h4>
+              <p>整合多源异构数据</p>
+            </div>
+          </div>
+          <div class="what-feature">
+            <div class="what-feature-icon">&#x1F5FA;</div>
+            <div class="what-feature-text">
+              <h4>制图可视化</h4>
+              <p>数字地图与三维渲染</p>
+            </div>
+          </div>
+          <div class="what-feature">
+            <div class="what-feature-icon">&#x1F50D;</div>
+            <div class="what-feature-text">
+              <h4>空间分析</h4>
+              <p>发现隐藏的空间关系</p>
+            </div>
+          </div>
+          <div class="what-feature">
+            <div class="what-feature-icon">&#x1F4E1;</div>
+            <div class="what-feature-text">
+              <h4>决策支持</h4>
+              <p>数据驱动的科学决策</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Components -->
+    <div style="margin-top: 4rem;">
+      <h3 class="fade-up" style="font-family: var(--font-display); font-size: 1.5rem; text-align: center; margin-bottom: 2rem;">GIS 系统的五大组成要素</h3>
+      <div class="software-grid fade-up">
+        <div class="card" style="text-align:center; padding: 2rem;">
+          <div style="font-size:2.5rem; margin-bottom: 1rem;">&#x1F5A5;</div>
+          <h4>硬件 Hardware</h4>
+          <p style="color: var(--text-secondary); font-size: .85rem; margin-top: .5rem;">计算机、服务器、GPS设备、扫描仪、打印机等</p>
+        </div>
+        <div class="card" style="text-align:center; padding: 2rem;">
+          <div style="font-size:2.5rem; margin-bottom: 1rem;">&#x1F4BF;</div>
+          <h4>软件 Software</h4>
+          <p style="color: var(--text-secondary); font-size: .85rem; margin-top: .5rem;">ArcGIS、QGIS、SuperMap、MapGIS等专业GIS软件</p>
+        </div>
+        <div class="card" style="text-align:center; padding: 2rem;">
+          <div style="font-size:2.5rem; margin-bottom: 1rem;">&#x1F4BE;</div>
+          <h4>数据 Data</h4>
+          <p style="color: var(--text-secondary); font-size: .85rem; margin-top: .5rem;">空间数据与属性数据，来自遥感、测量、调查等</p>
+        </div>
+        <div class="card" style="text-align:center; padding: 2rem;">
+          <div style="font-size:2.5rem; margin-bottom: 1rem;">&#x1F464;</div>
+          <h4>人员 People</h4>
+          <p style="color: var(--text-secondary); font-size: .85rem; margin-top: .5rem;">GIS分析师、开发者、数据管理者和决策者</p>
+        </div>
+        <div class="card" style="text-align:center; padding: 2rem;">
+          <div style="font-size:2.5rem; margin-bottom: 1rem;">&#x1F4CB;</div>
+          <h4>方法 Methods</h4>
+          <p style="color: var(--text-secondary); font-size: .85rem; margin-top: .5rem;">数据采集、处理、分析和输出的标准化流程</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== History Timeline ========== -->
+<section class="section" id="history" style="background: var(--bg-secondary);">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 02. History</div>
+      <h2 class="section-title">GIS 发展简史</h2>
+      <p class="section-desc">从1854年John Snow的霍乱地图到现代云端GIS，地理信息科学经历了跨越两个世纪的演进</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="timeline fade-up">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1854</div>
+          <div class="timeline-title">空间分析的先驱</div>
+          <div class="timeline-desc">John Snow 医生在伦敦绘制霍乱病例地图，通过空间分析锁定被污染的水泵为传染源，这被认为是 GIS 思想的起源。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1963</div>
+          <div class="timeline-title">第一个 GIS 系统诞生</div>
+          <div class="timeline-desc">Roger Tomlinson 博士在加拿大渥太华开发了世界上第一个投入运行的 GIS —— 加拿大地理信息系统（CGIS），用于土地资源清查。他因此被誉为"GIS之父"。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1969</div>
+          <div class="timeline-title">Esri 成立</div>
+          <div class="timeline-desc">Jack Dangermond 创立了环境系统研究所（Esri），后来发展为全球最大的 GIS 软件公司，推出了影响深远的 ArcGIS 系列产品。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1980s</div>
+          <div class="timeline-title">中国 GIS 研究起步</div>
+          <div class="timeline-desc">在陈述彭院士等先驱的推动下，中国开始了 GIS 研究与应用的探索。武汉测绘科技大学（现武汉大学）成为中国 GIS 教育的摇篮。SuperMap、MapGIS 等国产软件相继孕育。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1990s</div>
+          <div class="timeline-title">桌面 GIS 普及</div>
+          <div class="timeline-desc">ArcView、MapInfo 等桌面 GIS 软件兴起，GIS 从政府和军事领域走向商业和学术应用。GPS 技术的民用化极大推动了空间数据的采集能力。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2005</div>
+          <div class="timeline-title">Google Earth 改变世界</div>
+          <div class="timeline-desc">Google Earth 发布，让普通用户第一次在浏览器中自由探索三维地球，GIS 的概念从此进入公众视野。WebGIS 时代正式开启。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2010s</div>
+          <div class="timeline-title">移动 GIS 与大数据</div>
+          <div class="timeline-desc">智能手机普及带来海量位置数据，LBS（基于位置的服务）爆发。高分辨率遥感、无人机测量和云计算重塑 GIS 技术栈。开源 GIS（QGIS、PostGIS）蓬勃发展。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2020s</div>
+          <div class="timeline-title">GeoAI 与数字孪生时代</div>
+          <div class="timeline-desc">人工智能与 GIS 深度融合催生 GeoAI，数字孪生城市从概念走向落地。实景三维中国建设上升为国家战略，GIS 进入智能化新纪元。全球数字孪生市场预计2026年将达250亿美元。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Data Types & Core Tech ========== -->
+<section class="section" id="data">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 03. Core Technology</div>
+      <h2 class="section-title">核心数据与技术</h2>
+      <p class="section-desc">GIS 的两大基础数据模型和关键空间分析技术</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="data-grid fade-up">
+      <div class="card data-card">
+        <div class="icon-wrap" style="background: rgba(91,141,239,.15); color: var(--accent3);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/><line x1="22" y1="8.5" x2="12" y2="15.5"/><line x1="2" y1="8.5" x2="12" y2="15.5"/></svg>
+        </div>
+        <h3>矢量数据 Vector</h3>
+        <p>由<strong>点（Point）、线（Line）、面（Polygon）</strong>等几何元素组成，精确描述具有明确边界的地理要素。适用于表示建筑物轮廓、道路网络、河流水系、行政边界等。矢量数据存储效率高，支持精确的拓扑关系查询。</p>
+        <div class="tag-list">
+          <span class="tag" style="background:rgba(91,141,239,.1); color:var(--accent3); border:1px solid rgba(91,141,239,.2);">Shapefile</span>
+          <span class="tag" style="background:rgba(91,141,239,.1); color:var(--accent3); border:1px solid rgba(91,141,239,.2);">GeoJSON</span>
+          <span class="tag" style="background:rgba(91,141,239,.1); color:var(--accent3); border:1px solid rgba(91,141,239,.2);">GeoPackage</span>
+          <span class="tag" style="background:rgba(91,141,239,.1); color:var(--accent3); border:1px solid rgba(91,141,239,.2);">KML</span>
+        </div>
+      </div>
+      <div class="card data-card">
+        <div class="icon-wrap" style="background: rgba(247,183,49,.15); color: var(--accent2);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3>栅格数据 Raster</h3>
+        <p>将地表划分为大小均匀的<strong>像元（Pixel）或网格单元</strong>，用数值描述每个像元的属性。适用于表示连续变化的地理现象，如地形高程（DEM）、温度分布、卫星遥感影像、土地利用分类等。</p>
+        <div class="tag-list">
+          <span class="tag" style="background:rgba(247,183,49,.1); color:var(--accent2); border:1px solid rgba(247,183,49,.2);">GeoTIFF</span>
+          <span class="tag" style="background:rgba(247,183,49,.1); color:var(--accent2); border:1px solid rgba(247,183,49,.2);">DEM/DSM</span>
+          <span class="tag" style="background:rgba(247,183,49,.1); color:var(--accent2); border:1px solid rgba(247,183,49,.2);">NetCDF</span>
+          <span class="tag" style="background:rgba(247,183,49,.1); color:var(--accent2); border:1px solid rgba(247,183,49,.2);">IMG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spatial Analysis -->
+    <div style="margin-top: 4rem;">
+      <h3 class="fade-up" style="font-family: var(--font-display); font-size: 1.5rem; text-align: center; margin-bottom: 2rem;">关键空间分析技术</h3>
+      <div class="software-grid fade-up">
+        <div class="card" style="padding: 1.5rem;">
+          <h4 style="color: var(--accent); font-size: .9rem; margin-bottom: .5rem;">缓冲区分析</h4>
+          <p style="color: var(--text-secondary); font-size: .8rem;">围绕地理要素建立指定距离的区域，用于评估影响范围，如学校周边安全区域划定。</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+          <h4 style="color: var(--accent2); font-size: .9rem; margin-bottom: .5rem;">叠加分析</h4>
+          <p style="color: var(--text-secondary); font-size: .8rem;">将两个或多个图层进行空间叠合运算（交集、并集、差集），发现要素之间的空间关系。</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+          <h4 style="color: var(--accent3); font-size: .9rem; margin-bottom: .5rem;">网络分析</h4>
+          <p style="color: var(--text-secondary); font-size: .8rem;">在道路、管线等网络上进行最短路径、服务区域和物流配送等分析。</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+          <h4 style="color: var(--accent4); font-size: .9rem; margin-bottom: .5rem;">空间插值</h4>
+          <p style="color: var(--text-secondary); font-size: .8rem;">由已知采样点推算未知位置的属性值，如IDW、Kriging等方法，广泛用于气象和环境监测。</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+          <h4 style="color: var(--accent); font-size: .9rem; margin-bottom: .5rem;">地形分析</h4>
+          <p style="color: var(--text-secondary); font-size: .8rem;">基于DEM数据提取坡度、坡向、汇水区等地形因子，支持水文分析和土地评价。</p>
+        </div>
+        <div class="card" style="padding: 1.5rem;">
+          <h4 style="color: var(--accent2); font-size: .9rem; margin-bottom: .5rem;">热力图/密度分析</h4>
+          <p style="color: var(--text-secondary); font-size: .8rem;">通过核密度估计等方法可视化事件或要素的空间集聚模式，常用于犯罪分析和商业选址。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Projections -->
+    <div style="margin-top: 4rem;">
+      <div class="card fade-up" style="padding: 2.5rem; background: linear-gradient(135deg, rgba(0,229,176,.05), rgba(91,141,239,.05));">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+          <div>
+            <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 1rem;">地图投影 Map Projection</h3>
+            <p style="color: var(--text-secondary); font-size: .9rem; margin-bottom: 1rem;">地球是一个三维球体，而地图是二维平面。<strong>地图投影</strong>就是将球面坐标转换为平面坐标的数学方法。不同的投影方式会产生不同类型的变形（面积、形状、距离或方向），GIS 工作者需要根据应用需求选择合适的投影。</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <span style="font-size: .75rem; padding: .3rem .8rem; background: rgba(0,229,176,.1); border-radius: 4px; color: var(--accent);">墨卡托投影</span>
+              <span style="font-size: .75rem; padding: .3rem .8rem; background: rgba(247,183,49,.1); border-radius: 4px; color: var(--accent2);">等面积投影</span>
+              <span style="font-size: .75rem; padding: .3rem .8rem; background: rgba(91,141,239,.1); border-radius: 4px; color: var(--accent3);">UTM投影</span>
+              <span style="font-size: .75rem; padding: .3rem .8rem; background: rgba(224,86,160,.1); border-radius: 4px; color: var(--accent4);">高斯-克吕格投影</span>
+            </div>
+          </div>
+          <div style="text-align: center; font-size: 5rem; opacity: .15;">
+            &#x1F30D;
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Software Tools ========== -->
+<section class="section" id="software" style="background: var(--bg-secondary);">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 04. Software</div>
+      <h2 class="section-title">GIS 软件生态</h2>
+      <p class="section-desc">从商业巨头到开源新锐，GIS 软件工具覆盖桌面端、Web端和移动端的全场景需求</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="software-grid fade-up">
+      <!-- ArcGIS -->
+      <div class="card software-card">
+        <div class="logo-wrap" style="background: linear-gradient(135deg, #0079c1, #00a9e0); color: #fff;">A</div>
+        <h3>ArcGIS Pro</h3>
+        <div class="software-type">Commercial / Esri</div>
+        <p>全球市场份额 60%，拥有 40 年技术积累。提供 Spatial Analyst、Network Analyst、3D Analyst 等强大扩展模块，是政府和企业级 GIS 的首选。</p>
+        <div class="software-tags">
+          <span class="software-tag">桌面GIS</span>
+          <span class="software-tag">Web GIS</span>
+          <span class="software-tag">3D</span>
+          <span class="software-tag">Python</span>
+        </div>
+      </div>
+      <!-- QGIS -->
+      <div class="card software-card">
+        <div class="logo-wrap" style="background: linear-gradient(135deg, #589632, #93b023); color: #fff;">Q</div>
+        <h3>QGIS</h3>
+        <div class="software-type">Open Source / GNU GPL</div>
+        <p>全球最活跃的开源 GIS，10万+ 开发者社区。支持海量数据格式，数千款插件扩展功能。完全免费，是学术研究和中小项目的理想选择。</p>
+        <div class="software-tags">
+          <span class="software-tag">开源免费</span>
+          <span class="software-tag">跨平台</span>
+          <span class="software-tag">插件系统</span>
+          <span class="software-tag">PostGIS</span>
+        </div>
+      </div>
+      <!-- SuperMap -->
+      <div class="card software-card">
+        <div class="logo-wrap" style="background: linear-gradient(135deg, #d32029, #ff4d4f); color: #fff;">S</div>
+        <h3>SuperMap GIS</h3>
+        <div class="software-type">Commercial / 超图软件</div>
+        <p>中国自主研发的大型 GIS 基础软件平台，在三维 GIS、大数据 GIS 和 AI GIS 领域具有领先优势。服务于自然资源、智慧城市等国家重大项目。</p>
+        <div class="software-tags">
+          <span class="software-tag">国产自主</span>
+          <span class="software-tag">三维GIS</span>
+          <span class="software-tag">大数据</span>
+          <span class="software-tag">AI</span>
+        </div>
+      </div>
+      <!-- MapGIS -->
+      <div class="card software-card">
+        <div class="logo-wrap" style="background: linear-gradient(135deg, #1890ff, #36cfc9); color: #fff;">M</div>
+        <h3>MapGIS</h3>
+        <div class="software-type">Commercial / 中地数码</div>
+        <p>由中国地质大学孵化的国产 GIS 平台，在地质调查、矿产资源和国土空间规划等领域应用广泛，是中国"地质云"的核心技术支撑之一。</p>
+        <div class="software-tags">
+          <span class="software-tag">国产自主</span>
+          <span class="software-tag">地质应用</span>
+          <span class="software-tag">国土规划</span>
+        </div>
+      </div>
+      <!-- Google Earth Engine -->
+      <div class="card software-card">
+        <div class="logo-wrap" style="background: linear-gradient(135deg, #4285f4, #34a853); color: #fff;">G</div>
+        <h3>Google Earth Engine</h3>
+        <div class="software-type">Cloud / Google</div>
+        <p>基于云计算的地理空间分析平台，拥有 PB 级卫星影像档案和强大的并行计算能力。支持 JavaScript 和 Python API，是遥感和环境科学研究的利器。</p>
+        <div class="software-tags">
+          <span class="software-tag">云端</span>
+          <span class="software-tag">遥感</span>
+          <span class="software-tag">学术免费</span>
+          <span class="software-tag">大数据</span>
+        </div>
+      </div>
+      <!-- GRASS GIS -->
+      <div class="card software-card">
+        <div class="logo-wrap" style="background: linear-gradient(135deg, #2e7d32, #66bb6a); color: #fff;">G</div>
+        <h3>GRASS GIS</h3>
+        <div class="software-type">Open Source / OSGeo</div>
+        <p>始于1982年美国陆军工程兵团的老牌开源 GIS。在栅格分析、影像处理和水文建模等方面功能强大，是地理学和生态学研究的经典工具。</p>
+        <div class="software-tags">
+          <span class="software-tag">开源</span>
+          <span class="software-tag">栅格分析</span>
+          <span class="software-tag">科研</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison -->
+    <div class="card fade-up" style="margin-top: 2rem; padding: 2rem;">
+      <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1.5rem; text-align: center;">ArcGIS Pro vs QGIS 核心对比 (2025)</h3>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: .85rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border);">
+              <th style="padding: .75rem; text-align: left; color: var(--text-muted);">对比维度</th>
+              <th style="padding: .75rem; text-align: center; color: #00a9e0;">ArcGIS Pro</th>
+              <th style="padding: .75rem; text-align: center; color: #589632;">QGIS 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: .75rem; color: var(--text-secondary);">价格</td>
+              <td style="padding: .75rem; text-align: center;">年订阅制 ($数百~$数千)</td>
+              <td style="padding: .75rem; text-align: center;">完全免费</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: .75rem; color: var(--text-secondary);">市场份额</td>
+              <td style="padding: .75rem; text-align: center;">~60%</td>
+              <td style="padding: .75rem; text-align: center;">开源第一</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: .75rem; color: var(--text-secondary);">数据格式</td>
+              <td style="padding: .75rem; text-align: center;">Geodatabase 为核心</td>
+              <td style="padding: .75rem; text-align: center;">支持更多开放格式</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: .75rem; color: var(--text-secondary);">扩展方式</td>
+              <td style="padding: .75rem; text-align: center;">官方扩展模块</td>
+              <td style="padding: .75rem; text-align: center;">数千款社区插件</td>
+            </tr>
+            <tr>
+              <td style="padding: .75rem; color: var(--text-secondary);">适用场景</td>
+              <td style="padding: .75rem; text-align: center;">企业 / 政府</td>
+              <td style="padding: .75rem; text-align: center;">学术 / 中小项目</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Frontier Directions ========== -->
+<section class="section" id="frontier">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 05. Frontier</div>
+      <h2 class="section-title">前沿方向</h2>
+      <p class="section-desc">GIS 正在与人工智能、物联网、数字孪生等新兴技术深度融合，催生出一系列激动人心的前沿方向</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="frontier-grid fade-up">
+      <!-- GeoAI -->
+      <div class="card frontier-card">
+        <div class="frontier-number">01</div>
+        <div class="frontier-icon" style="background: rgba(0,229,176,.15); color: var(--accent);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M16 14a4 4 0 0 1 4 4v2H4v-2a4 4 0 0 1 4-4"/><circle cx="12" cy="6" r="1"/></svg>
+        </div>
+        <h3>GeoAI 地理人工智能</h3>
+        <div class="frontier-en">Geospatial Artificial Intelligence</div>
+        <p>GeoAI 是地理空间科学与人工智能的交叉融合方向，利用深度学习、计算机视觉和 NLP 等技术增强对地理现象的感知、推理和知识发现能力。</p>
+        <ul>
+          <li>多模态基础大模型（遥感影像、街景、轨迹、文本）</li>
+          <li>AI驱动的遥感影像自动解译与变化检测</li>
+          <li>智能化空间预测与决策优化</li>
+          <li>农业产量预估提升 20%+，碳排放智能监测</li>
+        </ul>
+      </div>
+
+      <!-- Digital Twin -->
+      <div class="card frontier-card">
+        <div class="frontier-number">02</div>
+        <div class="frontier-icon" style="background: rgba(91,141,239,.15); color: var(--accent3);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>数字孪生 Digital Twin</h3>
+        <div class="frontier-en">Digital Twin City & Earth</div>
+        <p>在虚拟空间中构建与物理世界实时映射的数字副本，结合三维 GIS 和 IoT 传感器数据，实现城市运行状态的实时监控、模拟仿真和预测决策。</p>
+        <ul>
+          <li>全球数字孪生市场预计2026年达 250 亿美元</li>
+          <li>中国"实景三维中国"建设上升为国家战略</li>
+          <li>城市级 CIM（城市信息模型）平台建设</li>
+          <li>交通流模拟、灾害推演、碳排放预测</li>
+        </ul>
+      </div>
+
+      <!-- 3D Reconstruction -->
+      <div class="card frontier-card">
+        <div class="frontier-number">03</div>
+        <div class="frontier-icon" style="background: rgba(247,183,49,.15); color: var(--accent2);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>三维重建 3D Reconstruction</h3>
+        <div class="frontier-en">3D City Modeling & Reality Capture</div>
+        <p>利用倾斜摄影、LiDAR 点云和 AI 技术从多源数据自动重建高精度三维城市模型。AI 赋能下，单机日处理面积可达 30 平方公里，LOD2.5+ 建筑自动化率超 90%。</p>
+        <ul>
+          <li>高精度 DEM 生成（高程精度优于 0.5m）</li>
+          <li>倾斜摄影+AI 自动化三维建模</li>
+          <li>BIM/CIM 融合与室内外一体化</li>
+          <li>NeRF/3DGS 神经辐射场新技术探索</li>
+        </ul>
+      </div>
+
+      <!-- LBS -->
+      <div class="card frontier-card">
+        <div class="frontier-number">04</div>
+        <div class="frontier-icon" style="background: rgba(224,86,160,.15); color: var(--accent4);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>LBS 位置服务</h3>
+        <div class="frontier-en">Location-Based Services</div>
+        <p>基于移动设备定位能力提供位置相关信息和服务。从导航、打车到社交推荐，LBS 已成为移动互联网最基础的能力之一，日均触达数十亿用户。</p>
+        <ul>
+          <li>高精度室内定位（UWB、蓝牙5.1、WiFi RTT）</li>
+          <li>自动驾驶高精地图（起薪 18-28 万元）</li>
+          <li>AR/VR 空间计算与地理围栏</li>
+          <li>隐私计算与联邦学习保护位置隐私</li>
+        </ul>
+      </div>
+
+      <!-- Remote Sensing -->
+      <div class="card frontier-card">
+        <div class="frontier-number">05</div>
+        <div class="frontier-icon" style="background: rgba(0,229,176,.15); color: var(--accent);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>智能遥感 Smart Remote Sensing</h3>
+        <div class="frontier-en">AI-Powered Earth Observation</div>
+        <p>新一代对地观测技术与 AI 深度融合，从"看得见"到"看得懂"。高分系列、商业星座提供亚米级分辨率，AI 实现影像的自动理解和信息提取。</p>
+        <ul>
+          <li>遥感基础大模型（多光谱、SAR、高光谱）</li>
+          <li>实时变化检测与动态监测</li>
+          <li>碳中和与生态环境遥感监测</li>
+          <li>商业航天与微纳卫星星座</li>
+        </ul>
+      </div>
+
+      <!-- WebGIS / Cloud GIS -->
+      <div class="card frontier-card">
+        <div class="frontier-number">06</div>
+        <div class="frontier-icon" style="background: rgba(91,141,239,.15); color: var(--accent3);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        </div>
+        <h3>云端 GIS 与 WebGIS</h3>
+        <div class="frontier-en">Cloud GIS & Web Mapping</div>
+        <p>GIS 从桌面走向云端和浏览器。基于 Mapbox GL、Cesium、Leaflet 等技术栈，WebGIS 开发成为最主流的 GIS 开发方向，也是就业市场需求最大的岗位类型。</p>
+        <ul>
+          <li>Mapbox GL JS / MapLibre 矢量瓦片渲染</li>
+          <li>Cesium 三维地球与 3D Tiles</li>
+          <li>Deck.gl 大规模空间数据可视化</li>
+          <li>服务端：GeoServer、MapServer、pg/PostGIS</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Applications ========== -->
+<section class="section" id="applications" style="background: var(--bg-secondary);">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 06. Applications</div>
+      <h2 class="section-title">应用领域</h2>
+      <p class="section-desc">GIS 技术已渗透至国民经济和社会生活的方方面面，覆盖超过 100 个行业领域</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="app-grid fade-up">
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(0,229,176,.12);">&#x1F3D9;</div>
+        <h4>城市规划</h4>
+        <p>城市用地分析、交通规划、公共设施选址、城市增长模拟和空间决策支持。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(91,141,239,.12);">&#x1F30D;</div>
+        <h4>自然资源管理</h4>
+        <p>土地调查、矿产资源评估、水资源管理、森林资源监测与生态系统服务评价。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(247,183,49,.12);">&#x1F6A8;</div>
+        <h4>应急管理</h4>
+        <p>灾害风险评估、应急指挥调度、疏散路线规划、灾后损失评估和救灾物资调配。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(224,86,160,.12);">&#x1F33F;</div>
+        <h4>生态环保</h4>
+        <p>环境影响评价、污染源监控、生物多样性保护、碳排放核算和气候变化研究。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(0,229,176,.12);">&#x1F69A;</div>
+        <h4>交通物流</h4>
+        <p>路径优化、车辆调度、交通流分析、智慧交通信号和供应链空间管理。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(91,141,239,.12);">&#x1F3E5;</div>
+        <h4>公共卫生</h4>
+        <p>疫情传播追踪、医疗资源配置、健康地理分析和流行病学空间建模。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(247,183,49,.12);">&#x1F33E;</div>
+        <h4>精准农业</h4>
+        <p>作物生长监测、土壤分析、精准灌溉、产量预估和农业保险损失评估。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(224,86,160,.12);">&#x1F3E0;</div>
+        <h4>不动产与地籍</h4>
+        <p>土地确权登记、不动产估价、地籍测量和国土空间用途管制。</p>
+      </div>
+      <div class="card app-card">
+        <div class="app-icon" style="background: rgba(0,229,176,.12);">&#x1F6E1;</div>
+        <h4>国防军事</h4>
+        <p>战场态势感知、地形分析、导航定位、军事目标侦察和作战模拟推演。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Employment ========== -->
+<section class="section" id="employment">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 07. Career</div>
+      <h2 class="section-title">就业前景</h2>
+      <p class="section-desc">GIS 行业正在经历快速增长，AI 与空间数据的融合创造了大量新兴岗位和机遇</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="employ-tabs fade-up">
+      <button class="employ-tab active" onclick="switchTab('china')">&#x1F1E8;&#x1F1F3; 中国市场</button>
+      <button class="employ-tab" onclick="switchTab('global')">&#x1F30F; 国际市场</button>
+    </div>
+
+    <!-- China Panel -->
+    <div class="employ-panel active" id="panel-china">
+      <div class="employ-highlight fade-up">
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent);">5-15W</div>
+          <div class="h-label">主流年薪区间 (50%+)</div>
+        </div>
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent2);">27.8%</div>
+          <div class="h-label">2026年涨薪比例</div>
+        </div>
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent3);">80%</div>
+          <div class="h-label">要求本科及以上</div>
+        </div>
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent4);">1,404</div>
+          <div class="h-label">2026薪资调查样本</div>
+        </div>
+      </div>
+
+      <div class="employ-grid fade-up">
+        <div class="chart-card">
+          <h3>薪资分布 (税前年薪)</h3>
+          <div class="chart-wrap"><canvas id="chart-salary-cn"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>单位性质分布</h3>
+          <div class="chart-wrap"><canvas id="chart-company-cn"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card fade-up" style="margin-top: 2rem; padding: 2rem;">
+        <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1.5rem;">热门岗位与方向</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <div style="padding: 1rem; background: rgba(0,229,176,.05); border-radius: 10px; border: 1px solid rgba(0,229,176,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">WebGIS 开发工程师</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">占据主导地位。技术栈：Vue/React + Mapbox/Cesium/Leaflet + GeoServer</div>
+            <div style="font-size: .75rem; color: var(--accent); margin-top: .5rem; font-family: var(--font-mono);">8-25W / 年</div>
+          </div>
+          <div style="padding: 1rem; background: rgba(91,141,239,.05); border-radius: 10px; border: 1px solid rgba(91,141,239,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">GIS 数据分析师</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">空间数据处理、分析与可视化。Python/R + ArcGIS/QGIS</div>
+            <div style="font-size: .75rem; color: var(--accent3); margin-top: .5rem; font-family: var(--font-mono);">8-20W / 年</div>
+          </div>
+          <div style="padding: 1rem; background: rgba(247,183,49,.05); border-radius: 10px; border: 1px solid rgba(247,183,49,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">三维 GIS / 数字孪生工程师</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">三维建模、CIM平台开发。Cesium/Unity/UE + 3D Tiles</div>
+            <div style="font-size: .75rem; color: var(--accent2); margin-top: .5rem; font-family: var(--font-mono);">12-30W / 年</div>
+          </div>
+          <div style="padding: 1rem; background: rgba(224,86,160,.05); border-radius: 10px; border: 1px solid rgba(224,86,160,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">自动驾驶/高精地图工程师</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">高精度地图制作与更新，属于高薪细分领域</div>
+            <div style="font-size: .75rem; color: var(--accent4); margin-top: .5rem; font-family: var(--font-mono);">18-28W / 年</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fade-up" style="margin-top: 2rem; padding: 2rem;">
+        <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1.5rem;">主要就业城市</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: .5rem;">
+          <span style="padding: .4rem 1rem; background: rgba(0,229,176,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(0,229,176,.15);">北京</span>
+          <span style="padding: .4rem 1rem; background: rgba(91,141,239,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(91,141,239,.15);">武汉</span>
+          <span style="padding: .4rem 1rem; background: rgba(247,183,49,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(247,183,49,.15);">上海</span>
+          <span style="padding: .4rem 1rem; background: rgba(224,86,160,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(224,86,160,.15);">广州</span>
+          <span style="padding: .4rem 1rem; background: rgba(0,229,176,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(0,229,176,.15);">深圳</span>
+          <span style="padding: .4rem 1rem; background: rgba(91,141,239,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(91,141,239,.15);">南京</span>
+          <span style="padding: .4rem 1rem; background: rgba(247,183,49,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(247,183,49,.15);">成都</span>
+          <span style="padding: .4rem 1rem; background: rgba(224,86,160,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(224,86,160,.15);">西安</span>
+          <span style="padding: .4rem 1rem; background: rgba(0,229,176,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(0,229,176,.15);">杭州</span>
+          <span style="padding: .4rem 1rem; background: rgba(91,141,239,.1); border-radius: 6px; font-size: .85rem; border: 1px solid rgba(91,141,239,.15);">苏州</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: .75rem; margin-top: 1rem;">* 以上城市包揽全国 GIS 工程师近八成岗位</p>
+      </div>
+    </div>
+
+    <!-- Global Panel -->
+    <div class="employ-panel" id="panel-global">
+      <div class="employ-highlight fade-up">
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent);">$75K</div>
+          <div class="h-label">中位年薪 (USD)</div>
+        </div>
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent2);">$137K</div>
+          <div class="h-label">地理数据科学家薪资</div>
+        </div>
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent3);">9%+</div>
+          <div class="h-label">岗位年增长率</div>
+        </div>
+        <div class="highlight-card">
+          <div class="h-value" style="color: var(--accent4);">10%</div>
+          <div class="h-label">BLS预测增长 (2022-2032)</div>
+        </div>
+      </div>
+
+      <div class="employ-grid fade-up">
+        <div class="chart-card">
+          <h3>各岗位薪资范围 (USD/年)</h3>
+          <div class="chart-wrap"><canvas id="chart-salary-global"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>高需求技能</h3>
+          <div style="padding: 1rem 0;">
+            <div class="stat-row">
+              <span class="stat-label">Python</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width: 95%;"></div></div>
+              <span class="stat-value" style="color: var(--accent);">95%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Cloud / AWS</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width: 82%;"></div></div>
+              <span class="stat-value" style="color: var(--accent);">82%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">SQL / PostGIS</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width: 78%;"></div></div>
+              <span class="stat-value" style="color: var(--accent);">78%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">JavaScript</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width: 72%;"></div></div>
+              <span class="stat-value" style="color: var(--accent);">72%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">AI / ML</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width: 65%;"></div></div>
+              <span class="stat-value" style="color: var(--accent);">65%</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Remote Sensing</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width: 58%;"></div></div>
+              <span class="stat-value" style="color: var(--accent);">58%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fade-up" style="margin-top: 2rem; padding: 2rem;">
+        <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1.5rem;">全球GIS职业路径</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <div style="padding: 1rem; background: rgba(0,229,176,.05); border-radius: 10px; border: 1px solid rgba(0,229,176,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">GIS Technician</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">入门级，数据采集、编辑和基础制图</div>
+            <div style="font-size: .75rem; color: var(--accent); margin-top: .5rem; font-family: var(--font-mono);">$45K - $65K</div>
+          </div>
+          <div style="padding: 1rem; background: rgba(91,141,239,.05); border-radius: 10px; border: 1px solid rgba(91,141,239,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">GIS Analyst</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">中级，空间分析、数据建模和项目管理</div>
+            <div style="font-size: .75rem; color: var(--accent3); margin-top: .5rem; font-family: var(--font-mono);">$65K - $90K</div>
+          </div>
+          <div style="padding: 1rem; background: rgba(247,183,49,.05); border-radius: 10px; border: 1px solid rgba(247,183,49,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">GIS Developer</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">WebGIS应用开发、空间数据库和API设计</div>
+            <div style="font-size: .75rem; color: var(--accent2); margin-top: .5rem; font-family: var(--font-mono);">$80K - $120K</div>
+          </div>
+          <div style="padding: 1rem; background: rgba(224,86,160,.05); border-radius: 10px; border: 1px solid rgba(224,86,160,.1);">
+            <div style="font-weight: 600; margin-bottom: .5rem;">Geospatial Data Scientist</div>
+            <div style="font-size: .8rem; color: var(--text-secondary);">GeoAI、空间统计和高级分析，最高薪方向</div>
+            <div style="font-size: .75rem; color: var(--accent4); margin-top: .5rem; font-family: var(--font-mono);">$100K - $160K+</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fade-up" style="margin-top: 2rem; padding: 2rem;">
+        <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1rem;">行业趋势</h3>
+        <ul style="list-style: none;">
+          <li style="padding: .5rem 0; color: var(--text-secondary); font-size: .9rem; display: flex; gap: .5rem;">
+            <span style="color: var(--accent); flex-shrink: 0;">-></span>
+            <span><strong>AI + GIS 融合</strong>：掌握 AI 驱动 GIS 方案的专业人士薪资溢价显著，Python + 数据科学是核心技能组合</span>
+          </li>
+          <li style="padding: .5rem 0; color: var(--text-secondary); font-size: .9rem; display: flex; gap: .5rem;">
+            <span style="color: var(--accent); flex-shrink: 0;">-></span>
+            <span><strong>云端迁移</strong>：越来越多组织转向云端 GIS 进行实时制图和数据共享，云计算技能需求旺盛</span>
+          </li>
+          <li style="padding: .5rem 0; color: var(--text-secondary); font-size: .9rem; display: flex; gap: .5rem;">
+            <span style="color: var(--accent); flex-shrink: 0;">-></span>
+            <span><strong>远程友好</strong>：GIS 开发、数据分析和咨询等岗位越来越支持远程工作</span>
+          </li>
+          <li style="padding: .5rem 0; color: var(--text-secondary); font-size: .9rem; display: flex; gap: .5rem;">
+            <span style="color: var(--accent); flex-shrink: 0;">-></span>
+            <span><strong>绿色发展</strong>：可再生能源选址、碳中和监测和环境保护领域是增长最快的 GIS 就业方向</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Learning Resources ========== -->
+<section class="section" id="resources" style="background: var(--bg-secondary);">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 08. Resources</div>
+      <h2 class="section-title">学习资源</h2>
+      <p class="section-desc">从入门到进阶，精选 GIS 学习路径和权威资源</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="resource-grid fade-up">
+      <div class="card resource-card">
+        <div class="r-type">在线课程</div>
+        <h4>Esri Academy</h4>
+        <p>Esri 官方学习平台，提供从入门到高级的 ArcGIS 系列课程，部分课程免费。</p>
+      </div>
+      <div class="card resource-card">
+        <div class="r-type">在线课程</div>
+        <h4>Coursera GIS 专项</h4>
+        <p>UC Davis 的"GIS, Mapping, and Spatial Analysis"专项课程，系统学习 GIS 理论与实践。</p>
+      </div>
+      <div class="card resource-card">
+        <div class="r-type">开源文档</div>
+        <h4>QGIS 官方文档</h4>
+        <p>最全面的开源 GIS 学习资料，包含用户手册、开发者指南和丰富的教程。</p>
+      </div>
+      <div class="card resource-card">
+        <div class="r-type">中文社区</div>
+        <h4>麻辣GIS</h4>
+        <p>中文 GIS 社区，提供教程、行业资讯和年度薪资调查等实用内容。</p>
+      </div>
+      <div class="card resource-card">
+        <div class="r-type">书籍</div>
+        <h4>GIS 教程系列</h4>
+        <p>《地理信息系统导论》(Kang-tsung Chang)、《GIS Fundamentals》(Paul Bolstad) 等经典教材。</p>
+      </div>
+      <div class="card resource-card">
+        <div class="r-type">实践平台</div>
+        <h4>Google Earth Engine</h4>
+        <p>免费的云端遥感分析平台，适合学习遥感和大数据 GIS 分析。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Footer ========== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="https://www.esri.com/en-us/what-is-gis/overview" target="_blank">Esri - What is GIS</a>
+      <a href="https://education.nationalgeographic.org/resource/geographic-information-system-gis/" target="_blank">National Geographic - GIS</a>
+      <a href="https://en.wikipedia.org/wiki/Geographic_information_system" target="_blank">Wikipedia - GIS</a>
+      <a href="https://malagis.com/gis-salary-survey-2026.html" target="_blank">麻辣GIS 2026薪资调查</a>
+      <a href="https://bootcampgis.com/gis-jobs-report/" target="_blank">GIS Jobs Report 2025</a>
+    </div>
+    <p>GIS Encyclopedia &copy; 2026 | 数据来源：Esri, National Geographic, Wikipedia, 麻辣GIS, BLS, Research.com</p>
+    <p style="margin-top: .5rem; font-size: .75rem; color: var(--text-muted);">Built with care. Powered by open data and open knowledge.</p>
+  </div>
+</footer>
+
+<!-- ========== Scripts ========== -->
+<script>
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.employ-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.employ-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  event.target.classList.add('active');
+
+  // Initialize charts when switching tabs
+  if (tab === 'china') initChinaCharts();
+  if (tab === 'global') initGlobalCharts();
+}
+
+// Chart.js defaults
+Chart.defaults.color = '#8b95a8';
+Chart.defaults.borderColor = '#1e2d4a';
+Chart.defaults.font.family = "'Noto Sans SC', sans-serif";
+Chart.defaults.font.size = 12;
+
+let chinaChartsInit = false;
+let globalChartsInit = false;
+
+function initChinaCharts() {
+  if (chinaChartsInit) return;
+  chinaChartsInit = true;
+
+  // Salary distribution
+  new Chart(document.getElementById('chart-salary-cn'), {
+    type: 'bar',
+    data: {
+      labels: ['1-5W', '5-10W', '10-15W', '15-20W', '20-25W', '25-30W', '30-35W', '35-40W', '40-50W', '50W+'],
+      datasets: [{
+        label: '人数',
+        data: [94, 281, 280, 173, 104, 36, 27, 16, 25, 42],
+        backgroundColor: [
+          'rgba(0,229,176,.3)', 'rgba(0,229,176,.5)', 'rgba(0,229,176,.7)', 'rgba(0,229,176,.6)',
+          'rgba(91,141,239,.5)', 'rgba(91,141,239,.4)', 'rgba(247,183,49,.4)', 'rgba(247,183,49,.3)',
+          'rgba(224,86,160,.4)', 'rgba(224,86,160,.5)'
+        ],
+        borderColor: [
+          'rgba(0,229,176,.6)', 'rgba(0,229,176,.8)', 'rgba(0,229,176,1)', 'rgba(0,229,176,.9)',
+          'rgba(91,141,239,.8)', 'rgba(91,141,239,.7)', 'rgba(247,183,49,.7)', 'rgba(247,183,49,.6)',
+          'rgba(224,86,160,.7)', 'rgba(224,86,160,.8)'
+        ],
+        borderWidth: 1, borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { color: 'rgba(30,45,74,.5)' }, ticks: { font: { size: 10 } } },
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 45 } }
+      }
+    }
+  });
+
+  // Company type
+  new Chart(document.getElementById('chart-company-cn'), {
+    type: 'doughnut',
+    data: {
+      labels: ['私企 56.7%', '国企 23.9%', '事业单位 16.5%', '公务员 1.1%', '外企 1.1%', '其他 0.6%'],
+      datasets: [{
+        data: [56.7, 23.9, 16.5, 1.1, 1.1, 0.6],
+        backgroundColor: [
+          'rgba(0,229,176,.7)', 'rgba(91,141,239,.7)', 'rgba(247,183,49,.7)',
+          'rgba(224,86,160,.7)', 'rgba(168,85,247,.7)', 'rgba(100,116,139,.5)'
+        ],
+        borderColor: 'rgba(8,14,26,.8)', borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 }, usePointStyle: true } } }
+    }
+  });
+}
+
+function initGlobalCharts() {
+  if (globalChartsInit) return;
+  globalChartsInit = true;
+
+  new Chart(document.getElementById('chart-salary-global'), {
+    type: 'bar',
+    data: {
+      labels: ['GIS Technician', 'GIS Analyst', 'GIS Developer', 'GIS Manager', 'Geospatial\nData Scientist'],
+      datasets: [
+        {
+          label: '最低薪资',
+          data: [45, 65, 80, 90, 100],
+          backgroundColor: 'rgba(91,141,239,.3)',
+          borderColor: 'rgba(91,141,239,.6)',
+          borderWidth: 1, borderRadius: 4
+        },
+        {
+          label: '最高薪资',
+          data: [65, 90, 120, 140, 160],
+          backgroundColor: 'rgba(0,229,176,.4)',
+          borderColor: 'rgba(0,229,176,.7)',
+          borderWidth: 1, borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 }, usePointStyle: true } } },
+      scales: {
+        x: { grid: { color: 'rgba(30,45,74,.5)' }, ticks: { callback: v => '$' + v + 'K' } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// Initialize charts on load
+document.addEventListener('DOMContentLoaded', () => {
+  initChinaCharts();
+});
+
+// Nav background on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('.nav');
+  if (window.scrollY > 100) {
+    nav.style.background = 'rgba(8,14,26,.95)';
+  } else {
+    nav.style.background = 'rgba(8,14,26,.85)';
+  }
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
