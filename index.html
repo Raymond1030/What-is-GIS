@@ -101,7 +101,7 @@ body::before {
 }
 .hero-bg {
   position: absolute; inset: 0;
-  background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80') center/cover no-repeat;
+  background: url('images/hero_earth_gis.png') center/cover no-repeat;
 }
 .hero-bg::after {
   content: ''; position: absolute; inset: 0;
@@ -426,6 +426,67 @@ body::before {
 .fade-up.delay-4 { transition-delay: .4s; }
 .fade-up.delay-5 { transition-delay: .5s; }
 
+/* ========== Encyclopedia Deep Dive ========== */
+.ency-subsection { margin-bottom: 3rem; }
+.ency-subsection h3 {
+  font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
+  color: var(--accent); margin-bottom: 1rem; padding-bottom: .5rem;
+  border-bottom: 2px solid rgba(0,229,176,.2);
+}
+.ency-subsection h4 {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 600;
+  color: var(--accent3); margin: 1.5rem 0 .75rem;
+}
+.ency-subsection h5 {
+  font-size: .95rem; font-weight: 600; color: var(--accent2);
+  margin: 1.2rem 0 .5rem;
+}
+.ency-subsection p {
+  color: var(--text-secondary); line-height: 1.85; margin-bottom: .8rem;
+  font-size: .92rem; text-align: justify;
+}
+.ency-subsection strong { color: var(--text-primary); }
+.ency-subsection ul, .ency-subsection ol {
+  color: var(--text-secondary); font-size: .92rem; line-height: 1.85;
+  margin: .5rem 0 1rem 1.5rem;
+}
+.ency-subsection li { margin-bottom: .3rem; }
+.formula-block {
+  background: rgba(0,229,176,.05); border: 1px solid rgba(0,229,176,.15);
+  border-radius: 10px; padding: 1.2rem 1.5rem; margin: 1rem 0;
+  font-family: var(--font-mono); font-size: .88rem;
+  color: var(--text-primary); overflow-x: auto; line-height: 1.9;
+}
+.compare-table {
+  width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem;
+  font-size: .85rem;
+}
+.compare-table th {
+  background: rgba(91,141,239,.12); color: var(--accent3);
+  padding: .7rem 1rem; text-align: left; font-weight: 600;
+  border-bottom: 2px solid rgba(91,141,239,.3);
+}
+.compare-table td {
+  padding: .6rem 1rem; color: var(--text-secondary);
+  border-bottom: 1px solid var(--border); vertical-align: top;
+}
+.compare-table tr:hover td { background: rgba(0,229,176,.03); }
+.ency-ref {
+  background: rgba(247,183,49,.05); border-left: 3px solid var(--accent2);
+  padding: .8rem 1.2rem; margin: 1rem 0; border-radius: 0 8px 8px 0;
+  font-size: .82rem; color: var(--text-muted); line-height: 1.7;
+}
+.ency-nav {
+  display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: 3rem;
+  justify-content: center;
+}
+.ency-nav a {
+  padding: .5rem 1.2rem; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; font-size: .82rem; color: var(--text-secondary);
+  transition: all .2s;
+}
+.ency-nav a:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,176,.05); }
+
 /* ========== Responsive ========== */
 @media (max-width: 1024px) {
   .frontier-grid { grid-template-columns: 1fr; }
@@ -453,6 +514,11 @@ body::before {
   .hero-stats { gap: 1.5rem; }
   .employ-highlight { grid-template-columns: 1fr 1fr; }
   .what-features { grid-template-columns: 1fr; }
+  .ency-subsection { padding: 1.5rem !important; }
+  .compare-table { display: block; overflow-x: auto; }
+  .formula-block { font-size: .8rem; padding: 1rem; }
+  .ency-nav { gap: .5rem; }
+  .ency-nav a { font-size: .75rem; padding: .4rem .8rem; }
 }
 @media (max-width: 480px) {
   .app-grid { grid-template-columns: 1fr; }
@@ -477,6 +543,8 @@ body::before {
       <li><a href="#applications">应用领域</a></li>
       <li><a href="#employment">就业前景</a></li>
       <li><a href="#resources">学习资源</a></li>
+      <li><a href="#encyclopedia">百科深入</a></li>
+      <li><a href="#academic">学术前沿</a></li>
     </ul>
   </div>
 </nav>
@@ -525,7 +593,7 @@ body::before {
 
     <div class="what-grid">
       <div class="what-image fade-up">
-        <img src="https://images.unsplash.com/photo-1569396116180-210c182bedb8?w=800&q=80" alt="GIS Map Visualization" loading="lazy">
+        <img src="images/gis_layers_concept.png" alt="GIS Map Visualization" loading="lazy">
       </div>
       <div class="what-text fade-up delay-1">
         <h3>地理信息系统的核心定义</h3>
@@ -776,7 +844,7 @@ body::before {
     <div class="section-header fade-up">
       <div class="section-tag">// 04. Software</div>
       <h2 class="section-title">GIS 软件生态</h2>
-      <p class="section-desc">从商业巨头到开源新锐，GIS 软件工具覆盖桌面端、Web端和移动端的全场景需求</p>
+      <p class="section-desc">从商业巨头到开源新锐，GIS 软件工具覆盖桌面端、Web端、云端和移动端的全场景需求 -- 全球 GIS 软件市场 2025 年规模 $145.8 亿</p>
       <div class="divider"></div>
     </div>
 
@@ -901,6 +969,200 @@ body::before {
         </table>
       </div>
     </div>
+
+    <!-- ===== ArcGIS Pro Deep Dive ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 3rem; padding: 2.5rem;">
+      <h3>ArcGIS Pro 完整功能详解</h3>
+      <p>ArcGIS Pro 是 Esri 新一代 64 位桌面 GIS 应用程序，采用 Ribbon 界面和多线程架构，全球市场份额约 60%。其功能覆盖数据管理、空间分析、制图、三维可视化、影像处理和自动化脚本等全流程。</p>
+
+      <h4>Spatial Analyst (空间分析扩展)</h4>
+      <p>Spatial Analyst 是 ArcGIS Pro 最核心的分析扩展之一，2025 年新增 Suitability Modeler 模型比较界面、两项新密度分析工具、两项新水文分析工具和两项新表面分析工具。主要功能类别包括：</p>
+      <ul>
+        <li><strong>适宜性建模 Suitability Modeling</strong>：通过加权叠加和模型比较，进行多准则决策分析，支持 what-if 场景推演</li>
+        <li><strong>距离分析 Distance Analysis</strong>：成本距离、成本路径、欧氏距离与方向，2025 版性能大幅优化</li>
+        <li><strong>水文分析 Hydrology</strong>：流向、流量累积、汇水区划分、河流网络提取，支持 D8 和 D-Infinity 算法</li>
+        <li><strong>表面分析 Surface</strong>：坡度 Slope、坡向 Aspect、曲率 Curvature、山体阴影 Hillshade、可视域 Viewshed</li>
+        <li><strong>密度分析 Density</strong>：核密度估计 KDE、点密度分析</li>
+        <li><strong>插值 Interpolation</strong>：IDW、Kriging、Spline、Natural Neighbor 等多种空间插值方法</li>
+        <li><strong>多变量分析 Multivariate</strong>：主成分分析 PCA、ISO 聚类、最大似然分类</li>
+        <li><strong>叠加分析 Overlay</strong>：模糊叠加、加权叠加 Weighted Overlay、加权总和</li>
+        <li><strong>地图代数 Map Algebra</strong>：基于像素级的栅格运算，通过 Raster Calculator 实现复杂公式</li>
+        <li><strong>分区统计 Zonal Statistics</strong>：按区域计算栅格统计量，2025 版增强性能</li>
+      </ul>
+
+      <h4>Network Analyst (网络分析扩展)</h4>
+      <p>基于网络数据集的高级路径和位置分析，2025 年新增 Waste Collection Solver。核心求解器：</p>
+      <ul>
+        <li><strong>路径分析 Route</strong>：多停靠点最优路径，考虑时间窗口、障碍和转弯限制</li>
+        <li><strong>服务区 Service Area</strong>：设施在指定时间/距离内的可达区域，用于应急响应和商业选址</li>
+        <li><strong>最近设施点 Closest Facility</strong>：事件点与最近设施点的最短路径</li>
+        <li><strong>OD 成本矩阵 Origin-Destination</strong>：多起终点之间的出行成本矩阵</li>
+        <li><strong>VRP 车辆路径问题</strong>：车队调度优化，考虑容量、时间窗口、休息等约束</li>
+        <li><strong>位置分配 Location-Allocation</strong>：设施最优选址，最大化覆盖或最小化阻抗</li>
+        <li><strong>废物收集 Waste Collection Solver</strong>：2025 新增，优化收集路线减少行驶时间</li>
+      </ul>
+
+      <h4>3D Analyst (三维分析扩展)</h4>
+      <p>支持 TIN、栅格、LAS (LiDAR) 和三维场景的空间分析。2025 年新增 Extract LOD2 Buildings：</p>
+      <ul>
+        <li><strong>三维可视化</strong>：Global Scene 和 Local Scene 两种视图模式</li>
+        <li><strong>TIN 表面操作</strong>：创建/编辑/分析不规则三角网 Triangulated Irregular Network</li>
+        <li><strong>LiDAR 处理</strong>：点云分类、地面滤波、特征提取、LAS 数据集统计</li>
+        <li><strong>LOD2 建筑提取</strong>：2025 新增，自动创建 LOD2 级三维建筑模型</li>
+        <li><strong>体积计算</strong>：表面差异、切填方量 Cut/Fill 计算</li>
+      </ul>
+
+      <h4>其他重要扩展</h4>
+      <ul>
+        <li><strong>Image Analyst</strong>：影像解译、特征提取、分类和基于机器学习的目标检测</li>
+        <li><strong>Geostatistical Analyst</strong>：Kriging/协同 Kriging/经验贝叶斯 Kriging，空间/时空现象预测</li>
+        <li><strong>Business Analyst</strong>：市场趋势、客户/竞争对手分析、站点评估、商圈划定</li>
+      </ul>
+
+      <h4>ArcPy 自动化开发</h4>
+      <p>ArcPy 是 ArcGIS Pro 的 Python 站点包，2025 年新增 <code style="color:var(--accent);background:rgba(0,229,176,.1);padding:.15rem .4rem;border-radius:4px;">CreateParquetCache</code> 函数。核心模块：</p>
+      <ul>
+        <li><strong>arcpy.mp</strong>：地图制图与打印自动化</li>
+        <li><strong>arcpy.da</strong>：数据访问 -- SearchCursor / UpdateCursor / InsertCursor 高效数据读写</li>
+        <li><strong>arcpy.sa</strong>：Spatial Analyst 模块，Map Algebra 和空间分析函数</li>
+        <li><strong>arcpy.na</strong>：Network Analyst 模块</li>
+        <li><strong>ModelBuilder</strong>：可视化工作流建模，可导出为 Python 脚本</li>
+        <li><strong>GeoAnalytics</strong>：基于 Apache Spark 的大数据并行地理处理引擎</li>
+        <li><strong>GeoAI 工具箱</strong>：深度学习目标检测、时间序列预测、空间聚类等 AI 功能</li>
+      </ul>
+      <div class="ency-ref">参考：Esri ArcGIS Pro Documentation (2025), Spatial Analyst 2025 Year in Review, ArcGIS Pro May 2025 Update</div>
+    </div>
+
+    <!-- ===== QGIS Deep Dive ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>QGIS 详细功能与插件生态</h3>
+      <p>QGIS 是全球最流行的开源桌面 GIS 软件。2025 年正式启动 Qt6 迁移并发布 QGIS 4.0，QGIS 4.2 LTR 计划 2026 年 2 月发布。QGIS 3.40 LTR 延长至 2026 年 5 月。</p>
+
+      <h4>核心功能</h4>
+      <ul>
+        <li><strong>多格式支持</strong>：通过 GDAL/OGR 支持 Shapefile、GeoJSON、GeoPackage、KML、WFS、PostGIS 等矢量格式和 GeoTIFF、JPEG2000、NetCDF、WMS/WMTS 等栅格格式</li>
+        <li><strong>高级制图</strong>：Print Layout 编辑器，Atlas 批量出图、标注引擎和混合模式渲染</li>
+        <li><strong>Processing 框架</strong>：统一地理处理框架，集成 GRASS GIS、SAGA GIS、GDAL、R 后端引擎数百种算法</li>
+        <li><strong>三维视图</strong>：内置 3D Map View，支持 DEM 地形渲染和三维矢量符号化</li>
+        <li><strong>时间管理器</strong>：时空数据动态可视化与时间序列动画输出</li>
+      </ul>
+
+      <h4>插件生态 (800+ 插件)</h4>
+      <ul>
+        <li><strong>Semi-Automatic Classification Plugin (SCP)</strong>：遥感影像自动分类</li>
+        <li><strong>Qgis2web</strong>：一键导出为 OpenLayers / Leaflet Web 地图</li>
+        <li><strong>QuickMapServices</strong>：快速加载 Google/Bing/OSM 底图</li>
+        <li><strong>WhiteboxTools</strong>：400+ 地理空间分析工具 (水文/地形/LiDAR)</li>
+        <li><strong>MMQGIS</strong>：地理编码、合并、导入/导出增强</li>
+      </ul>
+
+      <h4>PyQGIS 开发</h4>
+      <p>PyQGIS 与 C++ API 近乎一致，核心类：QgsProject、QgsVectorLayer、QgsRasterLayer、QgsProcessing、QgsGeometry、QgsMapCanvas、iface 接口。QGIS 4.0 保留废弃 API 确保向后兼容，插件开发者只需最小修改适配 Qt6。</p>
+      <div class="ency-ref">参考：QGIS Plugins Repository (800+ plugins), PyQGIS Developer Cookbook, QGIS Blog Qt6 Migration (2025)</div>
+    </div>
+
+    <!-- ===== SuperMap Deep Dive ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>SuperMap GIS 技术架构详解</h3>
+      <p>超图软件 (300036.SZ) 成立于 1997 年，亚洲第一、全球第二 GIS 基础软件企业。SuperMap GIS 2025 构建六大技术体系 (BRT-IDC)：</p>
+      <table class="compare-table">
+        <thead><tr><th>体系</th><th>缩写</th><th>核心能力</th></tr></thead>
+        <tbody>
+          <tr><td><strong>大数据 GIS</strong></td><td>B</td><td>HDFS/Elasticsearch 存储、200+ 空间分析算子、流处理、地理知识图谱</td></tr>
+          <tr><td><strong>新一代遥感</strong></td><td>R</td><td>摄影测量、遥感解译预训练大模型 LIM、土地分类与变化检测</td></tr>
+          <tr><td><strong>新一代三维</strong></td><td>T</td><td>二三维统一模型、倾斜摄影/点云/BIM、WebGL 渲染、低代码开发</td></tr>
+          <tr><td><strong>地理空间 AI</strong></td><td>I</td><td>SuperMap AIF，AI 工具流、智能问答，支持百川/ChatGLM/通义千问大模型</td></tr>
+          <tr><td><strong>分布式 GIS</strong></td><td>D</td><td>分布式 SQL/NoSQL、200+ 建模工具、Kubernetes 云原生微服务</td></tr>
+          <tr><td><strong>跨平台 GIS</strong></td><td>C</td><td>X86/ARM/LoongArch/MIPS + 麒麟/UOS + 国产 GPU/AI 芯片</td></tr>
+        </tbody>
+      </table>
+      <p><strong>iDesktopX 2025</strong> 新增 AI 助手(智能制图 + 智能建模)、LAS/多点数据/M 值支持。<strong>iServer</strong> 采用 SOA 架构，全功能 REST + OGC 服务，支持海量数据免切片发布和 Docker/K8s 微服务编排。</p>
+      <div class="ency-ref">参考：SuperMap GIS 2025 Product System, iDesktopX 2025 Release, iServer 2025 Help</div>
+    </div>
+
+    <!-- ===== MapGIS Deep Dive ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>MapGIS 功能与应用详解</h3>
+      <p>中地数码精耕 GIS 行业 30 余年，MapGIS 10.7 在全空间 GIS、跨平台(信创)、智能 GIS、大数据 GIS 和全栈开发五个维度实现 20 项创新升级。核心应用：</p>
+      <ul>
+        <li><strong>地质调查</strong>：中国"地质云"核心技术支撑，"地质图"系统适配勘探与灾害预警</li>
+        <li><strong>矿山管理</strong>：MapGIS 矿山管理与建模系统，2025 年获地理信息产业优秀工程奖</li>
+        <li><strong>国土空间规划</strong>："一张图"监督系统，支撑规划编制/审批/监测/评估/推演全流程</li>
+        <li><strong>AI 突破</strong>：2024 年地理空间视觉大模型和自然语言大模型应用研究取得突破</li>
+      </ul>
+      <div class="ency-ref">参考：中地数码官网 mapgis.com, 2025 湖南地理信息产业大会</div>
+    </div>
+
+    <!-- ===== GEE Deep Dive ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>Google Earth Engine 详细使用指南</h3>
+      <p>GEE 是 Google Cloud 旗下行星级地理空间分析平台，多 PB 级遥感数据目录 + 行星级并行计算。非商业用途免费。</p>
+
+      <h4>数据目录 (Data Catalog)</h4>
+      <ul>
+        <li><strong>光学遥感</strong>：Landsat 1-9、Sentinel-2 MSI、MODIS、VIIRS、Planet NICFI</li>
+        <li><strong>SAR 雷达</strong>：Sentinel-1 GRD/SLC、ALOS PALSAR</li>
+        <li><strong>气候天气</strong>：ERA5 再分析、CHIRPS 降水、TerraClimate</li>
+        <li><strong>地形</strong>：SRTM 30m/90m、ALOS World 3D、NASADEM</li>
+        <li><strong>土地覆盖</strong>：ESA WorldCover 10m、Dynamic World、GlobeLand30</li>
+        <li><strong>社会经济</strong>：WorldPop 人口密度、DMSP/VIIRS 夜光遥感</li>
+      </ul>
+
+      <h4>JavaScript API (Code Editor)</h4>
+      <p>基于浏览器的 IDE，核心对象：<code style="color:var(--accent);background:rgba(0,229,176,.1);padding:.15rem .4rem;border-radius:4px;">ee.Image</code> 单景影像、<code style="color:var(--accent);background:rgba(0,229,176,.1);padding:.15rem .4rem;border-radius:4px;">ee.ImageCollection</code> 影像集合(支持 filter/map/reduce)、<code style="color:var(--accent);background:rgba(0,229,176,.1);padding:.15rem .4rem;border-radius:4px;">ee.FeatureCollection</code> 矢量集合、<code style="color:var(--accent);background:rgba(0,229,176,.1);padding:.15rem .4rem;border-radius:4px;">ee.Reducer</code> 聚合运算器、<code style="color:var(--accent);background:rgba(0,229,176,.1);padding:.15rem .4rem;border-radius:4px;">ee.Classifier</code> 机器学习分类器(随机森林/CART/SVM)、<code style="color:var(--accent);background:rgba(0,229,176,.1);padding:.15rem .4rem;border-radius:4px;">ui.Map/ui.Chart</code> 交互组件。</p>
+
+      <h4>Python API + geemap</h4>
+      <p>earthengine-api 提供与 JS API 对等功能，<strong>geemap</strong> 库扩展体验：基于 ipyleaflet 的交互式地图、与 pandas/NumPy/Xarray 无缝集成、一键时间序列动画和 split-panel 对比地图、导出至 Google Cloud Storage/BigQuery/Drive。</p>
+
+      <h4>ML 与 Vertex AI 集成</h4>
+      <p>2025 年 GEE 深度集成 Vertex AI，支持在平台内进行高级模型训练和推理。REST API 提供直接 HTTP 访问。</p>
+      <div class="ency-ref">参考：Google Earth Engine Guides, geemap.org, Earth Engine Data Catalog</div>
+    </div>
+
+    <!-- ===== Open Source GIS Ecosystem ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>开源 GIS 生态详解</h3>
+
+      <h4>PostGIS - 空间数据库引擎</h4>
+      <p>PostGIS 是 PostgreSQL 的空间扩展，PostGIS 3.6 (2025年9月) 兼容 PostgreSQL 12-18。核心特性：</p>
+      <ul>
+        <li><strong>空间数据类型</strong>：Points/Lines/Polygons/Multi*/TIN/多面体表面 + geography 球面运算</li>
+        <li><strong>R-tree-over-GiST 索引</strong>：高速空间查询和混合查询优化</li>
+        <li><strong>空间运算</strong>：DE-9IM 谓词、面积/距离/长度度量、联合/差集/缓冲区集合运算</li>
+        <li><strong>栅格</strong>：postgis_raster 扩展，支持 1000+ 波段</li>
+        <li><strong>拓扑</strong>：postgis_topology，SQL/MM 标准</li>
+        <li><strong>3.6 新增</strong>：CG_Simplify、CG_3DAlphaWrapping、三维缩放/旋转/平移/缓冲</li>
+      </ul>
+
+      <h4>GRASS GIS - 科研级分析引擎 (500+ 模块)</h4>
+      <p>始于 1982 年美国陆军工程兵团，核心模块覆盖栅格/矢量/三维/影像/时序/空间统计分析，支持 Python API + Jupyter Notebook。</p>
+
+      <h4>GeoServer vs MapServer</h4>
+      <table class="compare-table">
+        <thead><tr><th>维度</th><th>GeoServer (Java)</th><th>MapServer (C)</th></tr></thead>
+        <tbody>
+          <tr><td>性能</td><td>属性查询 WFS 更强</td><td>地图渲染 WMS 更快</td></tr>
+          <tr><td>OGC 标准</td><td>WMS/WFS/<strong>WFS-T</strong>/WCS/WPS</td><td>WMS/WFS(非事务)/WCS</td></tr>
+          <tr><td>数据编辑</td><td>支持远程 WFS-T 事务编辑</td><td>只读服务</td></tr>
+          <tr><td>管理界面</td><td>Web 管理控制台</td><td>配置文件驱动</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Web 地图库生态 (2025-2026)</h4>
+      <table class="compare-table">
+        <thead><tr><th>库</th><th>npm 周下载</th><th>Stars</th><th>核心定位</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Leaflet</strong></td><td>3,220K</td><td>44.7K</td><td>轻量 2D 地图，v1.11 WebGL 矢量瓦片引擎</td></tr>
+          <tr><td><strong>OpenLayers</strong></td><td>~2.7K</td><td>12.4K</td><td>企业级 OGC 标准，v8 矢量瓦片编辑/时序回放</td></tr>
+          <tr><td><strong>Mapbox GL JS</strong></td><td>1,229K</td><td>12.2K</td><td>高性能矢量渲染，3.x 实时地形变形+GPU 标签碰撞</td></tr>
+          <tr><td><strong>CesiumJS</strong></td><td>62K</td><td>15K</td><td>唯一真3D地球引擎，v2.3 Google 3D Tiles 原生集成</td></tr>
+          <tr><td><strong>deck.gl</strong></td><td>77K</td><td>14K</td><td>WebGL 百万级数据 GPU 渲染层(散点/弧线/六边形/热力/轨迹)</td></tr>
+          <tr><td><strong>MapLibre GL</strong></td><td>--</td><td>7.5K+</td><td>Mapbox GL 开源分支，完全免费社区维护</td></tr>
+        </tbody>
+      </table>
+      <div class="ency-ref">参考：PostGIS.net, GRASS OSGeo, GisCarta Mapping Libraries Comparison, npm trends 2026</div>
+    </div>
+
   </div>
 </section>
 
@@ -1026,7 +1288,7 @@ body::before {
     <div class="section-header fade-up">
       <div class="section-tag">// 06. Applications</div>
       <h2 class="section-title">应用领域</h2>
-      <p class="section-desc">GIS 技术已渗透至国民经济和社会生活的方方面面，覆盖超过 100 个行业领域</p>
+      <p class="section-desc">GIS 技术已渗透至国民经济和社会生活的方方面面，覆盖超过 100 个行业 -- 以下含九大领域的真实案例深度分析</p>
       <div class="divider"></div>
     </div>
 
@@ -1077,6 +1339,78 @@ body::before {
         <p>战场态势感知、地形分析、导航定位、军事目标侦察和作战模拟推演。</p>
       </div>
     </div>
+
+    <!-- ===== Detailed Application Case Studies ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 3rem; padding: 2.5rem;">
+      <h3>GIS 应用案例详解</h3>
+
+      <h4>一、城市规划：国土空间规划与用地适宜性评价</h4>
+      <p><strong>国土空间规划"一张图"</strong>是中国新时代国土空间治理的核心数字化基础设施。基于 GIS 技术构建的"一张图"实施监督信息系统包含国土空间分析评价、规划成果审查管理、规划实施动态监测和智慧推演等子系统，支撑规划从编制到实施全生命周期管理。</p>
+      <p><strong>用地适宜性评价</strong>是城市规划的基础工作。GIS 将专业复杂的算法模型封装为可调用工具，实现评价模型可视化配置，根据区域特色灵活搭建评价算法。评价模型基于"生态文明"理念，重点关注区域生态风险评估。2024 年深圳智慧园区项目中，移动 GIS 平台实现了园区安防、能耗、设备维护的实时监控，效率提升 40%。2025 年，三维 GIS 技术广泛应用于城市的三维模型构建，清晰展示建筑物、道路、地下管网等设施的空间关系。</p>
+
+      <h4>二、自然资源：第三次全国国土调查</h4>
+      <p><strong>第三次全国国土调查 ("三调")</strong>于 2017 年启动，历时 3 年，21.9 万调查人员参与，是中国有史以来规模最大的国土调查工程。GIS/RS/GNSS 技术在其中发挥了核心作用：</p>
+      <ul>
+        <li><strong>遥感底图</strong>：全面采用优于 1 米分辨率的卫星遥感影像制作调查底图</li>
+        <li><strong>技术创新</strong>：整合移动互联网、云计算、无人机等新技术，建立"互联网+调查"机制</li>
+        <li><strong>数据采集</strong>：矢量数据采集、空间数据编辑处理、图层管理、空间信息查询</li>
+        <li><strong>确权登记</strong>：农村集体土地确权登记数据库中的权属界线转绘到国土调查底图上</li>
+      </ul>
+      <p><strong>核心成果 (2021年8月发布)</strong>：耕地 19.179 亿亩、园地 3 亿亩、林地 42.6 亿亩、草地 39.67 亿亩、湿地 3.5 亿亩、建设用地 6.13 亿亩。建立了覆盖州/县两级的集影像、地类、范围、面积、权属和自然资源信息为一体的国土调查数据库。</p>
+
+      <h4>三、应急管理：地震、洪水与疫情防控</h4>
+      <p>GIS 通过时空云平台和大数据技术，实现应急空间数据治理和基于"一张图"的事前/事中/事后全生命周期管理。</p>
+      <p><strong>地震应急</strong>：镇江市地震应急快速反应系统基于 WebGIS 构建，具备震中定位、烈度圈圈定、震后趋势分析、不同烈度区受灾单位查询、灾害信息产出等功能。</p>
+      <p><strong>洪水防灾</strong>：浙江省沿海地区农村住房防灾管理信息系统在灾害数据模型建立、灾害模拟、预警和应急预案制定方面填补了国内农村住房信息化管理和防灾抗灾领域的空白。</p>
+      <p><strong>综合应急</strong>：内蒙古自治区突发事件预警信息发布系统采用 SuperMap 时空大数据和二三维一体化技术，纵向连通国家和盟市/旗县，横向联合应急办、民政、公安等多部门，实现预警信息一键式发布。</p>
+
+      <h4>四、生态环保：碳排放、生物多样性与水质监测</h4>
+      <ul>
+        <li><strong>碳排放监测</strong>：GIS 整合各种来源数据监测和跟踪温室气体排放，有助于制定和评估气候行动计划，支撑碳达峰碳中和目标</li>
+        <li><strong>生物多样性</strong>：GIS 确定适合保护或恢复工作的区域，促进生态系统保护和生物多样性研究</li>
+        <li><strong>水质监测</strong>：实现地表水、大气、噪声和污染源的实时监测信息的 GIS 可视化显示、检索、统计和预警</li>
+        <li><strong>综合平台</strong>：超图生态环境监管平台整合基础地理、生态环境空间数据和业务数据，基于大数据和 AI 实现综合分析和预警预报</li>
+      </ul>
+
+      <h4>五、智慧交通：路径优化与交通仿真</h4>
+      <p><strong>珠海市交通大数据中心</strong>融合 VISSIM、VISSUM、TransCAD、EMME4 等仿真软件，实现实时数据共享和仿真决策，建立城市交通一体化模型与多层次交通仿真系统。</p>
+      <p>GIS 路径优化采用 <strong>Dijkstra 算法</strong>和 <strong>A* 算法</strong>，为个人出行和物流配送提供最短/最快路径规划。高速公路数字孪生项目基于高精度地图和卫星影像构建数字底座，结合实时路况实现车道级车辆运行监测。</p>
+
+      <h4>六、公共卫生：John Snow 霍乱案例与 COVID-19 疫情地图</h4>
+      <p><strong>John Snow 的霍乱研究 (1854)</strong> 被视为流行病学和空间分析的起源。Snow 在伦敦 Broad Street 绘制的死亡点阵图 (dot map) 发现了霍乱病例与受污染水源之间的空间关联，首次通过地图分析方法确定了霍乱的传播途径。170 多年后，GIS 已成为现代流行病学不可或缺的工具。</p>
+      <p><strong>COVID-19 GIS 应用</strong>：研究综述了 63 篇关于新冠疫情的地理空间分析论文，主题涵盖时空分析、健康与社会地理、环境变量、数据挖掘和 Web 地图等。约翰斯·霍普金斯大学的 COVID-19 Dashboard 成为全球疫情追踪的标志性 GIS 应用，展示了地图和地理空间数据在公共卫生危机中的重要性。Snow 的方法可以扩展到 COVID-19 和流感等现代流行病学数据分析。</p>
+
+      <h4>七、精准农业：NDVI 监测与变量施肥</h4>
+      <p>精准农业通过 GIS、遥感和物联网技术实现田块级精细管理。核心技术链路：</p>
+      <ul>
+        <li><strong>NDVI 监测</strong>：通过无人机或卫星获取多光谱影像，计算归一化植被指数 NDVI = (NIR - Red) / (NIR + Red)，捕获田块内的空间变异性，评估作物健康状态</li>
+        <li><strong>变量施肥 Variable Rate Fertilization</strong>：基于 NDVI 胁迫图和农学信息 (潜在产量、作物生物量氮含量、生育期)，定义变量施氮率。NDVI 引导施肥将肥料集中在高响应区域，减少低响应区域的浪费</li>
+        <li><strong>产量预估 Yield Prediction</strong>：机器学习模型基于农业气候因子和 NDVI 时间序列准确预测作物产量，关键生育期 NDVI 与最终产量高度相关</li>
+        <li><strong>实证效果</strong>：田间试验证明，集成系统可将<strong>肥料投入减少 18-27%</strong>，同时<strong>作物产量提高 4-11%</strong>，优于传统方法</li>
+      </ul>
+      <div class="formula-block">NDVI = (NIR - Red) / (NIR + Red)&nbsp;&nbsp;|&nbsp;&nbsp;值域: [-1, 1]&nbsp;&nbsp;|&nbsp;&nbsp;健康植被 > 0.5&nbsp;&nbsp;|&nbsp;&nbsp;裸地 ~ 0.1-0.2&nbsp;&nbsp;|&nbsp;&nbsp;水体 < 0</div>
+
+      <h4>八、考古学：GIS 在考古中的应用</h4>
+      <p>GIS 与预测建模的结合成为考古遗址勘探的强大工具。系统综述表明，考古 GIS 的主要任务包括<strong>制图 (19.4%)</strong> 和<strong>信息管理 (16.4%)</strong>，分析方法以预测建模、多准则分析、可视域分析、密度分析和空间统计为主。三大应用领域：</p>
+      <ul>
+        <li><strong>遗址选址分析 Site Location Analysis</strong>：利用地形、土壤、水源距离和历史土地利用等环境因素，通过统计和机器学习技术预测未发现遗址的位置</li>
+        <li><strong>运动与交通建模 Movement/Transport Modeling</strong>：模拟古代人群的移动路线和贸易网络</li>
+        <li><strong>可视域分析 Visibility Analysis</strong>：分析遗址之间的可视关系和景观控制</li>
+      </ul>
+      <p><strong>LiDAR 案例</strong>：Mesa Verde 地区使用 LiDAR 调查揭示了关于原住民居住的新发现，收集大型 kiva 和祖传道路的距离信息，帮助研究人员理解不同遗址之间的互动关系。匈牙利 49 处新石器时代遗址的多变量表面分析追踪了环境选址因素、土壤偏好和潜在土地利用策略。</p>
+
+      <h4>九、犯罪分析：犯罪热点与预测性警务</h4>
+      <p>GIS 使数据驱动的城市犯罪分析成为可能，与 AI 和大数据的整合正在改变犯罪预防策略。<strong>犯罪热点 (Hot Spot)</strong> 是犯罪活动高于平均水平的局部地理区域。核心技术：</p>
+      <ul>
+        <li><strong>核密度估计 KDE</strong>：最常用的热点分析方法，生成连续的犯罪密度表面</li>
+        <li><strong>地理加权回归 GWR</strong>：探索犯罪与社会经济因素之间的空间异质性关系</li>
+        <li><strong>时空分析</strong>：空间椭圆、主题地图、网格主题制图和时间模式识别</li>
+      </ul>
+      <p><strong>案例</strong>：美国 Denver 市 NIJ 资助的随机对照试验比较了不同犯罪预测软件的有效性，测试了预测区域内的热点警务策略。Shreveport 模型改善了社区关系和情报质量。埃塞俄比亚 Dessie 市结合警方记录和 GIS 数据确定犯罪集中区域，发现核心城区(Hote/Arada/Segno)犯罪集中度最高。</p>
+      <p><strong>伦理挑战</strong>：预测性警务模型虽能高精度识别潜在犯罪热点，但<strong>算法偏见和过度执法</strong>的伦理问题持续引发关注。大多数潜在用户缺乏可靠实施和解释地理空间犯罪分析算法的培训和专业知识。</p>
+      <div class="ency-ref">参考：MapGIS 国土空间规划方案, 国务院三调数据公报 (2021), 超图应急管理方案, Esri Crime Analysis, Johns Hopkins COVID-19 Dashboard, MDPI Agriculture (2025), Journal of Computer Applications in Archaeology</div>
+    </div>
+
   </div>
 </section>
 
@@ -1282,6 +1616,147 @@ body::before {
         </ul>
       </div>
     </div>
+
+    <!-- ===== China GIS Employment Deep Dive ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 3rem; padding: 2.5rem;">
+      <h3>中国 GIS 就业详细分析 (2025-2026)</h3>
+
+      <h4>麻辣 GIS 薪资调查完整数据</h4>
+      <p><strong>2026 年调查</strong> (1,404 份问卷，1,100+ 有效样本)：</p>
+      <table class="compare-table">
+        <thead><tr><th>维度</th><th>数据</th></tr></thead>
+        <tbody>
+          <tr><td>年薪 5-10 万元</td><td>52.1% (最大比例群体)</td></tr>
+          <tr><td>年薪 10-15 万元</td><td>26.0%</td></tr>
+          <tr><td>年薪 15-20 万元</td><td>16.0%</td></tr>
+          <tr><td>年薪 20-25 万元</td><td>9.6%</td></tr>
+          <tr><td>年薪 25 万元以上</td><td>8.1%</td></tr>
+          <tr><td>涨薪比例</td><td>27.8%</td></tr>
+          <tr><td>不变比例</td><td>45.9%</td></tr>
+          <tr><td>降薪比例</td><td>26.3%</td></tr>
+        </tbody>
+      </table>
+      <p><strong>2025 年调查</strong> (1,917 份问卷，历年最多)：5-10 万占 25%、10-15 万占 24%、15-20 万占 14%。涨薪比例 22%(同比下降 3 个百分点)，降薪比例 27%(上升 3 个百分点)。月薪超过 2.5 万在 GIS 行业已属 Top 级收入。</p>
+
+      <h4>工作经验分布 (2026 数据)</h4>
+      <ul>
+        <li>1-3 年经验：376 人 (35.0%)</li>
+        <li>3-5 年经验：256 人 (23.8%)</li>
+        <li>5-10 年经验：276 人 (25.7%)</li>
+        <li>10+ 年经验：166 人 (15.5%)</li>
+      </ul>
+
+      <h4>单位性质 (2026 数据)</h4>
+      <ul>
+        <li>民营企业：56.7% (绝对主力)</li>
+        <li>国有企业：23.9%</li>
+        <li>事业单位：16.5%</li>
+        <li>公务员/外企/其他：合计 2.8%</li>
+      </ul>
+
+      <h4>城市分布</h4>
+      <p>一线城市 (北京/上海/广州/深圳) 占 28.3%，二线城市占 56.2%，三线及以下占 15.5%。基于 624 个真实岗位分析：一线城市占 46.5%，新一线占 41.7%，合计近 90%。北京为研发核心城市，武汉为第二大 GIS 人才集聚地。</p>
+
+      <h4>具体岗位 JD 与薪资</h4>
+      <table class="compare-table">
+        <thead><tr><th>岗位方向</th><th>技术栈要求</th><th>月薪范围</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td><strong>WebGIS 开发工程师</strong></td><td>JavaScript/Vue/React + Mapbox/Leaflet/OpenLayers + GeoServer/PostGIS</td><td>10-25K</td><td>岗位占比最高，学习门槛相对较低</td></tr>
+          <tr><td><strong>三维 GIS 开发工程师</strong></td><td>Cesium/Unity/UE + 3D Tiles + WebGL + 空间数据库</td><td>12-30K (均值 18.2K)</td><td>门槛较高，需要较强数据处理和三维开发能力</td></tr>
+          <tr><td><strong>GIS 数据分析师</strong></td><td>Python/R + ArcGIS/QGIS + SQL + 统计分析</td><td>8-20K</td><td>空间数据处理、分析与可视化</td></tr>
+          <tr><td><strong>遥感工程师</strong></td><td>ENVI/ERDAS + Python + 深度学习框架 + GEE</td><td>10-22K</td><td>卫星影像解译与分类，AI 遥感趋势明显</td></tr>
+          <tr><td><strong>自动驾驶高精地图</strong></td><td>C++/Python + 点云处理 + SLAM + 高精地图格式</td><td>18-35K</td><td>高薪细分领域，一线城市为主</td></tr>
+        </tbody>
+      </table>
+      <p>总体数据：GIS 开发工程师<strong>月薪均值 17.2K</strong>。超过 60% 的岗位提供 15K+ 月薪。本科学历是基本门槛(81.2% 岗位要求)，硕士在算法/三维方向更受青睐。3-5 年经验需求最旺盛，约 110 个岗位面向应届生开放。</p>
+
+      <h4>主要 GIS 企业</h4>
+      <table class="compare-table">
+        <thead><tr><th>企业</th><th>产品</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td><strong>超图软件 (300036)</strong></td><td>SuperMap GIS 全系列</td><td>亚洲第一、全球第二 GIS 基础软件企业，中国市场份额第一，六大技术体系 BRT-IDC</td></tr>
+          <tr><td><strong>中地数码</strong></td><td>MapGIS 全系列</td><td>精耕 30+ 年，地质调查/矿产/国土空间规划核心支撑，信创 GIS 先行者</td></tr>
+          <tr><td><strong>南方数码</strong></td><td>南方 CASS / 测绘产品</td><td>广东龙头企业，测绘地理信息和不动产领域</td></tr>
+          <tr><td><strong>苍穹数码</strong></td><td>KQGIS 系列</td><td>GIS 基础软件市占率 12.78%，排名第二(部分领域)</td></tr>
+          <tr><td><strong>中科星图 (688568)</strong></td><td>GEOVIS 数字地球</td><td>科创板上市，中科院空天信息创新研究院孵化，2024 年营收 9.03 亿元(同比+33%)，总市值约 274 亿元</td></tr>
+        </tbody>
+      </table>
+
+      <h4>GIS 考研院校排名</h4>
+      <p>基于第四轮学科评估(地图学与地理信息系统方向)：</p>
+      <table class="compare-table">
+        <thead><tr><th>等级</th><th>院校</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A+</strong></td><td>北京大学、北京师范大学</td><td>综合实力顶尖，考研难度极大</td></tr>
+          <tr><td><strong>A</strong></td><td>华东师范大学、南京大学、南京师范大学</td><td>南京师范大学性价比较高(211 但 GIS 实力接近武大)</td></tr>
+          <tr><td><strong>A- / B+</strong></td><td>武汉大学、中国地质大学、信息工程大学</td><td>武汉大学 GIS 实力全国顶尖，测绘遥感领域第一梯队</td></tr>
+        </tbody>
+      </table>
+      <p>武汉大学在 GIS/遥感领域的综合科研实力常年位居全国第一梯队，测绘学科评估排名 A+。北京大学地理信息科学排名居前。南京师范大学虽为 211 但 GIS 实力与武大相差不大，招收人数可观，性价比相对较高。</p>
+      <div class="ency-ref">参考：麻辣 GIS 2025/2026 薪资调查, CSDN 2025 GIS 岗位需求分析 (624 岗位), 知乎 GIS 考研院校排名, 中科星图 2024 年报</div>
+    </div>
+
+    <!-- ===== International GIS Employment Deep Dive ===== -->
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>国际 GIS 就业详细分析</h3>
+
+      <h4>美国劳工统计局 (BLS) 数据 (2024 年 5 月)</h4>
+      <table class="compare-table">
+        <thead><tr><th>职业</th><th>中位年薪</th><th>就业人数</th><th>2024-2034 增长预测</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Geographers (地理学家)</strong></td><td>$97,200</td><td>~1,500</td><td>-3% (下降)，年均 100 个岗位空缺</td></tr>
+          <tr><td><strong>Cartographers & Photogrammetrists</strong></td><td>$78,380</td><td>--</td><td>+6% (快于平均)，年均 1,000 个空缺</td></tr>
+          <tr><td><strong>Surveying & Mapping Technicians</strong></td><td>$51,940</td><td>--</td><td>+5% (快于平均)，年均 7,600 个空缺</td></tr>
+          <tr><td><strong>Geoscientists (地球科学家)</strong></td><td>$56,180-$172,490</td><td>--</td><td>+3%</td></tr>
+        </tbody>
+      </table>
+      <p>地图制图师和摄影测量师的增长驱动因素：政府规划对地图的需求持续增长，自然灾害应急需要 GIS 专业人员。</p>
+
+      <h4>GIS 各岗位薪资 (美国)</h4>
+      <table class="compare-table">
+        <thead><tr><th>岗位层级</th><th>代表职位</th><th>年薪范围 (USD)</th></tr></thead>
+        <tbody>
+          <tr><td>初级入门</td><td>Cartographic Technician ($42K), GIS Technician ($48K), CAD Drafter ($45K)</td><td>$40,000 - $55,000</td></tr>
+          <tr><td>中级分析</td><td>GIS Analyst ($65K), GIS Specialist ($64K), Cartographer ($75K), LiDAR Analyst ($71K)</td><td>$60,000 - $80,000</td></tr>
+          <tr><td>高级开发</td><td>GIS Developer ($85K), Remote Sensing Analyst ($83K), GEOINT Analyst ($83K)</td><td>$80,000 - $100,000</td></tr>
+          <tr><td>管理/专家</td><td>GIS Administrator ($96K), GIS Project Manager ($105K), Senior Geomatics Engineer ($103K)</td><td>$95,000 - $120,000</td></tr>
+          <tr><td>数据科学</td><td>Geospatial Data Scientist, GIS Software Engineer ($99K)</td><td>$100,000 - $160,000+</td></tr>
+        </tbody>
+      </table>
+      <p>美国 GIS 整体平均年薪约 $75,000，GIS Developer 均薪 $103,584 为最高薪职位之一。</p>
+
+      <h4>全球顶级 GIS 雇主</h4>
+      <table class="compare-table">
+        <thead><tr><th>企业</th><th>总部</th><th>核心业务</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Esri</strong></td><td>美国 Redlands, CA</td><td>ArcGIS 全平台，全球市场份额约 60%，Forbes 500 最佳中型雇主第 13 位</td></tr>
+          <tr><td><strong>Trimble</strong></td><td>美国 Sunnyvale, CA</td><td>GPS/卫星影像/IoT + 地理空间软件，农业/建筑/交通领域实时优化分析</td></tr>
+          <tr><td><strong>Hexagon AB</strong></td><td>瑞典 Stockholm</td><td>2025 年推出 AI 驱动城市规划和基础设施管理分析工具套件</td></tr>
+          <tr><td><strong>Maxar Technologies</strong></td><td>美国 Westminster, CO</td><td>高分辨率卫星影像和地理空间情报，Forbes 500 第 74 位，支撑国防/能源/环境</td></tr>
+          <tr><td><strong>Planet Labs</strong></td><td>美国 San Francisco</td><td>Pelican 星座提供 30cm 分辨率影像和当日任务响应，保险/农业/环境监测</td></tr>
+        </tbody>
+      </table>
+
+      <h4>GIS 专业认证</h4>
+      <table class="compare-table">
+        <thead><tr><th>认证</th><th>颁发机构</th><th>要求</th><th>有效期</th></tr></thead>
+        <tbody>
+          <tr><td><strong>GISP</strong> (GIS Professional)</td><td>GISCI</td><td>4 年全职 GIS 经验 + 专业组合(150 分) + 技术考试</td><td>3 年</td></tr>
+          <tr><td><strong>GISP-E</strong> (Emerging)</td><td>GISCI</td><td>面向早期职业人士，无组合或资格要求</td><td>--</td></tr>
+          <tr><td><strong>Esri Technical Certification</strong></td><td>Esri</td><td>Associate / Professional 两级，验证 ArcGIS 技术专长</td><td>需定期更新</td></tr>
+          <tr><td><strong>ArcGIS Pro Professional 2025</strong></td><td>Esri</td><td>最新版本考试，覆盖 Pro 核心功能和工作流</td><td>版本相关</td></tr>
+        </tbody>
+      </table>
+      <p>GISP 验证 GIS 实践的教育和经验广度，Esri Technical Certification 验证 ArcGIS 工具的技术深度。拥有认证的专业人士通常获得更高薪资。</p>
+
+      <h4>远程 GIS 工作趋势 (2025-2026)</h4>
+      <p>截至 2026 年 4 月，约 <strong>855 个远程 GIS 岗位</strong>正在招聘(Indeed)，Glassdoor 显示 232 个远程 GIS 岗位。薪资范围 $21-$115/小时，中位数 $27.93/小时。部分高级职位薪酬达 $80,000-$158,000/年。远程 GIS 岗位主要集中在 GIS 开发、数据分析、项目管理和咨询领域。核心技能需求：ArcGIS Enterprise/Pro、Python、SQL、Power BI。</p>
+
+      <h4>全球地理空间市场规模</h4>
+      <p>全球地理空间分析市场规模 2024 年为 $1,143.2 亿，预计 2030 年达 $2,265.3 亿 (CAGR 11.3%)。GIS 软件市场 2025 年为 $145.8 亿，预计 2030 年达 $312 亿 (CAGR 13.1%)。北美占全球市场份额 34.2%。软件板块收入占比超过 64%。增长驱动：智慧城市、自动驾驶、AI 与大数据融合、可再生能源选址。</p>
+      <div class="ency-ref">参考：U.S. BLS Occupational Outlook Handbook (2024), GIS Geography Salary Report, PayScale GIS Analyst 2026, GISCI Applicant Manual (2025), Grand View Research Geospatial Market Report</div>
+    </div>
+
   </div>
 </section>
 
@@ -1330,6 +1805,864 @@ body::before {
   </div>
 </section>
 
+<!-- ========== Encyclopedia Deep Dive ========== -->
+<section class="section" id="encyclopedia">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 09. Encyclopedia</div>
+      <h2 class="section-title">GIS 百科深入讲解</h2>
+      <p class="section-desc">教科书级别的GIS核心理论深度解析，涵盖定义、坐标系、数据模型与空间分析</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="ency-nav fade-up">
+      <a href="#ency-definition">GIS定义与理论基础</a>
+      <a href="#ency-coordinate">坐标系统与大地测量</a>
+      <a href="#ency-vector">矢量数据模型</a>
+      <a href="#ency-raster">栅格数据模型</a>
+      <a href="#ency-analysis">空间分析深度讲解</a>
+    </div>
+
+    <!-- ==================== Section 1: GIS定义与理论基础 ==================== -->
+    <div class="card ency-subsection fade-up" id="ency-definition" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h3>一、GIS定义与理论基础 (GIS Definition & Theoretical Foundations)</h3>
+
+      <h4>1.1 GIS的四种经典定义</h4>
+      <p>地理信息系统（Geographic Information System, GIS）是一个多学科交叉的综合性概念，学术界至今对其定义尚无完全统一的表述。目前被广泛接受的归纳方式是将GIS的定义分为<strong>四种视角</strong>，每种视角侧重GIS的不同本质属性：</p>
+
+      <h5>(1) 面向过程的定义 (Process-oriented Definition)</h5>
+      <p>该定义强调GIS的<strong>数据处理流程</strong>。代表学者<strong>Michael F. Goodchild</strong>（古德柴尔德）将GIS定义为："采集、存储、管理、分析和显示有关地理现象信息的综合技术系统。"（A system for capturing, storing, managing, analyzing, and displaying information related to geographic phenomena.）该定义关注数据从输入到输出的完整生命周期，将GIS视为一条处理空间数据的"生产线"，涵盖数据采集（data acquisition）、数据存储（data storage）、数据管理（data management）、空间分析（spatial analysis）和可视化输出（visualization）等核心环节。</p>
+
+      <h5>(2) 面向工具箱的定义 (Toolbox-oriented Definition)</h5>
+      <p>该定义强调GIS是一组<strong>空间数据处理工具的集合</strong>。代表学者<strong>Peter Burrough</strong>（布鲁夫）在1986年提出："GIS是从现实世界中采集、存储、提取、转换和显示空间数据的一组强有力的工具。"（A powerful set of tools for collecting, storing, retrieving, transforming, and displaying spatial data from the real world.）这种定义将GIS看作一个"工具箱"（toolbox），用户可以根据需求选取不同的工具来解决特定的空间问题。工具箱定义的优势在于突出了GIS的<strong>功能多样性</strong>和<strong>模块化特征</strong>。</p>
+
+      <h5>(3) 面向数据库的定义 (Database-oriented Definition)</h5>
+      <p>该定义在工具箱定义的基础上，更加强调<strong>分析工具与空间数据库之间的连接</strong>。它认为GIS本质上是空间分析方法（spatial analysis methods）与空间数据管理系统（spatial database management system）的有机结合。数据库视角将GIS理解为一种特殊的数据库系统，其核心能力在于管理和查询具有空间位置属性的地理数据，支持SQL空间扩展、空间索引（如R-tree、Quadtree）等关键技术。代表系统如PostGIS、Oracle Spatial等正是该定义的典型体现。</p>
+
+      <h5>(4) 面向应用的定义 (Application-oriented Definition)</h5>
+      <p>该定义在面向过程定义的基础上，强调GIS所处理的<strong>数据类型和应用领域</strong>。它认为GIS是针对特定领域需求而建立的空间信息系统，如土地信息系统（LIS, Land Information System）、城市规划GIS（Urban Planning GIS）、交通GIS（Transportation GIS）、环境GIS（Environmental GIS）等。面向应用的定义反映了GIS的<strong>领域化</strong>和<strong>专业化</strong>趋势。</p>
+
+      <h4>1.2 GIS与GIScience的区别</h4>
+      <p><strong>地理信息科学</strong>（Geographic Information Science, GIScience）的概念由美籍英裔地理学家<strong>Michael F. Goodchild</strong>于<strong>1992年</strong>在其里程碑式的论文<em>"Geographical Information Science"</em>中正式提出。Goodchild指出，GIS不应仅被视为一种技术工具，更应被视为一门独立的科学学科。</p>
+      <p>GIS（地理信息系统）与GIScience（地理信息科学）的核心区别在于：</p>
+      <ul>
+        <li><strong>GIS</strong> 侧重<strong>技术实现</strong>（Technology & System）——即如何构建和运行一个地理信息处理系统，关注软件开发、数据采集、系统集成等技术层面的问题。</li>
+        <li><strong>GIScience</strong> 侧重<strong>科学理论</strong>（Science & Theory）——即研究地理信息背后的科学基础问题，包括空间认知（spatial cognition）、空间表达（spatial representation）、空间分析理论（spatial analysis theory）、不确定性（uncertainty）、尺度效应（scale effects）、空间数据基础设施（SDI）等。</li>
+      </ul>
+      <p>Goodchild提出GIScience的三大核心研究领域为：<strong>空间分析</strong>（spatial analysis）、<strong>可视化</strong>（visualization）和<strong>不确定性表达</strong>（uncertainty representation）。GIScience更关注的是"为什么"（why）和"是否可能"（whether），而GIS更关注"如何做"（how）。</p>
+
+      <h4>1.3 空间思维理论 (Spatial Thinking Theory)</h4>
+      <p>空间思维（Spatial Thinking）是GIScience的认知基础，指人类利用空间概念（如位置、距离、方向、区域、分布、模式等）来理解和解决问题的思维方式。美国国家研究理事会（NRC）在2006年发布的报告<em>"Learning to Think Spatially"</em>中，将空间思维定义为由三个要素构成的复合能力：<strong>空间概念</strong>（concepts of space）、<strong>表达工具</strong>（tools of representation）和<strong>推理过程</strong>（processes of reasoning）。</p>
+      <p>空间思维在GIS中的具体体现包括：理解空间分布模式（如聚集、离散、随机）、识别空间关系（如邻近、包含、连通）、分析空间过程（如扩散、迁移、侵蚀），以及通过地图、图表等工具进行空间可视化推理。GIS作为空间思维的"放大镜"和"延伸器"，极大地增强了人类感知和分析空间现象的能力。</p>
+
+      <h4>1.4 Tobler地理学第一定律 (Tobler's First Law of Geography)</h4>
+      <p><strong>Waldo R. Tobler</strong>（沃尔多·托布勒）于<strong>1969年</strong>在国际地理联合会（IGU）会议上提出，并于1970年正式发表。其完整表述为：</p>
+      <div class="formula-block">
+        "Everything is related to everything else, but near things are more related than distant things."<br>
+        "一切事物都与其他事物相关联，但距离近的事物比距离远的事物更加相关。"
+      </div>
+      <p>这一定律是<strong>空间依赖性</strong>（spatial dependence）和<strong>空间自相关</strong>（spatial autocorrelation）的理论基石。Tobler提出此定律时正在研究底特律（Detroit）的人口增长模型。他发现，如果没有这条法则，"地形表面将到处发生混乱变化，坡度将趋向无穷大。"该定律虽然并非严格的数学定理，但它为反距离权重插值（IDW）、克里金插值（Kriging）、地理加权回归（GWR）等大量空间分析方法提供了根本性的理论假设。</p>
+      <p>值得注意的是，Tobler还提出了<strong>地理学第二定律</strong>：<em>"The phenomenon external to an area of interest affects what goes on inside."</em>（研究区域外部的现象会影响区域内部的过程。）该定律强调了<strong>边界效应</strong>和<strong>空间溢出效应</strong>的重要性。</p>
+
+      <h4>1.5 空间自相关 (Spatial Autocorrelation)</h4>
+      <p>空间自相关是指<strong>同一变量在空间上不同位置的观测值之间存在的相关性</strong>。它是Tobler第一定律的数学量化表达。当空间上相近的观测值趋于相似（如高值聚集或低值聚集）时，称为<strong>正空间自相关</strong>（positive spatial autocorrelation）；当相近的观测值趋于相异时，称为<strong>负空间自相关</strong>（negative spatial autocorrelation）；若观测值在空间上呈随机分布，则无显著空间自相关。</p>
+      <p>全局空间自相关最常用的度量指标是<strong>Moran's I</strong>（莫兰指数），由统计学家<strong>Patrick Alfred Pierce Moran</strong>提出：</p>
+      <div class="formula-block">
+        I = (n / S₀) &times; [&Sigma;&Sigma; w<sub>ij</sub>(x<sub>i</sub> - x&#x0304;)(x<sub>j</sub> - x&#x0304;)] / &Sigma;(x<sub>i</sub> - x&#x0304;)&sup2;<br><br>
+        其中：<br>
+        &bull; n = 观测值（要素）的数量<br>
+        &bull; S₀ = 所有空间权重之和 (&Sigma;&Sigma; w<sub>ij</sub>)<br>
+        &bull; w<sub>ij</sub> = 空间权重矩阵中位置i与j之间的权重<br>
+        &bull; x<sub>i</sub>, x<sub>j</sub> = 位置i和j的属性值<br>
+        &bull; x&#x0304; = 属性值的均值
+      </div>
+      <p>Moran's I的取值范围通常在<strong>[-1, 1]</strong>之间。I &gt; E[I] = -1/(n-1) 表示正空间自相关（聚集模式），I &lt; E[I] 表示负空间自相关（离散模式）。统计显著性通过<strong>z得分</strong>和<strong>p值</strong>来判断，z得分表示标准差单位数，p值表示零假设（空间随机分布）成立的概率。当p &lt; 0.05且|z| &gt; 1.96时，可以在95%置信水平上拒绝零假设。</p>
+      <p>另一个常用的空间自相关统计量是<strong>Geary's C</strong>（盖里系数），它对局部空间自相关更为敏感。此外，<strong>局部空间自相关</strong>分析采用<strong>Local Moran's I</strong>（LISA, Local Indicators of Spatial Association），可以识别<strong>热点</strong>（High-High聚集）、<strong>冷点</strong>（Low-Low聚集）和<strong>空间异质性</strong>（High-Low或Low-High）。</p>
+
+      <div class="ency-ref">
+        <strong>参考文献：</strong><br>
+        [1] Goodchild, M. F. (1992). Geographical information science. <em>International Journal of Geographical Information Systems</em>, 6(1), 31-45.<br>
+        [2] Tobler, W. R. (1970). A computer movie simulating urban growth in the Detroit region. <em>Economic Geography</em>, 46(sup1), 234-240.<br>
+        [3] National Research Council. (2006). <em>Learning to Think Spatially</em>. Washington, DC: The National Academies Press.<br>
+        [4] Moran, P. A. P. (1950). Notes on continuous stochastic phenomena. <em>Biometrika</em>, 37(1/2), 17-23.<br>
+        [5] Anselin, L. (1995). Local indicators of spatial association—LISA. <em>Geographical Analysis</em>, 27(2), 93-115.
+      </div>
+    </div>
+
+    <!-- ==================== Section 2: 坐标系统与大地测量 ==================== -->
+    <div class="card ency-subsection fade-up" id="ency-coordinate" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h3>二、坐标系统与大地测量 (Coordinate Systems & Geodesy)</h3>
+
+      <h4>2.1 地理坐标系与投影坐标系</h4>
+      <p><strong>地理坐标系</strong>（Geographic Coordinate System, GCS）使用<strong>经度</strong>（Longitude）和<strong>纬度</strong>（Latitude）来描述地球表面上点的位置，单位为度（&deg;）。地理坐标系的两个关键组成部分是：<strong>参考椭球体</strong>（Reference Ellipsoid）和<strong>大地基准面</strong>（Geodetic Datum）。由于地球并非完美球体，而是一个两极稍扁、赤道略鼓的旋转椭球体，因此必须选择一个数学形状与地球最接近的椭球体来建立坐标系统。</p>
+      <p><strong>投影坐标系</strong>（Projected Coordinate System, PCS）是利用数学方法将三维地球表面上的经纬线网<strong>转换（投影）到二维平面</strong>上，单位通常为米（m）。投影坐标系 = 地理坐标系 + 投影方法。由于地球曲面不可能无变形地展开为平面（高斯定理），任何地图投影都不可避免地存在<strong>变形</strong>（distortion），包括长度变形、面积变形、角度变形和形状变形。根据变形性质，投影可分为<strong>等角投影</strong>（conformal）、<strong>等面积投影</strong>（equal-area）和<strong>等距投影</strong>（equidistant）。</p>
+
+      <h4>2.2 大地水准面与参考椭球体</h4>
+      <p><strong>大地水准面</strong>（Geoid）是假想的、与平均海平面重合并延伸到大陆内部的一个封闭曲面。它处处与重力方向（铅垂线）正交，是一个不规则的物理面，由地球内部质量分布决定，不能用简单的数学公式表达。大地水准面是测量高程的基准面，海拔高度即为某点到大地水准面的铅垂距离。</p>
+      <p><strong>参考椭球体</strong>（Reference Ellipsoid）是用数学公式定义的规则旋转椭球面，用来逼近大地水准面的形状。一个椭球体由两个核心参数唯一确定：<strong>长半轴</strong>（semi-major axis, a）和<strong>扁率</strong>（flattening, f = (a-b)/a），其中b为短半轴。</p>
+
+      <h4>2.3 中国常用坐标系参数对比</h4>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>参数</th>
+            <th>北京54 (BJZ54)</th>
+            <th>西安80 (Xi'an 80)</th>
+            <th>CGCS2000</th>
+            <th>WGS84</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>建立年份</strong></td>
+            <td>1954年</td>
+            <td>1980年</td>
+            <td>2000年（2008年启用）</td>
+            <td>1984年</td>
+          </tr>
+          <tr>
+            <td><strong>参考椭球体</strong></td>
+            <td>Krasovsky 1940</td>
+            <td>IAG-75 (GRS 1975)</td>
+            <td>CGCS2000椭球</td>
+            <td>WGS84椭球</td>
+          </tr>
+          <tr>
+            <td><strong>长半轴 a (m)</strong></td>
+            <td>6,378,245.0</td>
+            <td>6,378,140.0</td>
+            <td>6,378,137.0</td>
+            <td>6,378,137.0</td>
+          </tr>
+          <tr>
+            <td><strong>扁率 1/f</strong></td>
+            <td>298.3</td>
+            <td>298.257</td>
+            <td>298.257222101</td>
+            <td>298.257223563</td>
+          </tr>
+          <tr>
+            <td><strong>坐标系类型</strong></td>
+            <td>参心坐标系</td>
+            <td>参心坐标系</td>
+            <td>地心坐标系</td>
+            <td>地心坐标系</td>
+          </tr>
+          <tr>
+            <td><strong>原点</strong></td>
+            <td>苏联Pulkovo天文台</td>
+            <td>陕西省泾阳县</td>
+            <td>地球质量中心</td>
+            <td>地球质量中心</td>
+          </tr>
+          <tr>
+            <td><strong>高程基准</strong></td>
+            <td>1956年黄海高程</td>
+            <td>1985国家高程基准</td>
+            <td>1985国家高程基准</td>
+            <td>EGM96大地水准面</td>
+          </tr>
+          <tr>
+            <td><strong>GM (m&sup3;/s&sup2;)</strong></td>
+            <td>--</td>
+            <td>--</td>
+            <td>3.986004418&times;10&sup1;&sup4;</td>
+            <td>3.986004418&times;10&sup1;&sup4;</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>关键说明：</strong>北京54坐标系（BJZ54）源自苏联1942年坐标系的延伸，采用Krasovsky椭球体，原点并非在北京而是在苏联Pulkovo。西安80坐标系于1978年建立，大地原点设在陕西省泾阳县（约108&deg;55'E, 34&deg;32'N），海拔417.20m。CGCS2000是中国现行的国家大地坐标系，与国际地球参考框架（ITRF97, 历元2000.0）对齐，属于<strong>地心坐标系</strong>，其椭球参数与WGS84仅存在<strong>毫米级差异</strong>（扁率的第8位小数不同），在绝大多数实际应用中可视为一致。</p>
+      <p>参心坐标系与地心坐标系的核心区别在于：<strong>参心坐标系</strong>的椭球体中心不在地球质心，而是通过选择与某一区域大地水准面最为密合的参考椭球体来建立局部最优坐标系；<strong>地心坐标系</strong>的椭球体中心与地球质量中心重合，具有全球统一性，适用于卫星定位等全球性应用。</p>
+
+      <h4>2.4 高斯-克吕格投影 (Gauss-Kr&uuml;ger Projection)</h4>
+      <p>高斯-克吕格投影是一种<strong>等角横切椭圆柱投影</strong>（Transverse Conformal Cylindrical Projection），由德国数学家<strong>Carl Friedrich Gauss</strong>（高斯）于19世纪20年代提出原理框架，后由德国大地测量学家<strong>Louis Kr&uuml;ger</strong>（克吕格）于1912年对投影公式加以完善。</p>
+      <p><strong>投影原理：</strong>设想用一个椭圆柱面横套在地球椭球体外部，使其与某一条子午线（称为<strong>中央经线</strong>，Central Meridian）<strong>相切</strong>。椭圆柱的中心轴通过椭球体中心并位于赤道面内。然后将中央经线两侧一定经差范围内的球面区域，按照<strong>等角条件</strong>正形投影到椭圆柱面上，最后将柱面沿母线剪开展平。</p>
+      <p><strong>核心投影性质：</strong></p>
+      <ul>
+        <li><strong>等角性</strong>（Conformality）：投影后任意微小区域的形状保持不变（角度无变形），这对测量和导航至关重要。</li>
+        <li><strong>中央经线无变形</strong>：中央经线投影后为直线，且<strong>长度比 m = 1</strong>（无长度变形）。</li>
+        <li><strong>赤道投影为直线</strong>：赤道的投影也是直线，与中央经线正交。</li>
+        <li><strong>变形规律</strong>：从中央经线向投影带两侧边缘，长度变形逐渐增大。变形量与离中央经线的距离的平方成正比。在赤道与带边缘的交点处变形最大。</li>
+      </ul>
+
+      <h5>分带规则</h5>
+      <p>为控制边缘变形，高斯-克吕格投影采用<strong>分带</strong>投影：</p>
+      <ul>
+        <li><strong>6&deg;分带</strong>：从格林威治0&deg;经线起，每6&deg;为一个投影带，全球共60个带。中央经线计算公式：<strong>L₀ = 6n - 3</strong>（n为带号）。适用于1:2.5万至1:50万比例尺地形图。</li>
+        <li><strong>3&deg;分带</strong>：从东经1&deg;30'起，每3&deg;为一个投影带，全球共120个带。中央经线计算公式：<strong>L₀ = 3n</strong>。适用于大于1:1万比例尺的大比例尺地形图。</li>
+      </ul>
+      <p>中国领土约横跨东经73&deg;至东经135&deg;，在6&deg;带系统中涵盖第13带到第23带（共11个带），在3&deg;带系统中涵盖第25带到第45带。</p>
+
+      <h5>坐标偏移</h5>
+      <p>在高斯平面直角坐标系中，以中央经线与赤道交点为原点，中央经线投影为纵轴（X轴，正方向朝北），赤道投影为横轴（Y轴，正方向朝东）。为避免横坐标出现负值，规定将<strong>纵坐标轴（Y轴原点）西移500km</strong>，即所有y值加上500,000m，坐标值前再冠以带号。例如，某点坐标为 20,345,678.910m 表示该点在第20带，距中央经线以东 345,678.910 - 500,000 = -154,321.090m（即在中央经线以西154.3km处）。</p>
+
+      <h4>2.5 UTM投影 (Universal Transverse Mercator)</h4>
+      <p>UTM投影是由美国军方于<strong>1947年</strong>提出的一种<strong>等角横轴割圆柱投影</strong>（Transverse Secant Cylindrical Projection）。与高斯-克吕格投影（切圆柱）的关键区别在于：</p>
+      <ul>
+        <li>UTM使用<strong>割圆柱</strong>（Secant Cylinder），即圆柱面与椭球体相割而非相切，形成两条割线。</li>
+        <li>UTM规定<strong>中央经线的长度比 m₀ = 0.9996</strong>（而非1），这使得投影带内变形分布更均匀：中央经线处长度被略微压缩，而在中央经线两侧各约180km处的割线上长度比恰好为1，带边缘的最大变形也因此减小。</li>
+        <li>UTM采用<strong>6&deg;分带</strong>，全球共60个带，覆盖南纬80&deg;至北纬84&deg;（极区使用UPS投影）。东偏500,000m，南半球北偏10,000,000m。</li>
+      </ul>
+      <p>中国采用的高斯-克吕格投影可以视为UTM投影的一种变体，两者的数学变换公式结构相同，仅在中央经线比例因子上存在差异（1.0 vs 0.9996）。</p>
+
+      <div class="ency-ref">
+        <strong>参考文献：</strong><br>
+        [1] Snyder, J. P. (1987). <em>Map Projections — A Working Manual</em>. USGS Professional Paper 1395.<br>
+        [2] 国家测绘地理信息局. (2008). 2000国家大地坐标系技术报告.<br>
+        [3] 李德仁, 龚健雅, 等. (2006). <em>测量学</em>. 武汉大学出版社.<br>
+        [4] Iliffe, J. C., & Lott, R. (2008). <em>Datums and Map Projections</em>. Whittles Publishing.
+      </div>
+    </div>
+
+    <!-- ==================== Section 3: 矢量数据模型详解 ==================== -->
+    <div class="card ency-subsection fade-up" id="ency-vector" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h3>三、矢量数据模型详解 (Vector Data Model)</h3>
+
+      <h4>3.1 矢量数据基本概念</h4>
+      <p>矢量数据模型（Vector Data Model）利用欧几里得几何学中的<strong>点（Point）、线（Polyline/LineString）、面（Polygon）</strong>及其组合体来表示地理实体的空间分布。与栅格模型的"规则网格单元"不同，矢量模型直接记录要素的<strong>精确坐标和形状</strong>，因此特别适合表示具有明确边界的离散地理要素，如建筑物轮廓、道路中心线、行政区划边界、河流水系等。</p>
+      <p>矢量数据由两部分组成：<strong>空间数据</strong>（Spatial Data，即几何坐标信息）和<strong>属性数据</strong>（Attribute Data，即描述性信息）。两者通过唯一的要素标识符（Feature ID, FID）相关联。</p>
+
+      <h4>3.2 OGC简单要素模型 (OGC Simple Feature Access)</h4>
+      <p><strong>开放地理空间联盟</strong>（Open Geospatial Consortium, OGC）制定了<strong>简单要素访问标准</strong>（Simple Feature Access, SFA），即ISO 19125标准，定义了矢量几何对象的标准化表达方式。该标准规定了以下几何类型的层次结构：</p>
+      <ul>
+        <li><strong>Geometry</strong>（几何基类）
+          <ul>
+            <li><strong>Point</strong>（点）——0维几何对象，表示空间中的一个位置</li>
+            <li><strong>Curve &rarr; LineString</strong>（曲线/折线）——1维几何对象，由有序点序列连接而成</li>
+            <li><strong>Surface &rarr; Polygon</strong>（曲面/多边形）——2维几何对象，由一个外环和零个或多个内环（孔洞）组成</li>
+            <li><strong>GeometryCollection</strong>（几何集合）——包含MultiPoint、MultiLineString、MultiPolygon等多要素类型</li>
+          </ul>
+        </li>
+      </ul>
+      <p>OGC标准还定义了几何对象的三个核心属性：<strong>Interior</strong>（内部）、<strong>Boundary</strong>（边界）和<strong>Exterior</strong>（外部）。对于一个多边形：内部是多边形面所占的区域；边界是多边形的边缘线环；外部是内部和边界之外的所有空间。</p>
+
+      <h4>3.3 拓扑关系与DE-9IM模型</h4>
+      <p><strong>空间拓扑关系</strong>（Spatial Topological Relationship）描述了地理要素之间<strong>与变换无关的空间位置关系</strong>，是GIS空间查询和分析的基础。拓扑关系在几何形变（如拉伸、弯曲）后仍然保持不变。GIS中常见的拓扑关系包括三大类：</p>
+      <ul>
+        <li><strong>邻接关系</strong>（Adjacency）：面与面之间共享边界的关系，如相邻省份。</li>
+        <li><strong>关联关系</strong>（Connectivity/Incidence）：不同维度要素之间的连接关系，如节点与弧段的关联、弧段与多边形的关联。</li>
+        <li><strong>包含关系</strong>（Containment）：一个要素包含另一个要素的关系，如省包含市。</li>
+      </ul>
+
+      <p><strong>DE-9IM</strong>（Dimensionally Extended 9-Intersection Model，维度扩展九交模型）是OGC和ISO标准中用于精确描述两个几何对象空间关系的数学框架。它通过计算两个几何体的<strong>内部(I)、边界(B)、外部(E)</strong>两两交集的维度构造3&times;3矩阵：</p>
+
+      <div class="formula-block">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Interior(b) &nbsp; Boundary(b) &nbsp; Exterior(b)<br>
+        Interior(a) &nbsp;&nbsp; dim(I(a)&cap;I(b)) &nbsp; dim(I(a)&cap;B(b)) &nbsp; dim(I(a)&cap;E(b))<br>
+        Boundary(a) &nbsp; dim(B(a)&cap;I(b)) &nbsp; dim(B(a)&cap;B(b)) &nbsp; dim(B(a)&cap;E(b))<br>
+        Exterior(a) &nbsp;&nbsp; dim(E(a)&cap;I(b)) &nbsp; dim(E(a)&cap;B(b)) &nbsp; dim(E(a)&cap;E(b))<br><br>
+        维度编码：-1（空集F），0（点），1（线），2（面）<br>
+        通配符：T（非空，即0/1/2），*（任意），0/1/2（指定维度）
+      </div>
+
+      <p>基于DE-9IM矩阵，OGC标准定义了<strong>8种命名空间关系</strong>：</p>
+      <ul>
+        <li><strong>Equals</strong>（相等）：两个几何体完全重合</li>
+        <li><strong>Disjoint</strong>（相离）：两个几何体没有任何交集</li>
+        <li><strong>Intersects</strong>（相交）：两个几何体有交集（Disjoint的反操作）</li>
+        <li><strong>Touches</strong>（接触）：边界相交但内部不相交</li>
+        <li><strong>Crosses</strong>（交叉）：内部有交集且交集的维度小于两个几何体中较大者的维度</li>
+        <li><strong>Within</strong>（包含于）：a完全在b的内部</li>
+        <li><strong>Contains</strong>（包含）：b完全在a的内部（Within的逆操作）</li>
+        <li><strong>Overlaps</strong>（重叠）：内部有交集且交集的维度等于两个几何体的维度</li>
+      </ul>
+
+      <h4>3.4 常用矢量数据格式对比</h4>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>特性</th>
+            <th>Shapefile (.shp)</th>
+            <th>GeoJSON (.geojson)</th>
+            <th>GeoPackage (.gpkg)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>开发者</strong></td>
+            <td>Esri (1990s)</td>
+            <td>IETF RFC 7946 (2016)</td>
+            <td>OGC (2014)</td>
+          </tr>
+          <tr>
+            <td><strong>文件结构</strong></td>
+            <td>多文件（至少.shp/.shx/.dbf 3个文件，通常还有.prj/.cpg等）</td>
+            <td>单一JSON文本文件</td>
+            <td>单一SQLite数据库文件</td>
+          </tr>
+          <tr>
+            <td><strong>数据类型</strong></td>
+            <td>仅矢量</td>
+            <td>仅矢量</td>
+            <td>矢量 + 栅格 + 扩展</td>
+          </tr>
+          <tr>
+            <td><strong>文件大小限制</strong></td>
+            <td>2GB（单文件）</td>
+            <td>无硬性限制（内存限制）</td>
+            <td>无限制（理论上）</td>
+          </tr>
+          <tr>
+            <td><strong>属性字段名长度</strong></td>
+            <td>10字符（DBF限制）</td>
+            <td>无限制</td>
+            <td>无限制</td>
+          </tr>
+          <tr>
+            <td><strong>最大字段数</strong></td>
+            <td>255列</td>
+            <td>无限制</td>
+            <td>无限制</td>
+          </tr>
+          <tr>
+            <td><strong>坐标系支持</strong></td>
+            <td>.prj文件定义</td>
+            <td>仅WGS84 (EPSG:4326)</td>
+            <td>任意坐标系</td>
+          </tr>
+          <tr>
+            <td><strong>拓扑支持</strong></td>
+            <td>不支持</td>
+            <td>TopoJSON扩展支持</td>
+            <td>支持</td>
+          </tr>
+          <tr>
+            <td><strong>Web适用性</strong></td>
+            <td>差（多文件）</td>
+            <td>优秀（原生Web格式）</td>
+            <td>良好</td>
+          </tr>
+          <tr>
+            <td><strong>空间索引</strong></td>
+            <td>.sbn/.sbx文件</td>
+            <td>不支持</td>
+            <td>内置R-tree</td>
+          </tr>
+          <tr>
+            <td><strong>混合几何类型</strong></td>
+            <td>不支持（每个文件单一类型）</td>
+            <td>支持</td>
+            <td>支持</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>选型建议：</strong>Shapefile虽然历史悠久、兼容性好，但因多文件管理不便、字段名限制、不支持空值等缺陷，逐渐被<strong>GeoPackage</strong>取代，后者已成为OGC推荐的开放标准格式。GeoJSON因其JSON文本格式天然适合Web传输和JavaScript解析，在WebGIS和前端可视化领域占据主导地位。<strong>TopoJSON</strong>是GeoJSON的拓展格式，通过拓扑编码消除了共享边界的冗余存储，文件体积可缩减80%以上。</p>
+
+      <h4>3.5 拓扑规则 (Topology Rules)</h4>
+      <p>拓扑规则用于确保矢量数据的空间完整性和一致性。在GIS软件（如ArcGIS Geodatabase Topology）中，常见的拓扑规则包括：</p>
+      <ul>
+        <li><strong>面规则</strong>：面不得重叠（Must Not Overlap）、面不得有间隙（Must Not Have Gaps）、面不得有悬挂要素、面边界必须被线覆盖等。</li>
+        <li><strong>线规则</strong>：线不得自相交（Must Not Self-Intersect）、线不得重叠（Must Not Overlap）、线不得有悬挂节点（Must Not Have Dangles）、线端点必须被其他线覆盖等。</li>
+        <li><strong>点规则</strong>：点必须在面内（Must Be Inside Polygon）、点必须在线端点上（Must Be Covered By Endpoint Of Line）等。</li>
+        <li><strong>跨图层规则</strong>：线必须被面边界覆盖（Must Be Covered By Boundary Of Polygon）、面不得与其他图层的面重叠等。</li>
+      </ul>
+      <p>拓扑验证和错误修正是GIS数据质量控制的重要环节，可以发现悬挂节点（dangle）、自交多边形（self-intersection）、碎片多边形（sliver polygon）等常见拓扑错误。</p>
+
+      <div class="ency-ref">
+        <strong>参考文献：</strong><br>
+        [1] OGC. (2011). OpenGIS Implementation Standard for Geographic information — Simple feature access — Part 1: Common architecture. OGC 06-103r4.<br>
+        [2] Egenhofer, M. J., & Franzosa, R. D. (1991). Point-set topological spatial relations. <em>International Journal of Geographical Information Systems</em>, 5(2), 161-174.<br>
+        [3] Clementini, E., Di Felice, P., & van Oosterom, P. (1993). A small set of formal topological relationships suitable for end-user interaction. <em>Advances in Spatial Databases</em>, SSD'93.<br>
+        [4] Butler, H., et al. (2016). The GeoJSON Format. IETF RFC 7946.
+      </div>
+    </div>
+
+    <!-- ==================== Section 4: 栅格数据模型详解 ==================== -->
+    <div class="card ency-subsection fade-up" id="ency-raster" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h3>四、栅格数据模型详解 (Raster Data Model)</h3>
+
+      <h4>4.1 栅格数据基本概念</h4>
+      <p>栅格数据模型（Raster Data Model）将地理空间划分为<strong>大小均匀的规则网格单元（Grid Cell/Pixel）</strong>，按行列排列组成矩阵。每个像元存储一个数值，表示该位置的某种地理属性（如高程值、温度值、土地利用类别编码等）。栅格模型以其<strong>隐式空间引用</strong>为特点——像元的地理位置由行列号和栅格参数（原点坐标、像元大小、旋转角度）共同推算得到，无需显式存储每个像元的坐标。</p>
+      <p>栅格数据可以表达<strong>连续型</strong>和<strong>离散型</strong>两类空间现象：连续型数据（如高程、温度、降雨量）在空间上连续变化，每个像元的值可以是任意实数；离散型数据（如土地利用类型、行政区编码）的每个像元取有限类别的整数值。</p>
+
+      <h4>4.2 空间分辨率</h4>
+      <p><strong>空间分辨率</strong>（Spatial Resolution）是栅格数据最核心的质量参数，指<strong>一个像元在地面上所代表的实际面积大小</strong>。分辨率数值越小（如1m vs 30m），空间细节越丰富，但数据量也呈平方级增长——<strong>像元尺寸减半，数据量增大四倍</strong>。</p>
+      <p>常见遥感影像分辨率参考：</p>
+      <ul>
+        <li><strong>超高分辨率</strong>（&lt;1m）：WorldView系列(0.3m)、Pl&eacute;iades(0.5m)——城市精细制图</li>
+        <li><strong>高分辨率</strong>（1-10m）：高分系列(2m)、SPOT(2.5m)——城镇尺度分析</li>
+        <li><strong>中分辨率</strong>（10-100m）：Sentinel-2(10m)、Landsat(30m)——区域尺度监测</li>
+        <li><strong>低分辨率</strong>（&gt;100m）：MODIS(250-1000m)——全球尺度研究</li>
+      </ul>
+
+      <h4>4.3 栅格重采样 (Resampling)</h4>
+      <p>重采样是将栅格数据从一种像元大小（或坐标系、范围）<strong>转换为另一种</strong>的过程。其本质是将<strong>输入栅格的像元值或推导值赋予输出栅格中每个新像元</strong>的计算过程。三种标准重采样方法：</p>
+      <ul>
+        <li><strong>最邻近法</strong>（Nearest Neighbor）：将距离输出像元中心最近的输入像元值直接赋予输出像元。计算速度最快，不会改变原始值，<strong>适用于离散型数据</strong>（如土地利用分类图）。缺点是可能产生空间偏移和锯齿效应。</li>
+        <li><strong>双线性内插法</strong>（Bilinear Interpolation）：利用最近的<strong>4个</strong>（2&times;2）输入像元值进行加权平均，权重与距离成反比。产生较平滑的结果，<strong>适用于连续型数据</strong>。缺点是会平滑化处理导致局部极值信息丢失。</li>
+        <li><strong>三次卷积法</strong>（Cubic Convolution）：利用最近的<strong>16个</strong>（4&times;4）输入像元值进行三次多项式拟合。结果最为平滑，空间细节保留最好，但计算量最大，且可能产生超出原始值范围的新值。</li>
+      </ul>
+
+      <h4>4.4 DEM、DSM与DTM</h4>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>模型</th>
+            <th>全称</th>
+            <th>描述内容</th>
+            <th>地表物体</th>
+            <th>主要应用</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DEM</strong></td>
+            <td>Digital Elevation Model (数字高程模型)</td>
+            <td>规则格网点的地面高程数据集</td>
+            <td>不包含（或部分包含）</td>
+            <td>地形分析、水文建模、坡度坡向计算、通视分析</td>
+          </tr>
+          <tr>
+            <td><strong>DSM</strong></td>
+            <td>Digital Surface Model (数字表面模型)</td>
+            <td>地球表面及其上所有物体的高度</td>
+            <td>包含建筑物、植被树冠等</td>
+            <td>城市三维建模、景观可视化、飞行安全评估</td>
+          </tr>
+          <tr>
+            <td><strong>DTM</strong></td>
+            <td>Digital Terrain Model (数字地形模型)</td>
+            <td>裸露地面的地形高度</td>
+            <td>完全不包含</td>
+            <td>洪水排水建模、地质分析、土地利用研究</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>三者关系：</strong>DEM是DTM的一个子集，为零阶单纯的数字地貌模型。DTM在广义上包含DEM以及由DEM派生的其他地貌特性数据（如坡度、坡向、曲率等）。DSM = DTM + 地表物体高度。从DSM到DTM的转换过程称为<strong>滤波</strong>（filtering），即剔除建筑物和植被等非地面点。</p>
+      <p><strong>数据获取方式：</strong>主要包括航空/卫星摄影测量、<strong>LiDAR</strong>（激光雷达）、<strong>InSAR</strong>（干涉合成孔径雷达）、地面测量（GPS/全站仪）和从现有等高线地形图数字化等。LiDAR可以同时获取DSM和DTM（通过首末次回波分离），精度可达亚分米级。</p>
+      <p><strong>数据结构：</strong>DEM既可以<strong>规则格网</strong>（Grid）形式存储（即栅格格式，如GeoTIFF），也可以<strong>不规则三角网</strong>（TIN, Triangulated Irregular Network）形式存储（矢量格式），TIN在地形复杂区域可以自适应加密采样点。</p>
+
+      <h4>4.5 地图代数 (Map Algebra)</h4>
+      <p><strong>地图代数</strong>是由<strong>Dana Tomlin</strong>在其1990年出版的<em>"Geographic Information Systems and Cartographic Modeling"</em>中系统提出的栅格空间分析理论框架。它将栅格数据视为地理参考的数值数组，通过数学运算符和分析函数对一个或多个栅格图层进行运算以生成新的栅格图层。地图代数支持的运算包括算术运算（+、-、&times;、&divide;）、关系运算（&gt;、&lt;、=）、逻辑运算（AND、OR、NOT）和位运算等。</p>
+      <p>根据运算所涉及的空间范围，地图代数分为<strong>四种运算类型</strong>：</p>
+
+      <h5>(1) 局域运算 (Local Operations)</h5>
+      <p>基于<strong>单个像元位置</strong>上的值进行运算。输出栅格中每个像元的值仅取决于输入栅格中对应位置的像元值。典型操作包括：单一栅格的数学变换（如 output = 2 &times; input + 1）、多栅格逐像元运算（如 output = raster1 + raster2）、栅格重分类（reclassification）。</p>
+
+      <h5>(2) 焦点运算 (Focal Operations)</h5>
+      <p>基于目标像元及其<strong>邻域</strong>（neighborhood）内的像元值进行运算。需要定义一个<strong>移动窗口</strong>（kernel/window），如3&times;3、5&times;5等矩形窗口或圆形窗口。窗口在整个栅格上逐像元滑动，计算窗口内所有像元的统计量（如均值、最大值、标准差等）并赋给中心像元。高斯核（Gaussian kernel）可以对窗口内像元进行距离加权，离中心越近权重越大。焦点运算广泛用于影像平滑、边缘检测、坡度计算等。</p>
+
+      <h5>(3) 区域运算 (Zonal Operations)</h5>
+      <p>基于另一个栅格（区域图层）定义的<strong>区域</strong>（zone）对值栅格进行汇总统计。区域是共享相同属性值的一组像元集合（如行政区、土地利用类别）。典型操作包括计算各区域的均值、总和、面积、最大/最小值等。例如，计算每个省份的平均温度或每种土地类型的总面积。</p>
+
+      <h5>(4) 全局运算 (Global Operations)</h5>
+      <p>考虑整个栅格图层的<strong>全部或大量像元</strong>进行运算。典型操作包括：<strong>欧氏距离</strong>（Euclidean Distance，计算每个像元到最近源要素的直线距离）、<strong>成本距离</strong>（Cost Distance，考虑地形阻力的加权距离）、<strong>水文流向分析</strong>（Flow Direction/Accumulation）和<strong>最小成本路径</strong>（Least-Cost Path）分析等。</p>
+
+      <h4>4.6 栅格数据压缩编码</h4>
+      <p>由于栅格数据量往往很大（尤其是高分辨率遥感影像），需要采用压缩编码技术来减少存储空间。栅格压缩方法按信息保真度分为<strong>无损压缩</strong>（lossless）和<strong>有损压缩</strong>（lossy）两大类：</p>
+
+      <h5>(1) 直接编码 (Direct Coding)</h5>
+      <p>逐行（或逐列）逐像元记录属性值，即按行主序将二维矩阵展开为一维序列存储。方法简单直观但<strong>无压缩效果</strong>，数据冗余度最高。</p>
+
+      <h5>(2) 游程编码 (Run-Length Encoding, RLE)</h5>
+      <p>按行扫描时，将连续相同属性值的像元序列记录为<strong>"值+长度"</strong>对。例如，一行像元值为 [3,3,3,3,5,5,7,7,7] 编码为 [(3,4),(5,2),(7,3)]。游程编码对大面积同质区域压缩效果显著，在栅格加密时数据量不会明显增加，且支持叠加合并等运算。压缩比取决于数据的空间自相关性——自相关越强，相邻像元同值的概率越大，压缩比越高。</p>
+
+      <h5>(3) 链式编码 (Chain Coding / Freeman Chain Code)</h5>
+      <p>由<strong>Freeman</strong>提出，用起始点坐标和一系列<strong>方向代码</strong>来表示线状或面状地物的边界。定义8个基本方向（东=0、东北=1、北=2、西北=3、西=4、西南=5、南=6、东南=7），每个代码表示从当前点到下一个点的单位矢量方向。链式编码对<strong>面状要素边界</strong>的压缩效果最为显著，还便于计算长度和面积。缺点是叠置运算困难，且边界可能被重复存储。</p>
+
+      <h5>(4) 块式编码 (Block Coding)</h5>
+      <p>将游程编码从一维扩展到<strong>二维</strong>，以正方形区域为记录单元。每条记录包含：初始位置（行号、列号）、半径（边长）和属性代码。块式编码对大而简单的同质区域效率较高，但对碎部复杂的区域效果不佳。</p>
+
+      <h5>(5) 四叉树编码 (Quadtree Encoding)</h5>
+      <p>四叉树的基本思想是将栅格区域<strong>递归地等分为四个象限</strong>（NW、NE、SW、SE），逐块检查属性值是否一致。若子区内所有像元值相同则停止分割，否则继续四分，直到每个子块都只含单一值。四叉树可以用<strong>树形结构</strong>（常规四叉树）或<strong>线性数组</strong>（线性四叉树/Morton码）存储。优点：分辨率可变，边界复杂部分精细、同质部分粗略，天然支持多尺度层次结构；缺点：数据组织较复杂，旋转不变性差。</p>
+
+      <h5>(6) 有损压缩 — DCT编码</h5>
+      <p><strong>离散余弦变换</strong>（Discrete Cosine Transform, DCT）是JPEG标准的核心算法。它将空间域的像元值块（通常8&times;8）转换为频率域的系数，然后通过量化舍弃高频分量实现压缩。DCT编码属于<strong>有损压缩</strong>，适用于对精度要求不高的影像显示场景。</p>
+
+      <h5>(7) LZW编码</h5>
+      <p><strong>Lempel-Ziv-Welch（LZW）</strong>是一种基于字典的通用无损压缩算法，广泛应用于TIFF、GIF等格式中。它在压缩过程中动态构建字符串字典，将重复出现的字符序列替换为较短的编码。SuperMap平台中的SGL（SuperMap Grid LZW）即是LZW的改进实现。</p>
+
+      <div class="ency-ref">
+        <strong>参考文献：</strong><br>
+        [1] Tomlin, C. D. (1990). <em>Geographic Information Systems and Cartographic Modeling</em>. Prentice Hall.<br>
+        [2] Li, Z., Zhu, Q., & Gold, C. (2004). <em>Digital Terrain Modeling: Principles and Methodology</em>. CRC Press.<br>
+        [3] Samet, H. (1990). <em>The Design and Analysis of Spatial Data Structures</em>. Addison-Wesley.<br>
+        [4] Freeman, H. (1961). On the encoding of arbitrary geometric configurations. <em>IRE Trans. Electronic Computers</em>, EC-10(2), 260-268.<br>
+        [5] Welch, T. A. (1984). A technique for high-performance data compression. <em>Computer</em>, 17(6), 8-19.
+      </div>
+    </div>
+
+    <!-- ==================== Section 5: 空间分析深度讲解 ==================== -->
+    <div class="card ency-subsection fade-up" id="ency-analysis" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h3>五、空间分析深度讲解 (Spatial Analysis In-Depth)</h3>
+
+      <h4>5.1 缓冲区分析 (Buffer Analysis)</h4>
+      <p>缓冲区分析是GIS中最基础也最常用的<strong>邻近性分析</strong>（Proximity Analysis）方法。其基本思想是：根据指定距离，在点、线、面几何对象周围建立一定宽度的区域（缓冲区），以确定要素的影响范围或服务区域。</p>
+      <p>从数学上看，对于几何对象 A 和给定距离 d，缓冲区 B 定义为：</p>
+      <div class="formula-block">
+        B(A, d) = { p | distance(p, A) &le; d }
+      </div>
+      <p>即所有到几何对象 A 的距离不超过 d 的点的集合。按要素类型分：</p>
+      <ul>
+        <li><strong>点缓冲区</strong>：以点为圆心、d为半径的圆形区域。</li>
+        <li><strong>线缓冲区</strong>：沿线要素法线方向向两侧各平移距离d，并在端点处形成圆弧（圆头缓冲）或直线截断（平头缓冲）连接的封闭区域。可设置<strong>不等宽缓冲</strong>（左右侧距离不同）或<strong>单侧缓冲</strong>。</li>
+        <li><strong>面缓冲区</strong>：沿面边界向外扩展（正d）或向内收缩（负d）的区域。</li>
+        <li><strong>多重缓冲区</strong>：同一要素建立多个不同半径的同心缓冲区，如距离河流100m、200m、500m的分级缓冲。</li>
+      </ul>
+      <p>缓冲区分析常与<strong>叠加分析</strong>结合使用，形成经典的"缓冲区+叠加"分析范式。典型应用包括：学校周边200m禁烟区划定、水源保护区划定、道路噪声影响评估、设施服务范围分析等。</p>
+      <p>缓冲距离的度量方式分为<strong>欧氏缓冲</strong>（Euclidean buffer，基于平面直线距离）和<strong>测地线缓冲</strong>（Geodesic buffer，基于椭球面曲面距离），后者在大范围分析（如跨UTM带）时更为准确。</p>
+
+      <h4>5.2 叠加分析 (Overlay Analysis)</h4>
+      <p>叠加分析是在<strong>统一空间参考系</strong>下，对两个或多个空间数据层进行<strong>集合运算</strong>，产生新数据层的过程。叠加分析是GIS空间分析的核心功能之一，其操作本质是布尔集合运算的空间化。</p>
+      <p>主要叠加操作类型包括：</p>
+      <ul>
+        <li><strong>Intersect（相交/交集）</strong>：仅保留所有输入图层<strong>空间重叠区域</strong>的要素，合并所有图层的属性。不相交的部分被丢弃。输出范围是所有输入范围的交集。</li>
+        <li><strong>Union（联合/并集）</strong>：保留所有输入图层的<strong>全部要素</strong>，重叠区域产生新的分割多边形，合并所有属性。所有输入必须为面要素。输出范围是所有输入范围的并集。</li>
+        <li><strong>Identity（标识）</strong>：保留<strong>输入图层</strong>的全部范围，同时将标识图层（identity layer）中与输入图层重叠部分的属性附加到输出中。相当于Clip + 属性附加。</li>
+        <li><strong>Erase（擦除/差集）</strong>：从输入图层中<strong>移除</strong>与擦除图层重叠的部分，仅保留不重叠的区域。</li>
+        <li><strong>Symmetric Difference（交集取反/对称差集）</strong>：保留两个图层<strong>不重叠</strong>的部分，丢弃重叠区域。</li>
+        <li><strong>Update（更新）</strong>：用更新图层的要素<strong>替换</strong>输入图层中相应位置的要素。</li>
+      </ul>
+      <p>叠加分析对数据质量有较高要求，输入图层必须具有<strong>相同的坐标系</strong>和合理的拓扑结构。常见的叠加分析质量问题包括碎片多边形（sliver polygon）的产生、属性字段冲突等。</p>
+
+      <h4>5.3 网络分析 (Network Analysis)</h4>
+      <p>网络分析是在由<strong>线要素</strong>（边/弧段）和<strong>节点</strong>（交叉点/端点）构成的网络结构上进行的空间分析。网络数据模型以<strong>图论</strong>（Graph Theory）为数学基础，将现实世界的道路、管线、河流等抽象为有向/无向加权图 G(V, E)。主要分析功能包括：</p>
+
+      <h5>(1) 最短路径分析 (Shortest Path)</h5>
+      <p>寻找网络中两个节点之间<strong>总成本（距离、时间或其他权重）最小</strong>的路径。经典算法包括：</p>
+      <ul>
+        <li><strong>Dijkstra算法</strong>（1956年，Edsger W. Dijkstra提出）：单源最短路径算法。采用<strong>贪心策略</strong>，从起点开始，每次选择当前未确定最短路径的节点中距离最小的节点进行"松弛"（relaxation）操作。时间复杂度 O(V&sup2;)，使用优先队列优化后可达 O((V+E)logV)。<strong>要求所有边权重非负</strong>。</li>
+        <li><strong>A*算法</strong>：Dijkstra的启发式改进版。引入<strong>启发函数 h(n)</strong>（如欧氏距离估计）来指导搜索方向，优先展开"更有可能接近目标"的节点，从而大幅减小搜索范围。评估函数 f(n) = g(n) + h(n)，其中g(n)是起点到n的实际代价。</li>
+        <li><strong>Floyd-Warshall算法</strong>：解决<strong>所有节点对</strong>之间的最短路径问题。基于动态规划思想，时间复杂度 O(V&sup3;)。允许存在负权边（但不能有负权回路）。</li>
+        <li><strong>Bellman-Ford算法</strong>：可处理负权边的单源最短路径算法，时间复杂度 O(VE)，还可以检测负权回路。</li>
+      </ul>
+
+      <h5>(2) 服务区分析 (Service Area)</h5>
+      <p>给定一个或多个设施点（如消防站、医院），计算在指定时间或距离阈值内该设施所能覆盖的网络范围（服务区域）。可用于评估公共服务设施的覆盖度和可达性。</p>
+
+      <h5>(3) 最近设施点分析 (Closest Facility)</h5>
+      <p>计算事件点到多个设施点的最短路径，找出最近的N个设施。典型应用如急救车辆调度、最近医院/消防站查找。</p>
+
+      <h5>(4) 物流配送/车辆路径问题 (Vehicle Routing Problem, VRP)</h5>
+      <p>在满足容量、时间窗口等约束条件下，规划多辆车辆从配送中心到多个客户点的最优路径组合。属于NP-hard问题，通常使用启发式算法求解。</p>
+
+      <h4>5.4 空间插值 (Spatial Interpolation)</h4>
+      <p>空间插值是利用<strong>已知采样点的属性值</strong>来估算<strong>未知位置属性值</strong>的方法。其理论基础是Tobler第一定律——空间上相近的点更可能具有相似的属性值。</p>
+
+      <h5>(1) 反距离权重法 (Inverse Distance Weighting, IDW)</h5>
+      <p>IDW是最常用的确定性插值方法。核心假设：<strong>离待插值点越近的采样点对其估值的影响越大</strong>。</p>
+      <div class="formula-block">
+        Z&#x0302;(x₀) = &Sigma;[w<sub>i</sub> &times; Z(x<sub>i</sub>)] / &Sigma;w<sub>i</sub><br><br>
+        其中权重：w<sub>i</sub> = 1 / d<sub>i</sub><sup>p</sup><br><br>
+        &bull; Z&#x0302;(x₀) = 待插值点 x₀ 的估计值<br>
+        &bull; Z(x<sub>i</sub>) = 第 i 个采样点的观测值<br>
+        &bull; d<sub>i</sub> = 待插值点到第 i 个采样点的欧氏距离<br>
+        &bull; p = 幂参数（距离衰减指数），通常取 p=2<br>
+        &bull; n = 参与计算的采样点数量
+      </div>
+      <p>幂参数 p 对插值结果影响显著：p 越大，近距离点的权重越集中，结果越局部化；p 越小，远距离点的影响越大，结果越平滑。一般取 p = 1 或 p = 2。当 p = 2 时称为<strong>反距离平方权重插值</strong>。IDW方法的优点是简单直观、计算效率高；缺点是不能外推（插值结果不会超出已知值范围），不考虑采样点的空间分布模式和方向性，容易产生"牛眼效应"（bull's eye effect）。</p>
+
+      <h5>(2) 克里金插值 (Kriging Interpolation)</h5>
+      <p>Kriging是一种源于<strong>地统计学</strong>（Geostatistics）的最优线性无偏估计（BLUE, Best Linear Unbiased Estimator）方法，由南非矿业工程师<strong>Danie G. Krige</strong>在1950年代提出，后由法国数学家<strong>Georges Matheron</strong>系统化为区域化变量理论。</p>
+      <p>普通克里金（Ordinary Kriging）的估计值为：</p>
+      <div class="formula-block">
+        Z&#x0302;(x₀) = &Sigma;<sub>i=1</sub><sup>n</sup> &lambda;<sub>i</sub> &times; Z(x<sub>i</sub>)<br><br>
+        约束条件：&Sigma;&lambda;<sub>i</sub> = 1（无偏约束）<br><br>
+        &bull; &lambda;<sub>i</sub> = 第 i 个采样点的最优权重（通过求解Kriging方程组得到）<br>
+        &bull; Z(x<sub>i</sub>) = 第 i 个采样点的观测值
+      </div>
+      <p>与IDW不同，Kriging的权重<strong>不仅取决于距离</strong>，还取决于数据的<strong>空间变异结构</strong>（spatial variability structure），即通过<strong>半变异函数</strong>（Semivariogram，也称变差函数）来量化。</p>
+      <p><strong>半变异函数 &gamma;(h)</strong> 定义为：</p>
+      <div class="formula-block">
+        &gamma;(h) = (1/2N(h)) &times; &Sigma;[Z(x<sub>i</sub>) - Z(x<sub>i</sub>+h)]&sup2;<br><br>
+        &bull; h = 滞后距离 (lag distance)<br>
+        &bull; N(h) = 距离为 h 的点对数量<br>
+        &bull; Z(x<sub>i</sub>), Z(x<sub>i</sub>+h) = 距离为 h 的两个点的属性值
+      </div>
+      <p>半变异函数的三个关键参数：</p>
+      <ul>
+        <li><strong>块金值</strong>（Nugget, C₀）：h&rarr;0时的半变异值，反映微观尺度变异或测量误差。</li>
+        <li><strong>基台值</strong>（Sill, C）：半变异值趋于稳定时的上限值，反映数据的总方差。</li>
+        <li><strong>变程</strong>（Range, a）：半变异值达到基台值时的滞后距离，超过此距离的数据点不再具有空间自相关性。</li>
+      </ul>
+      <p>常用的理论半变异函数模型包括：</p>
+      <ul>
+        <li><strong>球状模型 (Spherical)：</strong>&gamma;(h) = C₀ + (C-C₀)[1.5(h/a) - 0.5(h/a)&sup3;]，当 h &le; a 时；&gamma;(h) = C，当 h &gt; a 时。</li>
+        <li><strong>指数模型 (Exponential)：</strong>&gamma;(h) = C₀ + (C-C₀)[1 - exp(-3h/a)]。不存在严格的变程，以a为实际变程（达到基台95%时的距离）。</li>
+        <li><strong>高斯模型 (Gaussian)：</strong>&gamma;(h) = C₀ + (C-C₀)[1 - exp(-3h&sup2;/a&sup2;)]。在原点处曲线呈抛物线形状，适合极为平滑的空间变化。</li>
+      </ul>
+      <p>Kriging方法的主要变体包括：<strong>简单克里金</strong>（Simple Kriging，已知总体均值）、<strong>普通克里金</strong>（Ordinary Kriging，均值未知但假设局部恒定）、<strong>泛克里金</strong>（Universal Kriging，允许存在空间趋势）和<strong>协同克里金</strong>（Co-Kriging，利用辅助变量）。Kriging不仅给出估计值，还能提供<strong>估计方差</strong>（Kriging variance），量化预测的不确定性。</p>
+
+      <h4>5.5 核密度估计 (Kernel Density Estimation, KDE)</h4>
+      <p>核密度估计是一种<strong>非参数概率密度估计</strong>方法，用于可视化点事件或线事件的<strong>空间聚集模式</strong>，即"热力图"（heat map）。它将离散的点事件转化为连续的密度表面。</p>
+      <div class="formula-block">
+        f&#x0302;(x) = (1/nh) &times; &Sigma;<sub>i=1</sub><sup>n</sup> K[(x - x<sub>i</sub>) / h]<br><br>
+        二维形式（空间KDE）：<br>
+        f&#x0302;(x,y) = (1/nh&sup2;) &times; &Sigma;<sub>i=1</sub><sup>n</sup> K[(x-x<sub>i</sub>)/h, (y-y<sub>i</sub>)/h]<br><br>
+        &bull; f&#x0302;(x,y) = 位置 (x,y) 处的估计密度<br>
+        &bull; n = 事件点总数<br>
+        &bull; h = 带宽 (bandwidth)，即搜索半径<br>
+        &bull; K = 核函数 (kernel function)<br>
+        &bull; (x<sub>i</sub>, y<sub>i</sub>) = 第 i 个事件点的坐标
+      </div>
+      <p>ArcGIS等GIS软件通常采用<strong>四次核函数</strong>（Quartic/Epanechnikov kernel，Silverman, 1986）：</p>
+      <div class="formula-block">
+        K(u) = (3/&pi;) &times; (1 - u&sup2;)&sup2;，当 |u| &le; 1 时；<br>
+        K(u) = 0，当 |u| &gt; 1 时。
+      </div>
+      <p><strong>带宽 h</strong> 是KDE中最关键的参数：带宽过小，密度面呈现过多"尖峰"（过拟合）；带宽过大，密度面过度平滑，丢失局部细节。默认带宽通常采用<strong>Silverman经验公式</strong>（Silverman's Rule-of-Thumb），该公式在二维情况下基于加权标准距离和中位距离来自适应计算最优带宽。</p>
+      <p>KDE的典型应用包括：犯罪热点分析、交通事故密度分析、商业选址评估、疾病空间聚集性分析和野生动物栖息地分析等。</p>
+
+      <h4>5.6 空间统计 (Spatial Statistics)</h4>
+      <p>空间统计是将<strong>经典统计学方法</strong>扩展到空间数据分析领域的学科。其核心挑战在于空间数据违反了经典统计中观测值<strong>独立同分布</strong>（i.i.d.）的基本假设——空间数据天然具有<strong>空间自相关性</strong>。</p>
+      <p>空间统计的主要方法和工具包括：</p>
+      <ul>
+        <li><strong>全局空间自相关</strong>：Moran's I、Geary's C（见1.5节），检验整体空间模式是聚集、离散还是随机。</li>
+        <li><strong>局部空间自相关</strong>：LISA（Local Moran's I）、Getis-Ord Gi*（热点分析/冷点分析），识别统计显著的局部热点（High-High）和冷点（Low-Low）集群。</li>
+        <li><strong>点模式分析</strong>：最近邻指数（Nearest Neighbor Index, NNI）——比较实际最近邻距离均值与理论随机分布距离均值的比值，判断点是聚集（NNI&lt;1）还是离散（NNI&gt;1）；K函数/L函数——多尺度空间聚集性检测。</li>
+        <li><strong>空间回归</strong>：空间滞后模型（SLM/SAR）、空间误差模型（SEM），在回归模型中纳入空间自相关结构以获得无偏估计。</li>
+        <li><strong>地理加权回归</strong>（GWR, Geographically Weighted Regression）：允许回归系数随空间位置变化，揭示变量关系的空间非平稳性。</li>
+      </ul>
+
+      <h5>Getis-Ord Gi* 热点分析</h5>
+      <p>Getis-Ord Gi* 统计量用于识别统计显著的<strong>热点</strong>和<strong>冷点</strong>。其计算公式为：</p>
+      <div class="formula-block">
+        Gi* = [&Sigma;w<sub>ij</sub>x<sub>j</sub> - X&#x0304;&Sigma;w<sub>ij</sub>] / {S &times; sqrt{[n&Sigma;w<sub>ij</sub>&sup2; - (&Sigma;w<sub>ij</sub>)&sup2;] / (n-1)}}<br><br>
+        &bull; w<sub>ij</sub> = 位置 i 和 j 之间的空间权重<br>
+        &bull; x<sub>j</sub> = 位置 j 的属性值<br>
+        &bull; X&#x0304; = 属性均值，S = 属性标准差<br>
+        &bull; n = 要素总数
+      </div>
+      <p>输出的Gi*值为z得分。正的z得分且统计显著表示<strong>热点</strong>（高值聚集），负的z得分且统计显著表示<strong>冷点</strong>（低值聚集）。z值的绝对值越大，聚集程度越强。</p>
+
+      <div class="ency-ref">
+        <strong>参考文献：</strong><br>
+        [1] Silverman, B. W. (1986). <em>Density Estimation for Statistics and Data Analysis</em>. Chapman & Hall.<br>
+        [2] Dijkstra, E. W. (1959). A note on two problems in connexion with graphs. <em>Numerische Mathematik</em>, 1(1), 269-271.<br>
+        [3] Matheron, G. (1963). Principles of geostatistics. <em>Economic Geology</em>, 58(8), 1246-1266.<br>
+        [4] Cressie, N. A. C. (1993). <em>Statistics for Spatial Data</em>. Wiley-Interscience.<br>
+        [5] Getis, A., & Ord, J. K. (1992). The analysis of spatial association by use of distance statistics. <em>Geographical Analysis</em>, 24(3), 189-206.<br>
+        [6] Fotheringham, A. S., Brunsdon, C., & Charlton, M. (2002). <em>Geographically Weighted Regression</em>. Wiley.<br>
+        [7] Krige, D. G. (1951). A statistical approach to some basic mine valuation problems on the Witwatersrand. <em>J. of the Chemical, Metallurgical and Mining Society of South Africa</em>, 52(6), 119-139.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========== GIS Academic Frontiers ========== -->
+<section class="section" id="academic" style="background: var(--bg-secondary);">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// 10. Academic Frontiers</div>
+      <h2 class="section-title">GIS 学术前沿与经典论文</h2>
+      <p class="section-desc">从 GIS 奠基人到前沿研究方向，梳理地理信息科学的学术脉络与知识谱系</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="card fade-up ency-subsection" style="padding: 2.5rem;">
+      <h3>GIS 奠基人与经典论文</h3>
+
+      <h4>Roger Tomlinson - "GIS 之父"</h4>
+      <p>Roger Tomlinson 于 1960 年代在加拿大开发了世界上第一个地理信息系统 -- <strong>Canada Geographic Information System (CGIS)</strong>，用于管理加拿大土地清查数据。其经典著作 <em>"Computer Handling of Geographical Data: An Examination of Selected Geographic Information Systems"</em> (UNESCO Press, 1976, 与 Calkins 和 Marble 合著) 是 GIS 领域的奠基文献，系统阐述了计算机处理地理数据的原理和方法。Tomlinson 因此被学界尊称为 "Father of GIS"。</p>
+
+      <h4>Michael F. Goodchild - 地理信息科学理论体系</h4>
+      <p>Goodchild 是现代 GIS 理论体系的核心建设者。其 1992 年发表的开创性论文 <em>"Geographical Information Science"</em> 正式提出了将 GIS 从"系统"(System) 提升为"科学"(Science) 的理念，创立了 <strong>GIScience (地理信息科学)</strong> 这一学术领域。主要贡献：</p>
+      <ul>
+        <li><em>"GIS and Spatial Data Analysis: Converging Perspectives"</em> -- 分析了 GIS 与空间数据分析自 1950 年代以来的发展历程及融合趋势</li>
+        <li><em>"Integrating GIS and Spatial Analysis -- Problems and Possibilities"</em> (与 Haining, Wise 合著, 1992, International Journal of Geographical Information Systems) -- 探讨 GIS 与空间分析集成的关键问题</li>
+        <li><em>"Geospatial Analysis: A Comprehensive Guide to Principles, Techniques and Software Tools"</em> (与 De Smith, Longley 合著) -- 地理空间分析领域最全面的参考著作</li>
+      </ul>
+
+      <h4>Luc Anselin - 空间计量经济学与探索性空间数据分析</h4>
+      <p>芝加哥大学空间数据科学中心 (Center for Spatial Data Science) 的 Luc Anselin 教授是空间计量经济学和探索性空间数据分析 (ESDA) 的创始人。核心贡献：</p>
+      <ul>
+        <li><em>"The Moran Scatterplot as an ESDA Tool to Assess Local Instability in Spatial Association"</em> (1996, 收录于 Spatial Analytical Perspectives on GIS)</li>
+        <li><strong>GeoDa 软件</strong>：<em>"GeoDa: An Introduction to Spatial Data Analysis"</em> (Geographical Analysis, 2006) -- 开源的空间数据分析和地理可视化软件，是空间统计学教学和研究的标准工具</li>
+        <li>与 Getis 合著的空间分析概念框架 (Anselin & Getis, 1992) 为 GIS 与空间统计的链接建立了理论基础</li>
+        <li><strong>空间自相关理论</strong>：发展了 Local Indicators of Spatial Association (LISA) 和空间权重矩阵理论</li>
+      </ul>
+    </div>
+
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>核心学术期刊与会议</h3>
+
+      <h4>International Journal of Geographical Information Science (IJGIS)</h4>
+      <p>地理信息科学领域最权威的期刊之一。<strong>最新影响因子 5.87</strong> (2024 评估)，h-index 141。由 Taylor & Francis 出版，当前发行至 Volume 40 (2026)。近期热门研究方向：</p>
+      <ul>
+        <li>基于 BERT 的等高线数据标记化和表示学习</li>
+        <li>空间上下文感知的跨视角地理实体对齐</li>
+        <li>基于深度学习的历史地图局部损伤修复</li>
+        <li>可扩展语言无关的地名解析方法 UniTopRank</li>
+        <li>GeoFM 地理基础模型对空间数据科学和 GeoAI 的重塑</li>
+      </ul>
+
+      <h4>ISPRS Journal of Photogrammetry and Remote Sensing</h4>
+      <p>国际摄影测量与遥感学会 (ISPRS) 官方期刊，摄影测量和遥感领域最顶级的学术刊物。覆盖主题包括卫星对地观测、点云处理、自动化制图、遥感影像解译和空间信息提取。ISPRS International Journal of Geo-Information 为其开放获取姊妹刊。</p>
+
+      <h4>GIScience 会议系列</h4>
+      <p>GIScience Conference 是地理信息科学领域的顶级学术会议，每两年举办一次。会议涵盖空间认知、空间数据建模、地理信息检索、空间推理、移动性分析和空间统计等核心主题。与 ACM SIGSPATIAL 和 COSIT (Conference on Spatial Information Theory) 并列为空间信息领域三大旗舰会议。</p>
+
+      <h4>其他重要学术刊物</h4>
+      <ul>
+        <li><strong>Transactions in GIS</strong>：Wiley 出版，GIS 方法与应用</li>
+        <li><strong>Computers & Geosciences</strong>：Elsevier 出版，地学计算方法</li>
+        <li><strong>Annals of the American Association of Geographers</strong>：地理学核心期刊</li>
+        <li><strong>Geographical Analysis</strong>：空间分析和地理建模方法论</li>
+        <li><strong>Journal of Spatial Information Science (JOSIS)</strong>：开放获取</li>
+        <li><strong>地球信息科学学报</strong>：中国地理信息科学核心期刊</li>
+      </ul>
+    </div>
+
+    <div class="card fade-up ency-subsection" style="margin-top: 2rem; padding: 2.5rem;">
+      <h3>空间数据智能与 GeoAI 前沿</h3>
+
+      <h4>2024 年中国空间数据智能战略发展白皮书</h4>
+      <p>由 ACM SIGSPATIAL China Chapter 组织编写，是国家空间数据智能年度发展报告 (2022) 和空间数据智能与城市元宇宙白皮书 (2023) 的延续，在第五届空间数据智能学术会议 (SpatialDI 2024) 上正式发布。白皮书以<strong>空间数据智能大模型</strong>为核心，研究内容包括：</p>
+      <ul>
+        <li><strong>地图作为模态数据</strong>：将地图视为深度学习的一种数据模态类型</li>
+        <li><strong>深度强化学习在空间优化中的应用</strong>：路径规划、选址优化等</li>
+        <li><strong>AGI 时代的地理知识图谱</strong>：机遇与挑战</li>
+        <li><strong>大模型与知识图谱的互补关系</strong>：LLM-based GeoAI 范式如 JARVIS、Geo-JARVIS</li>
+        <li><strong>地理空间 AI 基础模型</strong>：如 IBM/NASA 的 Prithvi 地球科学基础模型</li>
+      </ul>
+
+      <h4>GeoAI 研究前沿 (2025-2026)</h4>
+      <p>GeoAI 作为地理空间研究与人工智能的交叉融合，已成为空间数据科学中发展最快的研究方向。核心研究主题：</p>
+      <ul>
+        <li><strong>异质性感知 GeoAI (Heterogeneity-aware)</strong>：处理空间非平稳性和地理异质性</li>
+        <li><strong>知识引导 GeoAI (Knowledge-guided)</strong>：融合地理学第一原理和领域知识</li>
+        <li><strong>空间表示学习 (Spatial Representation Learning)</strong>：地理实体和空间关系的深度学习表示</li>
+        <li><strong>地理基础模型 Geo-Foundation Models (GeoFM)</strong>：针对地理空间领域预训练的大型基础模型</li>
+        <li><strong>公平性感知 GeoAI (Fairness-aware)</strong>：GeoAI 正在扩大数字鸿沟的问题与应对</li>
+        <li><strong>隐私感知 GeoAI (Privacy-aware)</strong>：位置隐私保护和联邦学习</li>
+        <li><strong>可解释 GeoAI (Interpretable/Explainable)</strong>：提升空间预测模型的透明度</li>
+        <li><strong>Geographical Graph Attention Networks</strong>：空间深度学习模型用于空间预测和探索性分析 (Transactions in GIS, 2025)</li>
+      </ul>
+
+      <h4>GeoAI 对地理信息科学的重塑</h4>
+      <p>IJGIS 2025 年发表的重要论文 <em>"GeoFM: How Will Geo-Foundation Models Reshape Spatial Data Science and GeoAI?"</em> 系统探讨了地理基础模型对空间数据科学的深远影响。另一篇 <em>"Geospatial Artificial Intelligence (GeoAI) Is Widening the Digital Divide"</em> (Annals of the AAG, 2025) 则从社会公平角度审视 GeoAI 的发展问题。<em>"Towards the Next Generation of Geospatial Artificial Intelligence"</em> (ScienceDirect, 2025) 展望了下一代地理空间 AI 的发展方向。</p>
+      <div class="ency-ref">
+        参考文献：<br>
+        [1] Tomlinson, R. F., Calkins, H. W., & Marble, D. F. (1976). Computer Handling of Geographical Data. UNESCO Press.<br>
+        [2] Goodchild, M. F. (1992). Geographical Information Science. International Journal of Geographical Information Systems, 6(1), 31-45.<br>
+        [3] Anselin, L. (1996). The Moran Scatterplot as an ESDA Tool. In Spatial Analytical Perspectives on GIS.<br>
+        [4] Anselin, L., Syabri, I., & Kho, Y. (2006). GeoDa: An Introduction to Spatial Data Analysis. Geographical Analysis, 38(1), 5-22.<br>
+        [5] Goodchild, M. F., Haining, R., & Wise, S. (1992). Integrating GIS and Spatial Analysis. IJGIS, 6(5), 407-423.<br>
+        [6] Getis, A., & Ord, J. K. (1992). The Analysis of Spatial Association by Use of Distance Statistics. Geographical Analysis, 24(3), 189-206.<br>
+        [7] Wang, S. et al. (2024). Research on Foundation Model for Spatial Data Intelligence -- China 2024 White Paper. ACM SIGSPATIAL China Chapter.<br>
+        [8] IJGIS Impact Factor 5.87 (2024), h-index 141.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ========== Image Gallery: Generated & Educational Images ========== -->
+<section class="section" id="gallery" style="background: var(--bg-secondary);">
+  <div class="section-inner">
+    <div class="section-header fade-up">
+      <div class="section-tag">// Image Gallery</div>
+      <h2 class="section-title" style="font-family: var(--font-display);">图片资源库</h2>
+      <p class="section-desc" style="color: var(--text-secondary);">AI生成配图 + Wikimedia Commons教育资源 + NASA公共领域影像</p>
+      <div class="divider"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;" class="fade-up">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/hero_earth_gis.png" alt="GIS地球网络" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">GIS 全球网络</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/gis_layers_concept.png" alt="GIS图层概念" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">GIS 数据图层叠加</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/vector_data.png" alt="矢量数据" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">矢量数据模型</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/raster_data.png" alt="栅格数据" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">栅格数据模型</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/map_projection.png" alt="地图投影" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">地图投影</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/spatial_analysis.png" alt="空间分析" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">空间分析</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/remote_sensing.png" alt="遥感技术" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">遥感技术</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/geoai_concept.png" alt="GeoAI" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">GeoAI 地理人工智能</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/digital_twin.png" alt="数字孪生" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">数字孪生城市</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/3d_reconstruction.png" alt="三维重建" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">三维城市重建</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/lbs_location.png" alt="LBS" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">LBS 位置服务</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/urban_planning.png" alt="城市规划" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">城市规划GIS</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/agriculture_gis.png" alt="精准农业" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">精准农业</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/emergency_gis.png" alt="应急管理" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">应急管理GIS</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/webgis_dev.png" alt="WebGIS" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">WebGIS 开发</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="images/gis_career.png" alt="GIS职业" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">GIS 职业发展</h4><p style="font-size:.75rem;color:var(--text-muted)">AI生成 (Nano Banana 2)</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Snow-cholera-map-1.jpg" alt="John Snow霍乱地图" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">John Snow 1854 霍乱地图</h4><p style="font-size:.75rem;color:var(--text-muted)">Wikimedia Commons · Public Domain</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Gislayers.jpg" alt="GIS图层" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">GIS 图层叠加</h4><p style="font-size:.75rem;color:var(--text-muted)">Wikimedia Commons · CC BY 3.0</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/2016_Miami_by_OLI_Landsat_8_Nasa.jpg" alt="Landsat迈阿密" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">Landsat 8 卫星影像 (迈阿密)</h4><p style="font-size:.75rem;color:var(--text-muted)">NASA/USGS · Public Domain</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/52/NDVI_of_irrigated_fields.jpg" alt="NDVI" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">NDVI 植被指数图</h4><p style="font-size:.75rem;color:var(--text-muted)">Wikimedia Commons · CC BY 4.0</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/2016_City_of_London_3D_model.jpg" alt="伦敦3D模型" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">伦敦 3D 城市模型</h4><p style="font-size:.75rem;color:var(--text-muted)">AccuCities · CC BY-SA 4.0</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Ouster_OS1-64_lidar_point_cloud_of_intersection_of_Folsom_and_Dore_St%2C_San_Francisco.png" alt="LiDAR点云" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">LiDAR 点云可视化</h4><p style="font-size:.75rem;color:var(--text-muted)">Daniel L. Lu · CC BY 4.0</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Photogrammetry_3D_city_model_of_London.jpg" alt="摄影测量" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">倾斜摄影测量 3D 模型</h4><p style="font-size:.75rem;color:var(--text-muted)">AccuCities · CC BY-SA 4.0</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Precision_Farming_in_Minnesota_-_False_Colour.jpg" alt="精准农业" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">精准农业卫星遥感</h4><p style="font-size:.75rem;color:var(--text-muted)">NASA · Public Domain</p></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/QGIS_Interface_Screenshot_with_Map_of_Median_Income_in_Houston_%282010%29.png" alt="QGIS界面" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0;margin:0;border:none" loading="lazy">
+        <div style="padding:1rem"><h4 style="font-size:.9rem;margin-bottom:.3rem">QGIS 软件界面</h4><p style="font-size:.75rem;color:var(--text-muted)">Wikimedia Commons · CC0</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ========== Footer ========== -->
 <footer class="footer">
   <div class="footer-inner">
@@ -1339,8 +2672,13 @@ body::before {
       <a href="https://en.wikipedia.org/wiki/Geographic_information_system" target="_blank">Wikipedia - GIS</a>
       <a href="https://malagis.com/gis-salary-survey-2026.html" target="_blank">麻辣GIS 2026薪资调查</a>
       <a href="https://bootcampgis.com/gis-jobs-report/" target="_blank">GIS Jobs Report 2025</a>
+      <a href="https://www.supermap.com/zh-cn/aboutus/" target="_blank">超图软件</a>
+      <a href="https://www.mapgis.com/" target="_blank">中地数码 MapGIS</a>
+      <a href="https://earthengine.google.com/" target="_blank">Google Earth Engine</a>
+      <a href="https://postgis.net/" target="_blank">PostGIS</a>
+      <a href="https://www.tandfonline.com/toc/tgis20/current" target="_blank">IJGIS</a>
     </div>
-    <p>GIS Encyclopedia &copy; 2026 | 数据来源：Esri, National Geographic, Wikipedia, 麻辣GIS, BLS, Research.com</p>
+    <p>GIS Encyclopedia &copy; 2026 | 数据来源：Esri, National Geographic, Wikipedia, 麻辣GIS, BLS, SuperMap, MapGIS, GISCI, IJGIS, Grand View Research</p>
     <p style="margin-top: .5rem; font-size: .75rem; color: var(--text-muted);">Built with care. Powered by open data and open knowledge.</p>
   </div>
 </footer>
