@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三维GIS与三维重建详解 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 10</div>
+  <h1>三维GIS与三维重建详解</h1>
+  <p>从倾斜摄影到 NeRF，从点云处理到 3D Gaussian Splatting——全面解析三维地理空间数据的采集、重建、标准与可视化技术体系。</p>
+  <div class="hero-img"><img src="../images/3d_reconstruction.png" alt="三维GIS与三维重建"></div>
+</div>
+
+<article class="content">
+
+<!-- ============================================================ -->
+<h2>一、倾斜摄影测量（Oblique Photogrammetry）</h2>
+
+<p><strong>倾斜摄影测量</strong>是当前城市级三维模型生产的主流技术。与传统垂直航空摄影只获取地面正射影像不同，倾斜摄影通过搭载多个不同角度的相机，同时获取地物的顶部和侧面影像信息，从而自动化生成具有真实纹理的三维模型。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Photogrammetry_3D_city_model_of_London.jpg" alt="倾斜摄影三维城市模型">
+<p class="caption">倾斜摄影生成的伦敦三维城市模型（图片来源：Wikimedia Commons）</p>
+
+<h3>1.1 五镜头相机系统</h3>
+
+<p>标准的倾斜摄影系统通常采用<strong>五镜头（Five-Camera）</strong>配置：</p>
+
+<table>
+<tr><th>镜头编号</th><th>方向</th><th>倾斜角度</th><th>主要功能</th></tr>
+<tr><td><strong>镜头 1</strong></td><td>正下方（Nadir）</td><td>0°（垂直）</td><td>获取地面正射信息，提供高精度空间定位基准</td></tr>
+<tr><td><strong>镜头 2</strong></td><td>前方（Forward）</td><td>40°-45°</td><td>获取建筑物前立面纹理</td></tr>
+<tr><td><strong>镜头 3</strong></td><td>后方（Backward）</td><td>40°-45°</td><td>获取建筑物后立面纹理</td></tr>
+<tr><td><strong>镜头 4</strong></td><td>左侧（Left）</td><td>40°-45°</td><td>获取建筑物左侧立面纹理</td></tr>
+<tr><td><strong>镜头 5</strong></td><td>右侧（Right）</td><td>40°-45°</td><td>获取建筑物右侧立面纹理</td></tr>
+</table>
+
+<p>典型的工业级五镜头系统包括 <strong>Leica CityMapper-2</strong>（1.5 亿像素混合传感器）、<strong>Trimble MX9</strong>、<strong>Phase One iXM-RS150F</strong> 等。国产系统如 <strong>赛尔 PowerVision</strong> 和 <strong>飞马 D2000</strong> 也已在大规模城市三维重建中得到广泛应用。</p>
+
+<h3>1.2 倾斜摄影处理流程</h3>
+
+<p>从原始影像到最终三维模型，倾斜摄影的完整处理流程包括以下五个核心步骤：</p>
+
+<h4>步骤一：空中三角测量（Aerial Triangulation，空三）</h4>
+
+<p>空三是倾斜摄影数据处理的基础环节，其目标是建立影像像素坐标与地面三维坐标之间的精确对应关系。核心过程包括：</p>
+
+<ol>
+<li><strong>特征点提取与匹配</strong>：在重叠影像间自动提取 SIFT/SURF 等特征点并进行跨影像匹配</li>
+<li><strong>相对定向</strong>：利用匹配点计算相邻影像间的相对位姿关系</li>
+<li><strong>绝对定向</strong>：利用地面控制点（GCP）或 GNSS/IMU 观测值将模型转换到大地坐标系</li>
+<li><strong>光束法平差（Bundle Adjustment）</strong>：以所有连接点和控制点为约束，同时优化所有影像的外方位元素和连接点的三维坐标</li>
+</ol>
+
+<div class="formula">
+共线方程（Collinearity Equation）—— 空三的数学基础：<br>
+x - x₀ = -f · (a₁(X-Xs) + b₁(Y-Ys) + c₁(Z-Zs)) / (a₃(X-Xs) + b₃(Y-Ys) + c₃(Z-Zs))<br>
+y - y₀ = -f · (a₂(X-Xs) + b₂(Y-Ys) + c₂(Z-Zs)) / (a₃(X-Xs) + b₃(Y-Ys) + c₃(Z-Zs))<br>
+<br>
+其中：(x, y) 为像点坐标；(x₀, y₀) 为主点坐标；f 为焦距<br>
+(X, Y, Z) 为地面点坐标；(Xs, Ys, Zs) 为摄站坐标<br>
+a_i, b_i, c_i 为旋转矩阵 R 的元素<br>
+<br>
+光束法平差目标函数：<br>
+min Σ_i Σ_j ||x_ij - π(R_i, t_i, X_j)||² + λ Σ_k ||X_k - X_k^GCP||²
+</div>
+
+<h4>步骤二：密集匹配（Dense Matching）</h4>
+
+<p>在空三完成后，利用密集匹配算法为每个像素计算三维坐标，生成密集点云。常用算法包括 <strong>SGM（Semi-Global Matching）</strong>和 <strong>MVS（Multi-View Stereo）</strong>。SGM 通过多方向动态规划优化视差图，在效率和精度之间取得了良好平衡。</p>
+
+<h4>步骤三：网格重建（Mesh Reconstruction）</h4>
+
+<p>将密集点云转换为三角网格（Triangulated Irregular Network, TIN）表面模型。常用方法包括 Poisson Surface Reconstruction 和 Delaunay 三角剖分。</p>
+
+<h4>步骤四：纹理映射（Texture Mapping）</h4>
+
+<p>将原始影像的颜色信息投影到网格表面，生成具有真实纹理的三维模型。需要处理遮挡检测、色彩均衡和接缝消除等问题。</p>
+
+<h4>步骤五：模型优化与输出</h4>
+
+<p>对三维模型进行简化（Mesh Simplification）、LOD 分级和切片（Tiling），输出为 3D Tiles、OSGB 等标准格式。</p>
+
+<h3>1.3 主流倾斜摄影处理软件</h3>
+
+<div class="two-col">
+<div class="card">
+<h4>ContextCapture（Bentley）</h4>
+<p>工业级倾斜摄影建模软件，前身为 Acute3D Smart3DCapture。支持超大规模数据集（数万张影像）的分布式处理，是城市级三维重建的首选方案。自动化程度高，输出格式丰富（3D Tiles、OSGB、3MX、OBJ 等）。</p>
+</div>
+<div class="card">
+<h4>Agisoft Metashape</h4>
+<p>高性价比的专业摄影测量软件（前身为 PhotoScan）。支持倾斜摄影、无人机航测和近景摄影测量。提供 Python API 支持自动化批处理。学术界广泛使用，适合中小规模项目。</p>
+</div>
+</div>
+
+<p>其他主要工具还包括 <strong>Pix4Dmapper</strong>（无人机航测领域市占率最高）、<strong>DJI Terra</strong>（大疆无人机配套方案）、<strong>OpenDroneMap</strong>（开源方案）等。</p>
+
+<!-- ============================================================ -->
+<h2>二、LiDAR 点云处理</h2>
+
+<p><strong>LiDAR（Light Detection and Ranging，激光雷达）</strong>通过发射激光脉冲并测量反射回波的时间来精确获取目标的三维坐标，是除摄影测量外最重要的三维空间数据采集技术。LiDAR 能够穿透植被获取地表信息，在地形测量、林业调查、电力线路巡检等领域具有不可替代的优势。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Ouster_OS1-64_lidar_point_cloud_of_intersection_of_Folsom_and_Dore_St%2C_San_Francisco.png" alt="LiDAR 点云数据">
+<p class="caption">旧金山街道交叉口的 LiDAR 点云数据（Ouster OS1-64，图片来源：Wikimedia Commons）</p>
+
+<h3>2.1 点云滤波算法</h3>
+
+<p>点云滤波（Filtering）的目标是将原始 LiDAR 点云分离为<strong>地面点（Ground Points）</strong>和<strong>非地面点（Non-ground Points）</strong>，是后续 DEM 提取和地物分类的前提。</p>
+
+<h4>CSF（Cloth Simulation Filter，布料模拟滤波）</h4>
+
+<p><strong>CSF</strong>（Zhang et al., 2016）是一种直观且高效的地面滤波算法。其核心思想是将点云上下翻转，然后模拟一块布料在重力作用下覆盖到翻转后的点云表面上——布料最终的形态即近似于地面表面。</p>
+
+<div class="formula">
+CSF 算法步骤：<br>
+1. 将点云上下翻转（Z 取反）<br>
+2. 在翻转后的点云上方放置一块水平布料网格<br>
+3. 模拟布料在重力作用下的下落过程（质点-弹簧模型）：<br>
+   F_gravity = m · g（重力）<br>
+   F_spring = k · (||x_i - x_j|| - L₀)（弹簧力）<br>
+   F_damping = -d · v（阻尼力）<br>
+4. 当布料质点接触到点云时停止下落<br>
+5. 比较每个点云点与最近布料质点的距离，距离小于阈值的为地面点<br>
+<br>
+参数：布料分辨率（grid resolution）、刚度系数（rigidness）、距离阈值
+</div>
+
+<p>CSF 的优势在于物理意义直观、参数少且易于调节，已被集成到 <strong>CloudCompare</strong> 和 <strong>LAStools</strong> 等主流点云处理软件中。</p>
+
+<h4>TIN 渐进加密滤波（Progressive TIN Densification）</h4>
+
+<p><strong>渐进 TIN 加密</strong>（Axelsson, 2000）是另一类经典的地面滤波方法。算法从稀疏的初始种子点构建 TIN 表面，然后逐步将满足角度和距离阈值条件的点加入 TIN，直到没有新点可加入为止。</p>
+
+<div class="formula">
+渐进 TIN 加密判据：<br>
+对于候选点 P 和其投影所在的 TIN 三角面：<br>
+- 距离准则：d(P, TIN_face) < d_threshold<br>
+- 角度准则：α(P, TIN_edge) < α_threshold<br>
+<br>
+满足两个准则的点被接受为地面点并加入 TIN
+</div>
+
+<h3>2.2 点云分类（Classification）</h3>
+
+<p>在地面滤波之后，需要对非地面点进行进一步分类，识别出建筑物、植被、电力线、车辆等不同地物类别。现代点云分类方法主要分为：</p>
+
+<ul>
+<li><strong>基于规则的方法</strong>：利用几何特征（高度、平面度、法向量分布）和回波特征（回波次数、强度）设定分类规则</li>
+<li><strong>基于机器学习的方法</strong>：使用 Random Forest、SVM 等方法对提取的特征进行有监督分类</li>
+<li><strong>基于深度学习的方法</strong>：直接在原始点云上进行分类，代表方法包括 <strong>PointNet</strong>（Qi et al., 2017）、<strong>PointNet++</strong>、<strong>RandLA-Net</strong>（Hu et al., 2020）和 <strong>KPConv</strong>（Thomas et al., 2019）</li>
+</ul>
+
+<h3>2.3 DEM 提取</h3>
+
+<p>基于分类后的地面点云，通过内插生成<strong>数字高程模型（DEM, Digital Elevation Model）</strong>。常用的内插方法包括：<strong>反距离加权（IDW）</strong>、<strong>克里金（Kriging）</strong>、<strong>自然邻点法（Natural Neighbor）</strong>和<strong>TIN 线性内插</strong>。LiDAR 生成的 DEM 精度通常可达 <strong>5-15 cm（垂直精度）</strong>，远优于卫星遥感 DEM。</p>
+
+<div class="ref">
+Zhang, W., Qi, J., Wan, P., et al. (2016). An easy-to-use airborne LiDAR data filtering method based on cloth simulation. <em>Remote Sensing</em>, 8(6), 501.<br>
+Qi, C. R., Su, H., Mo, K., & Guibas, L. J. (2017). PointNet: Deep learning on point sets for 3D classification and segmentation. <em>CVPR 2017</em>.
+</div>
+
+<!-- ============================================================ -->
+<h2>三、NeRF：神经辐射场</h2>
+
+<p><strong>NeRF（Neural Radiance Fields，神经辐射场）</strong>是 Mildenhall 等人于 2020 年在 ECCV 上发表的开创性工作，开辟了基于神经网络的三维场景表示与新视角合成（Novel View Synthesis）的新范式。NeRF 的核心思想是用一个 MLP（多层感知机）网络隐式地表示三维场景的辐射场。</p>
+
+<h3>3.1 NeRF 的数学框架</h3>
+
+<p>NeRF 将三维场景表示为一个连续的 5D 函数 F，将空间位置 (x, y, z) 和观察方向 (&theta;, &phi;) 映射为该点的颜色 (R, G, B) 和体积密度 &sigma;：</p>
+
+<div class="formula">
+NeRF 隐式表示：<br>
+F: (x, y, z, θ, φ) → (R, G, B, σ)<br>
+<br>
+其中：<br>
+(x, y, z) —— 空间位置坐标<br>
+(θ, φ) —— 观察方向（极角和方位角）<br>
+(R, G, B) —— 该点在给定观察方向下的颜色（与视角相关，可建模高光反射）<br>
+σ —— 体积密度（与视角无关，表示该点是否被物质占据）<br>
+<br>
+NeRF 网络架构：<br>
+输入 → 位置编码（Positional Encoding） → 8层MLP(256维) → σ + 特征向量<br>
+特征向量 + 方向编码 → 1层MLP(128维) → RGB<br>
+<br>
+位置编码（Positional Encoding）：<br>
+γ(p) = (sin(2⁰πp), cos(2⁰πp), ..., sin(2^(L-1)πp), cos(2^(L-1)πp))<br>
+将低维输入映射到高维空间，使 MLP 能够表示高频细节
+</div>
+
+<h3>3.2 体积渲染（Volume Rendering）</h3>
+
+<p>NeRF 使用经典的<strong>体积渲染方程</strong>将隐式的辐射场渲染为二维图像。对于从相机发出的每条光线 r(t) = o + td（其中 o 为相机光心，d 为光线方向），沿光线对颜色和密度进行积分：</p>
+
+<div class="formula">
+体积渲染方程：<br>
+C(r) = ∫_{t_n}^{t_f} T(t) · σ(r(t)) · c(r(t), d) dt<br>
+<br>
+其中累积透射率：<br>
+T(t) = exp(-∫_{t_n}^{t} σ(r(s)) ds)<br>
+<br>
+离散化近似（分层采样 N 个点）：<br>
+Ĉ(r) = Σ_{i=1}^{N} T_i · (1 - exp(-σ_i · δ_i)) · c_i<br>
+T_i = exp(-Σ_{j=1}^{i-1} σ_j · δ_j)<br>
+δ_i = t_{i+1} - t_i（采样间隔）<br>
+<br>
+训练目标：L = Σ_r ||Ĉ(r) - C_gt(r)||²<br>
+最小化渲染颜色与真实影像之间的 MSE 损失
+</div>
+
+<h3>3.3 NeRF 的局限与改进</h3>
+
+<p>原始 NeRF 存在训练慢（单场景需数小时至数天）、渲染慢（每帧需数秒）和静态场景假设等局限。后续工作进行了大量改进：</p>
+
+<table>
+<tr><th>改进方向</th><th>代表工作</th><th>核心创新</th></tr>
+<tr><td>加速训练</td><td><strong>Instant-NGP</strong>（NVIDIA, 2022）</td><td>多分辨率哈希编码（Multi-Resolution Hash Encoding），训练从小时缩短到秒级</td></tr>
+<tr><td>加速渲染</td><td><strong>MobileNeRF</strong>（2022）</td><td>将 NeRF 烘焙为网格 + 纹理，支持移动端实时渲染</td></tr>
+<tr><td>大规模场景</td><td><strong>Block-NeRF</strong>（Waymo, 2022）</td><td>将城市街景分块建模，支持城市级 NeRF 重建</td></tr>
+<tr><td>动态场景</td><td><strong>D-NeRF</strong>（2021）</td><td>引入时间维度的变形场，建模动态场景</td></tr>
+<tr><td>少样本</td><td><strong>pixelNeRF</strong>（2021）</td><td>从极少视角（甚至单张图像）推断 NeRF 表示</td></tr>
+<tr><td>无界场景</td><td><strong>Mip-NeRF 360</strong>（2022）</td><td>处理无界 360° 场景，多尺度反锯齿</td></tr>
+</table>
+
+<div class="ref">
+Mildenhall, B., Srinivasan, P. P., Tancik, M., et al. (2020). NeRF: Representing scenes as neural radiance fields for view synthesis. <em>ECCV 2020</em>.<br>
+Müller, T., Evans, A., Schied, C., & Keller, A. (2022). Instant neural graphics primitives with a multiresolution hash encoding. <em>SIGGRAPH 2022</em>.
+</div>
+
+<!-- ============================================================ -->
+<h2>四、3D Gaussian Splatting（三维高斯泼溅）</h2>
+
+<p><strong>3D Gaussian Splatting（3DGS）</strong>由 Kerbl 等人于 2023 年在 SIGGRAPH 上发表，迅速成为三维重建领域的革命性方法。与 NeRF 使用隐式 MLP 表示场景不同，3DGS 使用大量的<strong>显式三维高斯椭球</strong>来表示场景，并通过可微分的 tile-based 光栅化实现实时渲染。</p>
+
+<h3>4.1 显式 vs 隐式表示</h3>
+
+<div class="two-col">
+<div class="card">
+<h4>NeRF（隐式表示）</h4>
+<p><strong>表示方式</strong>：MLP 网络权重隐式编码场景<br>
+<strong>渲染方法</strong>：光线行进 + 体积渲染<br>
+<strong>渲染速度</strong>：慢（1-30 秒/帧）<br>
+<strong>训练速度</strong>：慢（小时级）<br>
+<strong>优势</strong>：连续表示、内存紧凑<br>
+<strong>劣势</strong>：渲染慢、编辑困难</p>
+</div>
+<div class="card">
+<h4>3DGS（显式表示）</h4>
+<p><strong>表示方式</strong>：数百万个三维高斯椭球<br>
+<strong>渲染方法</strong>：Tile-based 光栅化<br>
+<strong>渲染速度</strong>：实时（<strong>100+ FPS</strong>，1080p）<br>
+<strong>训练速度</strong>：快（分钟级）<br>
+<strong>优势</strong>：实时渲染、易于编辑<br>
+<strong>劣势</strong>：内存消耗大、几何精度有限</p>
+</div>
+</div>
+
+<h3>4.2 高斯椭球参数</h3>
+
+<p>每个三维高斯椭球由以下参数定义：</p>
+
+<div class="formula">
+3D Gaussian 参数：<br>
+<br>
+1. 位置均值 μ ∈ R³ —— 高斯中心的三维坐标 (x, y, z)<br>
+<br>
+2. 协方差矩阵 Σ ∈ R³ˣ³ —— 定义高斯椭球的形状和朝向<br>
+   Σ = R · S · Sᵀ · Rᵀ<br>
+   其中 R 为旋转矩阵（用四元数 q 参数化），S 为缩放对角矩阵<br>
+<br>
+3. 不透明度 α ∈ [0, 1] —— 该高斯的不透明程度<br>
+<br>
+4. 球谐函数系数 SH —— 表示与视角相关的颜色<br>
+   使用 l=0,1,2,3 阶球谐函数（共 48 个系数，RGB 各 16 个）<br>
+   c(d) = Σ_{l=0}^{3} Σ_{m=-l}^{l} c_l^m · Y_l^m(d)<br>
+<br>
+三维高斯函数：<br>
+G(x) = exp(-½ (x-μ)ᵀ Σ⁻¹ (x-μ))
+</div>
+
+<h3>4.3 Tile-based 可微分光栅化</h3>
+
+<p>3DGS 的核心渲染创新是<strong>基于瓦片的可微分光栅化（Tile-based Differentiable Rasterization）</strong>：</p>
+
+<ol>
+<li><strong>投影</strong>：将三维高斯投影到二维屏幕空间，得到二维高斯分布</li>
+<li><strong>瓦片分配</strong>：将屏幕划分为 16x16 像素的瓦片（tile），每个高斯分配到其覆盖的瓦片中</li>
+<li><strong>排序</strong>：在每个瓦片内，按深度对高斯进行排序</li>
+<li><strong>Alpha 混合渲染</strong>：从前到后遍历每个瓦片中的高斯，进行 alpha 混合计算像素颜色</li>
+</ol>
+
+<div class="formula">
+像素颜色的 Alpha 混合：<br>
+C = Σ_{i=1}^{N} c_i · α_i · G_i^{2D}(p) · Π_{j=1}^{i-1}(1 - α_j · G_j^{2D}(p))<br>
+<br>
+其中 G_i^{2D}(p) 为第 i 个高斯在像素 p 处的二维投影值<br>
+α_i 为该高斯的不透明度<br>
+c_i 为该高斯在当前视角下的球谐颜色<br>
+<br>
+关键优势：整个过程可微分（differentiable），因此可以通过<br>
+反向传播梯度来优化所有高斯参数
+</div>
+
+<h3>4.4 自适应密度控制</h3>
+
+<p>3DGS 在训练过程中动态调整高斯的数量和分布：</p>
+<ul>
+<li><strong>致密化（Densification）</strong>：在梯度大的区域（即重建质量不好的区域）克隆（clone）或分裂（split）高斯</li>
+<li><strong>剪枝（Pruning）</strong>：移除不透明度低于阈值的高斯和体积过大的高斯</li>
+<li><strong>不透明度重置</strong>：定期将所有高斯的不透明度重置为较低值，让不必要的高斯自然消亡</li>
+</ul>
+
+<p>一个典型的场景最终可能包含 <strong>100 万至 500 万个高斯椭球</strong>，在 RTX 3090 GPU 上可实现 1080p 分辨率下 <strong>100-200 FPS</strong> 的实时渲染。</p>
+
+<div class="ref">
+Kerbl, B., Kopanas, G., Leimkühler, T., & Drettakis, G. (2023). 3D Gaussian splatting for real-time radiance field rendering. <em>SIGGRAPH 2023</em>.
+</div>
+
+<!-- ============================================================ -->
+<h2>五、3D Tiles 与 CesiumJS 生态</h2>
+
+<h3>5.1 3D Tiles 标准</h3>
+
+<p><strong>3D Tiles</strong> 是 Cesium 公司提出并被 <strong>OGC（Open Geospatial Consortium）</strong>采纳的开放标准（OGC Community Standard），专为海量三维地理空间数据的流式传输和可视化而设计。它解决了在 Web 端高效加载和渲染城市级三维模型的核心挑战。</p>
+
+<p>3D Tiles 采用<strong>层次化的空间数据结构</strong>（通常是八叉树或 KD-Tree），支持基于视点的 LOD（Level of Detail）和视锥体裁剪，实现按需加载。</p>
+
+<h4>3D Tiles 内容格式</h4>
+
+<table>
+<tr><th>格式</th><th>全称</th><th>用途</th><th>数据类型</th></tr>
+<tr><td><strong>B3DM</strong></td><td>Batched 3D Model</td><td>大规模批次化三维模型（如城市建筑群）</td><td>glTF 几何 + 批次表属性</td></tr>
+<tr><td><strong>I3DM</strong></td><td>Instanced 3D Model</td><td>实例化模型（如路灯、树木等重复对象）</td><td>glTF 模板 + 实例位姿矩阵</td></tr>
+<tr><td><strong>PNTS</strong></td><td>Point Cloud</td><td>大规模点云数据</td><td>点坐标 + 颜色/强度/法向量</td></tr>
+<tr><td><strong>CMPT</strong></td><td>Composite</td><td>复合瓦片，包含多种格式</td><td>B3DM + I3DM + PNTS 的组合</td></tr>
+<tr><td><strong>glTF 2.0</strong></td><td>GL Transmission Format</td><td>3D Tiles 1.1 的默认内容格式</td><td>标准 glTF/GLB + 3DTILES 扩展</td></tr>
+</table>
+
+<p><strong>glTF 2.0</strong>（GL Transmission Format）是 Khronos Group 制定的三维模型传输标准，被称为"三维界的 JPEG"。3D Tiles 1.1 版本将 glTF 2.0 作为默认的内容格式，通过 <strong>EXT_structural_metadata</strong> 和 <strong>EXT_mesh_features</strong> 扩展支持地理空间属性信息。这使得 3D Tiles 能够直接利用 glTF 生态系统的工具链（如 Blender、three.js、GPU 压缩纹理等）。</p>
+
+<h3>5.2 CesiumJS 生态系统</h3>
+
+<p><strong>CesiumJS</strong> 是一个开源的 JavaScript 库，用于在 Web 浏览器中创建三维地球和地图。它是 3D Tiles 标准的参考实现，也是目前最成熟的 Web 三维地理空间可视化平台。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>CesiumJS 核心能力</h4>
+<p>全球高精度三维地球渲染；3D Tiles 流式加载与 LOD 管理；支持 WMS/WMTS/TMS 影像服务；Terrain 地形渲染（Quantized Mesh）；CZML 动态时间序列可视化；Entity API 与 Primitive API 双层接口。</p>
+</div>
+<div class="card">
+<h4>Cesium ion 云平台</h4>
+<p>Cesium 公司的云端三维数据托管与处理服务。自动将倾斜摄影模型、点云、BIM 模型转换为 3D Tiles 格式；提供全球 Terrain 和影像底图服务；支持数据共享和协作；提供 REST API。</p>
+</div>
+</div>
+
+<p>CesiumJS 的生态系统还包括：<strong>cesium-native</strong>（C++ 原生 SDK，用于 Unreal Engine 和 Unity 集成）、<strong>Resium</strong>（React 封装）、<strong>vue-cesium</strong>（Vue 封装）等。在中国，<strong>SuperMap iClient3D for Cesium</strong> 和 <strong>Mars3D</strong> 是基于 CesiumJS 的主流二次开发平台。</p>
+
+<!-- ============================================================ -->
+<h2>六、CityGML LOD 详解</h2>
+
+<p><strong>CityGML</strong> 是 OGC 制定的三维城市模型开放标准，基于 GML（Geography Markup Language）扩展。CityGML 定义了 <strong>LOD0-LOD4</strong> 五个细节层次（Level of Detail），系统性地规范了三维城市模型从二维到室内的完整精度体系。</p>
+
+<table>
+<tr><th>LOD</th><th>名称</th><th>几何表达</th><th>语义内容</th><th>精度</th><th>应用场景</th></tr>
+<tr><td><strong>LOD0</strong></td><td>区域模型</td><td>2.5D 地形表面 + 建筑物足迹（2D 多边形）</td><td>建筑足迹、用途</td><td>&gt; 5m</td><td>区域/国家级概览、GIS 分析</td></tr>
+<tr><td><strong>LOD1</strong></td><td>块体模型</td><td>建筑物以平顶块体（Box）表示，无屋顶形态</td><td>建筑高度、楼层数</td><td>约 5m</td><td>城市天际线、噪声模拟、日照粗略分析</td></tr>
+<tr><td><strong>LOD2</strong></td><td>屋顶模型</td><td>区分屋顶面、墙面、地面等语义面，含标准屋顶形态</td><td>屋顶类型、材质、建筑用途</td><td>约 2m</td><td>太阳能潜力评估、能耗模拟、城市规划</td></tr>
+<tr><td><strong>LOD3</strong></td><td>建筑外壳</td><td>精细的建筑外立面，含门窗、阳台、檐口等细节</td><td>门窗位置、外立面材质</td><td>约 0.5m</td><td>建筑可视化、风环境模拟、精细规划</td></tr>
+<tr><td><strong>LOD4</strong></td><td>室内模型</td><td>包含建筑内部结构：房间、楼梯、家具等</td><td>房间用途、室内设施</td><td>约 0.2m</td><td>室内导航、应急疏散、设施管理</td></tr>
+</table>
+
+<div class="info">
+<h4>CityGML 3.0 的重要更新</h4>
+<ul>
+<li><strong>Space 概念引入</strong>：用 AbstractSpace（OccupiedSpace / UnoccupiedSpace）统一描述三维空间，替代了 2.0 版本中不同专题模块各自定义空间的方式</li>
+<li><strong>LOD 体系简化</strong>：新的 LOD 体系与几何类型解耦，同一 LOD 下可以使用不同精度的几何表达</li>
+<li><strong>点云支持</strong>：原生支持点云（PointCloud）作为建筑模型的一种几何表达</li>
+<li><strong>动态数据扩展</strong>：Dynamizer 模块支持传感器时序数据的集成，为数字孪生提供标准化接口</li>
+<li><strong>版本化</strong>：支持城市模型的版本管理和变更追踪</li>
+</ul>
+</div>
+
+<div class="ref">
+Gröger, G., Kolbe, T. H., Nagel, C., & Häfele, K. H. (2012). OGC City Geography Markup Language (CityGML) Encoding Standard, Version 2.0. OGC Doc. 12-019.<br>
+Kutzner, T., Chaturvedi, K., & Kolbe, T. H. (2020). CityGML 3.0: New functions open up new applications. <em>PFG - Journal of Photogrammetry, Remote Sensing and Geoinformation Science</em>, 88, 43-61.
+</div>
+
+<!-- ============================================================ -->
+<h2>七、BIM+GIS 融合应用</h2>
+
+<p>BIM（Building Information Modeling）与 GIS 的融合是三维 GIS 从宏观走向微观、从室外延伸到室内的关键路径。两者的融合不仅是数据格式的转换，更是不同空间尺度、不同语义体系和不同业务流程的深度集成。</p>
+
+<h3>7.1 融合层次</h3>
+
+<table>
+<tr><th>融合层次</th><th>描述</th><th>技术实现</th><th>典型应用</th></tr>
+<tr><td><strong>可视化融合</strong></td><td>BIM 模型作为三维对象叠加在 GIS 场景中显示</td><td>IFC → glTF/3D Tiles 转换，CesiumJS 加载</td><td>城市三维总览、项目位置展示</td></tr>
+<tr><td><strong>数据融合</strong></td><td>BIM 的属性信息与 GIS 的空间属性关联查询</td><td>IFC → CityGML 语义映射、空间数据库联合查询</td><td>建筑信息查询、合规性检查</td></tr>
+<tr><td><strong>分析融合</strong></td><td>利用 BIM 的精细信息增强 GIS 的空间分析能力</td><td>BIM 模型参与 GIS 空间分析（日照、噪声、能耗）</td><td>城市微气候模拟、建筑能耗分析</td></tr>
+<tr><td><strong>流程融合</strong></td><td>BIM 和 GIS 在项目全生命周期中的协同工作流</td><td>CDE（Common Data Environment）、openBIM 标准</td><td>智慧建造、智慧运维</td></tr>
+</table>
+
+<h3>7.2 典型融合应用场景</h3>
+
+<div class="card-grid">
+<div class="card">
+<h4>智慧园区管理</h4>
+<p>将园区建筑的 BIM 模型与 GIS 地理底图融合，实现从园区全景到建筑室内的无缝浏览。集成 IoT 传感器数据（温湿度、能耗、安防），实现设施智能运维。</p>
+</div>
+<div class="card">
+<h4>地下管网管理</h4>
+<p>将市政管网的 BIM 模型（包含管径、材质、埋深等信息）嵌入 GIS 的地下空间中。支持管线碰撞检测、断面分析和事故定位。</p>
+</div>
+<div class="card">
+<h4>规划方案评审</h4>
+<p>将新建项目的 BIM 方案导入城市 CIM 平台，在真实城市环境中进行日照分析、高度限制检查、天际线影响评估和交通影响分析。</p>
+</div>
+<div class="card">
+<h4>应急救援</h4>
+<p>融合建筑 BIM（室内结构、消防设施布局）与 GIS（周边道路、消防站位置），辅助消防救援的路径规划和力量部署。</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<h2>八、三维 GIS 技术全景总结</h2>
+
+<table>
+<tr><th>技术</th><th>核心原理</th><th>精度</th><th>效率</th><th>适用场景</th></tr>
+<tr><td><strong>倾斜摄影</strong></td><td>多视角影像匹配 + SfM/MVS</td><td>厘米级</td><td>自动化程度高</td><td>城市级实景三维建模</td></tr>
+<tr><td><strong>LiDAR 点云</strong></td><td>激光测距 + 波形分析</td><td>毫米-厘米级</td><td>采集快，后处理复杂</td><td>地形测量、森林调查、变形监测</td></tr>
+<tr><td><strong>NeRF</strong></td><td>隐式 MLP + 体积渲染</td><td>像素级</td><td>训练/渲染慢</td><td>高质量新视角合成、文化遗产</td></tr>
+<tr><td><strong>3D Gaussian Splatting</strong></td><td>显式高斯 + 光栅化</td><td>像素级</td><td>实时渲染（100+FPS）</td><td>实时三维可视化、VR/AR</td></tr>
+<tr><td><strong>BIM 建模</strong></td><td>参数化构件建模</td><td>毫米级</td><td>人工建模为主</td><td>建筑设计、施工、运维</td></tr>
+<tr><td><strong>CityGML/3D Tiles</strong></td><td>标准化数据模型</td><td>LOD0-LOD4</td><td>支持流式加载</td><td>数字孪生、Web3D 可视化</td></tr>
+</table>
+
+<div class="warn">
+<h4>学习路径建议</h4>
+<p>三维 GIS 的学习建议从以下路径入手：(1) 使用 DJI Mini 系列无人机 + Agisoft Metashape 体验完整的倾斜摄影建模流程；(2) 使用 CloudCompare 学习 LiDAR 点云的基础处理操作；(3) 基于 Nerfstudio 框架实践 NeRF 和 3DGS 的训练与渲染；(4) 使用 CesiumJS 搭建三维地球可视化应用，加载 3D Tiles 数据集；(5) 学习 CityGML 标准文档，理解三维城市模型的语义结构。</p>
+<p>推荐资源：ISPRS Archives（摄影测量领域论文）、Cesium Blog（3D Tiles 技术文档）、Nerfstudio Docs（NeRF/3DGS 实践教程）。</p>
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="digital-twin.html">&larr; 数字孪生</a>
+  <a href="../index.html">目录</a>
+  <a href="lbs.html">位置服务 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>
