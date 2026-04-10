@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空间分析技术详解 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 05</div>
+  <h1>空间分析技术详解</h1>
+  <p>空间分析是地理信息科学的核心与灵魂，涵盖缓冲区分析、叠加分析、网络分析、空间插值、核密度估计、空间统计、地形分析与可视域分析等关键方法，是将地理数据转化为决策知识的核心引擎。</p>
+  <div class="hero-img"><img src="../images/spatial_analysis.png" alt="空间分析技术详解"></div>
+</div>
+
+<article class="content">
+
+<!-- ============================== -->
+<!-- 引言 -->
+<!-- ============================== -->
+<h2>引言：空间分析的意义与范畴</h2>
+
+<p>空间分析（Spatial Analysis）是地理信息科学（GIScience）最具技术深度和应用价值的核心领域。它利用数学、统计学和计算几何的方法，对地理空间数据进行定量化处理和推理，从而揭示空间现象的分布规律、相互关系和演变趋势。Waldo Tobler 于 1970 年提出的"地理学第一定律"——"所有事物都与其他事物相关，但近处的事物比远处的事物更相关"——构成了空间分析的哲学基础。</p>
+
+<p>空间分析不同于简单的地图可视化。可视化仅展示"在哪里"，而空间分析回答"为什么在这里"、"分布模式是什么"、"如果条件改变会怎样"等深层问题。一个完整的空间分析流程通常包括：<strong>数据准备与预处理</strong>（坐标转换、数据清洗、拓扑检查）、<strong>分析方法选择与参数设定</strong>、<strong>模型运算与结果验证</strong>、<strong>结果解释与决策支持</strong>。本章将系统阐述八大核心空间分析技术，涵盖从几何运算到统计建模的完整技术谱系。</p>
+
+<div class="info">
+<h4>本章目录</h4>
+<ol>
+<li>缓冲区分析（Buffer Analysis）</li>
+<li>叠加分析（Overlay Analysis）</li>
+<li>网络分析（Network Analysis）</li>
+<li>空间插值（Spatial Interpolation）</li>
+<li>核密度估计（Kernel Density Estimation）</li>
+<li>空间统计（Spatial Statistics）</li>
+<li>地形分析（Terrain Analysis）</li>
+<li>可视域分析（Viewshed Analysis）</li>
+</ol>
+</div>
+
+<!-- ============================== -->
+<!-- 1. 缓冲区分析 -->
+<!-- ============================== -->
+<h2>1. 缓冲区分析（Buffer Analysis）</h2>
+
+<p>缓冲区分析是空间分析中最基础也是最常用的操作之一。其核心思想极为简洁：给定一个空间对象（点、线或面），在其周围生成一个固定距离的区域，该区域内的所有点到原始对象的距离都不超过指定阈值。形式化定义如下：</p>
+
+<div class="formula">
+设 A 为空间对象，d 为缓冲距离，则缓冲区 B(A, d) 定义为：<br><br>
+B(A, d) = { x &isin; R&sup2; | dist(x, A) &le; d }<br><br>
+其中 dist(x, A) = min{ ||x - a|| : a &isin; A }，即点 x 到对象 A 的最短距离。
+</div>
+
+<h3>1.1 不同几何类型的缓冲区</h3>
+
+<h4>点缓冲区</h4>
+<p>对于单个点 P = (x₀, y₀)，缓冲区是以 P 为圆心、d 为半径的圆盘。在平面坐标系中，缓冲区边界方程为 (x - x₀)² + (y - y₀)² = d²。实际计算时，圆被离散化为正多边形，边数通常默认为 72（每 5 度一个顶点），可根据精度要求调整。点缓冲区广泛应用于设施影响范围评估，例如以学校为中心的 200 米安全区域、以基站为中心的信号覆盖范围。</p>
+
+<h4>线缓冲区</h4>
+<p>线缓冲区是沿线要素两侧扩展 d 距离形成的带状区域。对于折线的每一段线段，缓冲区由两条平行线和两端的半圆弧组成；在折点处，相邻段的缓冲区通过圆弧或斜接（miter）方式连接。线端部处理有三种模式：<strong>圆头（Round）</strong>——端部为半圆弧，最常用；<strong>平头（Flat）</strong>——端部为垂直于线段方向的平直截面；<strong>方头（Square）</strong>——端部延伸出 d 距离的矩形。线缓冲区典型应用包括道路噪声影响带、河流洪泛区模拟、管线安全距离划定等。</p>
+
+<h4>面缓冲区</h4>
+<p>面缓冲区是在多边形边界外侧扩展 d 距离形成的区域。其边界由原始多边形边界的偏移线和凸角处的圆弧组成。对于凹角（内角大于 180 度），偏移线会自然相交，无需额外处理。面缓冲区可产生<strong>外缓冲</strong>（正距离，向外扩展）和<strong>内缓冲</strong>（负距离，向内收缩）。内缓冲在建筑退线分析、生态核心区提取等场景中尤为重要。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Bufffer_GIS_ilustrations.svg" alt="缓冲区分析示意图 - 点线面缓冲区">
+<p class="caption">图 1：点、线、面三种几何类型的缓冲区示意图（来源：Wikimedia Commons）</p>
+
+<h3>1.2 缓冲区的度量与类型</h3>
+
+<h4>欧几里得缓冲区 vs 测地线缓冲区</h4>
+<p><strong>欧几里得缓冲区（Euclidean Buffer）</strong>在平面投影坐标系中计算，使用直线距离。适用于小范围、高精度的分析场景，计算效率高。但在大范围分析中，由于地图投影的变形，平面距离会偏离真实地表距离。例如在 Mercator 投影中，高纬度地区的缓冲区会被显著放大。</p>
+
+<p><strong>测地线缓冲区（Geodesic Buffer）</strong>在椭球体表面计算，使用大地线距离（Vincenty 或 Karney 公式）。无论数据处于何种投影，结果始终基于真实地球表面距离。测地线距离公式基于椭球面上两点之间的最短路径：</p>
+
+<div class="formula">
+Vincenty 反算公式核心迭代方程：<br><br>
+sin&sigma; = &radic;[(cos U₂ sin&lambda;)² + (cos U₁ sin U₂ - sin U₁ cos U₂ cos&lambda;)²]<br>
+cos&sigma; = sin U₁ sin U₂ + cos U₁ cos U₂ cos&lambda;<br>
+&sigma; = atan2(sin&sigma;, cos&sigma;)<br><br>
+其中 U₁, U₂ 为归化纬度，&lambda; 为经度差的迭代变量。
+</div>
+
+<p>在 ArcGIS Pro 和 QGIS 中，均提供了测地线缓冲选项，推荐在跨区域分析或使用地理坐标系数据时优先采用。</p>
+
+<h4>单侧缓冲区</h4>
+<p>对于线要素，有时只需在线的一侧生成缓冲区。例如河流右岸的防洪堤影响区，或者道路单侧的商业辐射范围。单侧缓冲区通过判断线要素的方向（数字化方向），在左侧或右侧生成缓冲带。方向判定遵循"沿线前进方向，左手侧为左，右手侧为右"的规则。</p>
+
+<h4>多环缓冲区（Multiple Ring Buffer）</h4>
+<p>多环缓冲区在同一空间对象周围生成多个不同距离的同心缓冲区，形成"环带"结构。例如以化工厂为中心，同时生成 500m、1000m、2000m、5000m 的缓冲区，用于评估不同距离范围的风险等级。多环缓冲区的每个环带可赋予不同的属性值或权重，常用于影响衰减分析。</p>
+
+<h3>1.3 缓冲区溶解（Dissolve）</h3>
+
+<p>当多个空间对象的缓冲区发生重叠时，需要决定是保留各个独立的缓冲区（ALL），还是将重叠部分融合为一个整体（DISSOLVE）。溶解操作通过计算所有缓冲区的<strong>几何并集（Union）</strong>实现，消除内部边界，生成一个或多个不相交的多边形。溶解在以下场景中必不可少：</p>
+
+<ul>
+<li><strong>连片评估</strong>：评估一组学校周围 200m 范围内的总覆盖面积，需要消除重叠区域避免重复计算</li>
+<li><strong>保护区划定</strong>：多个珍稀物种栖息地的保护缓冲区融合为一个连续的保护区</li>
+<li><strong>服务覆盖分析</strong>：多个消防站 5 分钟响应范围的联合覆盖区域</li>
+</ul>
+
+<h3>1.4 应用案例</h3>
+
+<div class="card-grid">
+<div class="card">
+<h4>学校安全区划定</h4>
+<p>根据《中华人民共和国未成年人保护法》，中小学校园周边 200 米范围内不得设立互联网上网服务营业场所、营业性歌舞娱乐场所等。GIS 中以学校点位为中心生成 200m 缓冲区，与商业 POI 数据叠加，可快速识别违规经营场所。北京市教育部门曾利用该方法一次性排查 2000 余所学校周边的合规情况。</p>
+</div>
+<div class="card">
+<h4>交通噪声评估</h4>
+<p>交通干线两侧噪声衰减通常呈对数规律。以高速公路中心线为基准，分别生成 50m、100m、200m、500m 的多环缓冲区，对应约 75dB、68dB、62dB、55dB 的噪声等级。结合居民区分布，可评估受不同噪声等级影响的人口数量，为隔声屏障选址提供依据。</p>
+</div>
+<div class="card">
+<h4>自然保护区划定</h4>
+<p>以珍稀动植物分布点为中心，生成核心保护区（500m）、缓冲区（1000m）和实验区（2000m）三层同心缓冲区。同种物种的缓冲区执行溶解操作，形成连续的保护区域。再与土地利用现状图叠加，分析保护区内的人类活动强度和潜在威胁。</p>
+</div>
+</div>
+
+<!-- ============================== -->
+<!-- 2. 叠加分析 -->
+<!-- ============================== -->
+<h2>2. 叠加分析（Overlay Analysis）</h2>
+
+<p>叠加分析是 GIS 中最强大的空间分析工具之一，通过将两个或多个图层在空间上进行叠合运算，生成包含多层信息的新图层。叠加分析既涉及<strong>几何运算</strong>（空间关系的布尔组合），也涉及<strong>属性处理</strong>（字段的合并与传递规则）。Ian McHarg 在 1969 年的著作《Design with Nature》中首次系统阐述了地图叠加方法，这被认为是 GIS 叠加分析的思想先驱。</p>
+
+<h3>2.1 矢量叠加的六种核心操作</h3>
+
+<table>
+<tr><th>操作类型</th><th>几何规则</th><th>属性规则</th><th>集合表达</th></tr>
+<tr><td><strong>Intersect（相交）</strong></td><td>仅保留两个图层的空间交集部分</td><td>保留两层的所有属性字段</td><td>A &cap; B</td></tr>
+<tr><td><strong>Union（联合）</strong></td><td>保留两个图层的全部空间范围</td><td>保留两层的所有属性字段；非重叠区域对方字段为空</td><td>A &cup; B</td></tr>
+<tr><td><strong>Identity（标识）</strong></td><td>保留输入图层(A)的完整范围，用叠加图层(B)对其切割</td><td>A 的属性完整保留；B 范围内补充 B 的属性</td><td>A（被 B 分割）</td></tr>
+<tr><td><strong>Erase（擦除）</strong></td><td>从输入图层(A)中减去与叠加图层(B)重叠的部分</td><td>仅保留 A 的属性</td><td>A - B = A &cap; B&#x0305;</td></tr>
+<tr><td><strong>Symmetric Difference（对称差）</strong></td><td>保留两图层不重叠的部分，去除交集</td><td>非重叠部分保留对应图层的属性</td><td>A &Delta; B = (A &cup; B) - (A &cap; B)</td></tr>
+<tr><td><strong>Update（更新）</strong></td><td>用叠加图层(B)的几何替换输入图层(A)中重叠区域</td><td>重叠区域使用 B 的属性；非重叠区域保留 A 的属性</td><td>（A - A&cap;B）&cup; B</td></tr>
+</table>
+
+<h4>Intersect（相交）详解</h4>
+<p>Intersect 操作计算两个图层的空间交集。设输入图层 A 包含多边形 {a₁, a₂, ..., aₘ}，叠加图层 B 包含多边形 {b₁, b₂, ..., bₙ}，则输出包含所有非空的 aᵢ &cap; bⱼ 多边形，每个输出多边形同时继承 aᵢ 和 bⱼ 的属性。Intersect 可处理多边形-多边形、线-多边形、点-多边形的组合。例如，将规划用地图与行政区划图进行 Intersect，可得到每个行政区内各类用地的精确面积。</p>
+
+<h4>Union（联合）详解</h4>
+<p>Union 操作保留两个图层的全部空间范围，在重叠区域进行切割，生成的每个子多边形携带来源图层的属性。输出可分为三类区域：仅属于 A 的区域（携带 A 的属性，B 的字段为 NULL）、仅属于 B 的区域（携带 B 的属性，A 的字段为 NULL）、A 与 B 的交集区域（携带双方的完整属性）。Union 仅支持多边形-多边形操作。</p>
+
+<h4>Identity（标识）详解</h4>
+<p>Identity 操作的独特之处在于它完整保留输入图层 A 的空间范围——不会因叠加图层 B 的范围而裁剪 A。在 B 覆盖的区域，A 被 B 的边界切割并获得 B 的属性；在 B 不覆盖的区域，A 的几何和属性保持不变，B 的字段为 NULL。这使 Identity 非常适合"用一个图层标注另一个图层"的场景，例如用土壤类型图对农田地块进行标注。</p>
+
+<h4>Erase（擦除）详解</h4>
+<p>Erase 操作从输入图层 A 中移除与叠加图层 B 重叠的部分，仅保留 A 中不被 B 覆盖的区域。这是一个"减法"操作。典型应用包括：从研究区域中擦除水体和道路区域，得到纯粹的可建设用地；从森林分布图中擦除已批准的开发区域，得到剩余的森林覆盖。</p>
+
+<h4>Symmetric Difference（对称差）详解</h4>
+<p>Symmetric Difference 是 Union 与 Intersect 的组合操作：保留两图层的联合范围，但移除它们的交集部分。即 A &Delta; B = (A &cup; B) - (A &cap; B)。输出仅包含"仅属于 A"和"仅属于 B"的区域。该操作可用于检测两个版本地图之间的差异区域，或分析两个时期土地利用变化的空间范围。</p>
+
+<h4>Update（更新）详解</h4>
+<p>Update 操作将叠加图层 B 的内容"覆盖"到输入图层 A 上。在 B 的范围内，A 的原有几何和属性被 B 完全替换；在 B 范围之外，A 保持不变。这类似于"贴图"操作，常用于地图更新：当某区域进行了新的详查，用新数据替换旧数据中的对应区域。</p>
+
+<h3>2.2 矢量叠加 vs 栅格叠加</h3>
+
+<div class="two-col">
+<div>
+<h4>矢量叠加</h4>
+<ul>
+<li>几何精确，保留对象边界的精确形状</li>
+<li>属性丰富，每个对象可携带多个属性字段</li>
+<li>计算复杂度高，涉及多边形裁剪算法（Weiler-Atherton 或 Vatti 算法）</li>
+<li>对拓扑错误敏感（悬挂点、伪节点等会导致碎片多边形）</li>
+<li>适合处理离散型、定性型的空间数据（行政区划、用地类型等）</li>
+</ul>
+</div>
+<div>
+<h4>栅格叠加</h4>
+<ul>
+<li>操作简单，本质是像元对像元的数学运算</li>
+<li>计算效率高，可利用矩阵运算的并行化优势</li>
+<li>支持丰富的数学运算（加减乘除、逻辑运算、条件判断）</li>
+<li>精度受栅格分辨率限制，边界存在锯齿效应</li>
+<li>适合处理连续型、定量型的空间数据（高程、温度、降雨等）</li>
+</ul>
+</div>
+</div>
+
+<div class="formula">
+栅格叠加的典型数学运算（地图代数）：<br><br>
+加法叠加：C(i,j) = A(i,j) + B(i,j)<br>
+加权叠加：C(i,j) = w₁&middot;A(i,j) + w₂&middot;B(i,j) + ... + wₙ&middot;N(i,j)，&sum;wₖ = 1<br>
+逻辑叠加：C(i,j) = A(i,j) AND B(i,j)（布尔型）<br>
+条件叠加：C(i,j) = IF(A(i,j) &gt; threshold, B(i,j), NoData)
+</div>
+
+<h3>2.3 应用案例：用地适宜性评价</h3>
+
+<p>用地适宜性评价是叠加分析最经典的综合应用。以"住宅建设用地适宜性评价"为例，完整流程如下：</p>
+
+<ol>
+<li><strong>确定评价因子</strong>：坡度（&le;15%）、距道路距离（&le;500m）、距水源距离（&le;2000m）、土壤承载力（&ge;中等）、洪水风险（低风险区）、距学校距离（&le;1500m）</li>
+<li><strong>单因子适宜性评分</strong>：将每个因子栅格化并重分类为 1-5 级适宜性评分（1=不适宜，5=最适宜）</li>
+<li><strong>确定权重</strong>：采用层次分析法（AHP）确定各因子权重，例如坡度 0.25、道路 0.20、水源 0.15、土壤 0.15、洪水 0.15、学校 0.10</li>
+<li><strong>加权叠加</strong>：S(i,j) = &sum; wₖ &middot; Fₖ(i,j)，得到综合适宜性评分图</li>
+<li><strong>结果分级</strong>：将综合评分重分类为"最适宜"、"较适宜"、"一般适宜"、"较不适宜"、"不适宜"五个等级</li>
+<li><strong>约束条件叠加</strong>：用 Erase 操作排除基本农田保护区、自然保护区、地质灾害高风险区等禁止建设区域</li>
+</ol>
+
+<div class="ref">
+参考文献：McHarg, I.L. (1969). <em>Design with Nature</em>. Garden City, NY: Natural History Press. 该著作首次系统提出了基于地图叠加的生态规划方法，被誉为 GIS 叠加分析的思想源头。
+</div>
+
+<!-- ============================== -->
+<!-- 3. 网络分析 -->
+<!-- ============================== -->
+<h2>3. 网络分析（Network Analysis）</h2>
+
+<p>网络分析利用图论（Graph Theory）方法对线状网络结构进行建模和分析。交通网络、管网系统、通信网络、河流水系等均可抽象为网络模型。网络分析的核心目标是在拓扑约束和成本约束下寻找最优路径或最优配置方案。</p>
+
+<h3>3.1 图论基础</h3>
+
+<p>网络在数学上用<strong>有向加权图 G = (V, E, W)</strong> 表示：</p>
+
+<ul>
+<li><strong>节点（Vertex / Node）V</strong>：表示网络中的交汇点。在交通网络中为路口、匝道口；在水管网中为阀门、接头；在河流网络中为汇合点。</li>
+<li><strong>边（Edge / Arc）E</strong>：表示节点之间的连接。每条边 e = (u, v) 连接节点 u 和 v。在有向图中，(u, v) 与 (v, u) 是不同的边（如单行道）；在无向图中则等价。</li>
+<li><strong>权重（Weight）W</strong>：边的"代价"属性。w(u, v) 表示从节点 u 到 v 的通行代价。权重可以是距离（米）、时间（分钟）、费用（元），也可以是多因素的综合成本。权重必须为非负实数（对于 Dijkstra 算法）。</li>
+</ul>
+
+<p>此外，网络模型还可包含<strong>转弯限制（Turn Restrictions）</strong>——例如"禁止左转"；<strong>单行规则</strong>——某些边仅允许单向通行；<strong>等级规则</strong>——高速公路优先于乡道；<strong>时间窗口</strong>——某些边仅在特定时段开放。</p>
+
+<h3>3.2 Dijkstra 最短路径算法</h3>
+
+<p>Edsger Dijkstra 于 1959 年提出的最短路径算法是网络分析的基石。该算法求解从单一源节点到图中所有其他节点的最短路径，属于<strong>贪心算法</strong>：每一步都选择当前已知距离最小的未访问节点进行扩展。</p>
+
+<div class="formula">
+<strong>Dijkstra 算法伪代码：</strong><br><br>
+DIJKSTRA(G, source):<br>
+&nbsp;&nbsp;for each vertex v in G.V:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dist[v] &larr; &infin;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;prev[v] &larr; UNDEFINED<br>
+&nbsp;&nbsp;dist[source] &larr; 0<br>
+&nbsp;&nbsp;Q &larr; priority_queue(G.V)  // 最小堆，按 dist 排序<br><br>
+&nbsp;&nbsp;while Q is not empty:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;u &larr; Q.extract_min()     // 取出 dist 最小的节点<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for each neighbor v of u:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alt &larr; dist[u] + w(u, v)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if alt &lt; dist[v]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[v] &larr; alt<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev[v] &larr; u<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q.decrease_key(v, alt)<br><br>
+&nbsp;&nbsp;return dist[], prev[]
+</div>
+
+<p><strong>时间复杂度分析</strong>：使用二叉堆（binary heap）实现优先队列时，extract_min 操作为 O(log V)，执行 V 次；decrease_key 操作为 O(log V)，最多执行 E 次。因此总复杂度为 <strong>O((V + E) log V)</strong>。使用斐波那契堆可优化到 O(E + V log V)，但实际实现中二叉堆通常更快。</p>
+
+<p><strong>前提条件</strong>：Dijkstra 算法要求所有边权重非负（w(u,v) &ge; 0）。若存在负权边，需使用 Bellman-Ford 算法（O(VE)）。</p>
+
+<h3>3.3 A* 算法</h3>
+
+<p>A* 算法是 Dijkstra 算法的启发式改进版本，由 Peter Hart、Nils Nilsson 和 Bertram Raphael 于 1968 年提出。其核心思想是在选择下一个扩展节点时，不仅考虑从起点到当前节点的实际代价 g(n)，还考虑从当前节点到目标的<strong>估计代价 h(n)</strong>（启发式函数），优先扩展总估计代价 f(n) 最小的节点：</p>
+
+<div class="formula">
+f(n) = g(n) + h(n)<br><br>
+其中：<br>
+&nbsp;&nbsp;g(n) = 从起点 s 到节点 n 的已知最短距离（与 Dijkstra 的 dist[n] 相同）<br>
+&nbsp;&nbsp;h(n) = 从节点 n 到目标 t 的启发式估计距离<br>
+&nbsp;&nbsp;f(n) = 经过节点 n 的总估计路径代价<br><br>
+<strong>可容许性条件（Admissibility）</strong>：h(n) &le; h*(n)（真实最短距离），保证找到最优解。<br>
+<strong>一致性条件（Consistency）</strong>：h(n) &le; w(n, n') + h(n')，保证每个节点只需扩展一次。
+</div>
+
+<p><strong>启发式函数的选择</strong>：在道路网络中，最常用的启发式函数是欧几里得直线距离或 Haversine 大圆距离（保证不会高估真实路径代价）。曼哈顿距离适用于网格状道路网络。启发式函数越接近真实距离，算法剪枝越有效，搜索效率越高。当 h(n) = 0 时，A* 退化为 Dijkstra 算法。</p>
+
+<h3>3.4 高级网络分析问题</h3>
+
+<div class="card-grid">
+<div class="card">
+<h4>服务区域分析（Service Area）</h4>
+<p>给定设施点和行驶时间/距离阈值，计算该设施沿网络可达的最远范围。本质上是 Dijkstra 算法在达到阈值时终止搜索。输出为一个多边形（由可达边的端点构成的凸包或精确覆盖区域）。典型应用：医院 15 分钟急救响应范围、消防站 5 分钟出警覆盖区域。</p>
+</div>
+<div class="card">
+<h4>最近设施分析（Closest Facility）</h4>
+<p>给定事件点和多个设施点，沿网络找到距离事件最近的 N 个设施及其最优路径。可以是"从事件到设施"或"从设施到事件"两个方向（单行道影响结果）。应用：交通事故发生后，找到最近的 3 家医院及各自的最优救援路线。</p>
+</div>
+<div class="card">
+<h4>位置-分配问题（Location-Allocation）</h4>
+<p>在候选位置中选择 P 个设施位置，使总体服务效率最优。常见目标函数包括：最小化总需求加权距离（P-Median）、最小化最远需求点的距离（P-Center）、最大化覆盖范围（MCLP）。属于 NP-hard 问题，通常使用启发式算法（遗传算法、模拟退火）求解。</p>
+</div>
+<div class="card">
+<h4>车辆路径问题（VRP）</h4>
+<p>Vehicle Routing Problem：给定一个仓库和多个客户点，规划多辆车的配送路线，使总行驶距离最短且满足各种约束（车辆容量、时间窗口、最大行驶距离等）。VRP 是旅行商问题（TSP）的多车辆扩展，是组合优化中的经典难题。实际中使用列生成、分支定价等精确算法或元启发式算法求解。</p>
+</div>
+</div>
+
+<h3>3.5 交通流分析</h3>
+<p>除了静态最短路径分析，现代 GIS 网络分析还包括动态交通流建模。基于<strong>交通分配模型（Traffic Assignment）</strong>，将出行需求（OD 矩阵）分配到路网上，预测各路段的交通流量。经典的用户均衡（User Equilibrium, UE）模型基于 Wardrop 第一原则：在均衡状态下，所有被使用的路径具有相同的最短行程时间，且不存在更短的未被使用路径。行程时间-流量关系通常采用 BPR（Bureau of Public Roads）函数：</p>
+
+<div class="formula">
+t(x) = t₀ &middot; [1 + &alpha; &middot; (x / c)&beta;]<br><br>
+其中：<br>
+&nbsp;&nbsp;t₀ = 自由流行程时间<br>
+&nbsp;&nbsp;x = 路段交通流量<br>
+&nbsp;&nbsp;c = 路段通行能力<br>
+&nbsp;&nbsp;&alpha; = 0.15，&beta; = 4（BPR 标准参数）
+</div>
+
+<!-- ============================== -->
+<!-- 4. 空间插值 -->
+<!-- ============================== -->
+<h2>4. 空间插值（Spatial Interpolation）</h2>
+
+<p>空间插值利用已知样本点的观测值，估计未采样位置的属性值，从而将离散点数据转换为连续表面。其理论基础正是 Tobler 地理学第一定律：空间上接近的事物倾向于具有相似的属性值。空间插值广泛应用于气象（温度、降雨分布）、地质（矿体品位、地层厚度）、环境（污染浓度、噪声分布）等领域。</p>
+
+<h3>4.1 反距离加权法（IDW）</h3>
+
+<p>反距离加权法（Inverse Distance Weighted）是最直观的确定性插值方法。其核心假设是：距待估点越近的样本点，对估计值的贡献越大，且贡献与距离的幂次成反比。</p>
+
+<div class="formula">
+<strong>IDW 完整公式：</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&sum;ᵢ₌₁ⁿ wᵢ &middot; zᵢ<br>
+Z(x₀) = ─────────────<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&sum;ᵢ₌₁ⁿ wᵢ<br><br>
+其中权重：<br>
+&nbsp;&nbsp;wᵢ = 1 / dᵢᵖ<br><br>
+&nbsp;&nbsp;Z(x₀) = 待估点 x₀ 的预测值<br>
+&nbsp;&nbsp;zᵢ = 第 i 个样本点的观测值<br>
+&nbsp;&nbsp;dᵢ = 待估点 x₀ 到第 i 个样本点的距离<br>
+&nbsp;&nbsp;p = 距离幂次参数（power parameter）<br>
+&nbsp;&nbsp;n = 参与插值的样本点数量
+</div>
+
+<h4>参数 p 的选择</h4>
+<p><strong>p 值</strong>控制距离衰减的速率，是 IDW 最关键的参数：</p>
+<ul>
+<li><strong>p = 1</strong>：线性衰减，远处样本点影响较大，生成较平滑的表面</li>
+<li><strong>p = 2</strong>（默认值）：平方反比衰减，平衡了局部细节与整体趋势</li>
+<li><strong>p = 3 或更高</strong>：快速衰减，估计值主要由最近的几个点决定，表面呈现更多局部变化和"牛眼"效应</li>
+<li><strong>p &rarr; &infin;</strong>：退化为最近邻插值，估计值等于最近样本点的值</li>
+</ul>
+<p>最优 p 值可通过<strong>交叉验证（Leave-One-Out Cross Validation, LOOCV）</strong>确定：依次移除每个样本点，用其余样本点插值该点，计算均方根误差（RMSE），选择 RMSE 最小的 p 值。</p>
+
+<p><strong>IDW 的局限</strong>：无法外推（预测值不会超出已知值范围）；在样本点处产生"牛眼"效应（等值线呈同心圆状围绕样本点）；不考虑空间自相关结构和各向异性；无法给出预测的不确定性估计。</p>
+
+<h3>4.2 克里金插值（Kriging）</h3>
+
+<p>克里金插值（Kriging）由南非矿业工程师 Danie G. Krige 于 1951 年提出，后经法国数学家 Georges Matheron 系统化发展为地统计学（Geostatistics）理论体系。克里金插值是一种<strong>最优无偏线性插值</strong>方法，其独特优势在于：（1）利用空间自相关结构确定权重；（2）提供预测值的同时给出预测方差（不确定性度量）。</p>
+
+<h4>变异函数（Variogram / Semivariogram）</h4>
+<p>变异函数是克里金插值的核心工具，它度量空间数据的空间依赖性。<strong>实验变异函数（Experimental Variogram）</strong>定义为：</p>
+
+<div class="formula">
+<strong>实验变异函数：</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+&gamma;(h) = ──────── &sum; [Z(xᵢ) - Z(xᵢ + h)]²<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2N(h)<br><br>
+其中：<br>
+&nbsp;&nbsp;&gamma;(h) = 滞后距离 h 处的半方差值<br>
+&nbsp;&nbsp;N(h) = 间距为 h（允许一定容差）的样本点对数量<br>
+&nbsp;&nbsp;Z(xᵢ) = 位置 xᵢ 处的观测值<br>
+&nbsp;&nbsp;h = 滞后距离（lag distance）
+</div>
+
+<p>实验变异函数的计算步骤：（1）计算所有样本点对之间的距离；（2）按距离分组（定义滞后间距和容差）；（3）对每组计算半方差均值；（4）绘制半方差值随滞后距离变化的散点图。</p>
+
+<h4>变异函数的三个关键参数</h4>
+
+<div class="card-grid">
+<div class="card">
+<h4>块金值（Nugget, C₀）</h4>
+<p>变异函数在 h &rarr; 0 时的截距值。反映<strong>微观尺度变异</strong>（采样间距内无法分辨的空间变异）和<strong>测量误差</strong>。纯块金效应（Nugget = Sill）表示数据完全无空间自相关——此时克里金退化为简单均值估计。理想情况下块金值应远小于基台值。</p>
+</div>
+<div class="card">
+<h4>基台值（Sill, C₀ + C）</h4>
+<p>变异函数趋于平稳时的渐近值，等于数据的总方差。<strong>偏基台（Partial Sill, C）</strong>= Sill - Nugget，反映可被空间结构解释的变异部分。C / (C₀ + C) 称为<strong>结构比</strong>，该比值越高，空间自相关越强，克里金插值效果越好。</p>
+</div>
+<div class="card">
+<h4>变程（Range, a）</h4>
+<p>变异函数达到基台值时对应的滞后距离。在变程以内，样本点之间存在空间自相关；超过变程，样本点之间的观测值统计上不再相关。变程决定了插值的有效搜索半径——超出变程的样本点对预测几乎无贡献。</p>
+</div>
+</div>
+
+<h4>理论变异函数模型</h4>
+<p>实验变异函数需要拟合为理论模型，以获得任意滞后距离处的连续半方差值。常用的理论模型包括：</p>
+
+<div class="formula">
+<strong>球面模型（Spherical Model）：</strong><br>
+&gamma;(h) = C₀ + C &middot; [1.5(h/a) - 0.5(h/a)³]，当 0 &lt; h &le; a<br>
+&gamma;(h) = C₀ + C，当 h &gt; a<br>
+&gamma;(0) = 0<br><br>
+
+<strong>指数模型（Exponential Model）：</strong><br>
+&gamma;(h) = C₀ + C &middot; [1 - exp(-3h/a)]，当 h &gt; 0<br>
+注：在 h = a 处达到基台的约 95%（实际变程 a' = a/3）<br><br>
+
+<strong>高斯模型（Gaussian Model）：</strong><br>
+&gamma;(h) = C₀ + C &middot; [1 - exp(-3h²/a²)]，当 h &gt; 0<br>
+注：在原点附近呈抛物线形状，适合描述极为平滑的空间现象
+</div>
+
+<p><strong>模型选择</strong>：球面模型在变程处有明确的截止点，适用于具有有限自相关范围的现象（如矿体品位）；指数模型的自相关渐进衰减，适用于气象变量（温度、降雨）；高斯模型在原点附近变化极缓，适用于高度平滑的现象（地下水位面）。可通过加权最小二乘法（WLS）或最大似然法（ML）进行拟合，评价指标包括残差平方和和交叉验证 RMSE。</p>
+
+<h4>普通克里金权重求解</h4>
+<p>普通克里金（Ordinary Kriging）假设区域化变量具有未知但恒定的均值。对于待估点 x₀，预测值为样本值的线性加权组合：</p>
+
+<div class="formula">
+<strong>普通克里金预测方程：</strong><br><br>
+Z*(x₀) = &sum;ᵢ₌₁ⁿ &lambda;ᵢ &middot; Z(xᵢ)<br><br>
+约束条件：&sum;ᵢ₌₁ⁿ &lambda;ᵢ = 1（无偏条件）<br><br>
+
+<strong>克里金方程组（矩阵形式）：</strong><br><br>
+| &gamma;(x₁,x₁)  &gamma;(x₁,x₂)  ...  &gamma;(x₁,xₙ)  1 | | &lambda;₁ |   | &gamma;(x₁,x₀) |<br>
+| &gamma;(x₂,x₁)  &gamma;(x₂,x₂)  ...  &gamma;(x₂,xₙ)  1 | | &lambda;₂ |   | &gamma;(x₂,x₀) |<br>
+| ...          ...          ...  ...          . | |  ... | = |  ...       |<br>
+| &gamma;(xₙ,x₁)  &gamma;(xₙ,x₂)  ...  &gamma;(xₙ,xₙ)  1 | | &lambda;ₙ |   | &gamma;(xₙ,x₀) |<br>
+| 1            1            ...  1            0 | |  &mu;  |   |  1         |<br><br>
+
+其中 &mu; 为拉格朗日乘子，&gamma;(xᵢ,xⱼ) 为理论变异函数模型在样本点 i 和 j 之间距离处的值。
+</div>
+
+<p><strong>克里金方差（预测不确定性）</strong>：</p>
+
+<div class="formula">
+&sigma;²(x₀) = &sum;ᵢ₌₁ⁿ &lambda;ᵢ &middot; &gamma;(xᵢ, x₀) + &mu;<br><br>
+克里金方差仅依赖于样本点的空间配置和变异函数模型，不依赖于观测值本身。这意味着可以在采样之前就规划样本布局，使预测方差最小化。
+</div>
+
+<h4>协同克里金（Co-Kriging）</h4>
+<p>当主变量的采样密度不足，但存在相关辅助变量且其采样密度较高时，协同克里金通过联合建模多变量的空间自相关和互相关结构，提高主变量的预测精度。例如，以稀疏分布的土壤重金属检测数据为主变量，以密集的土壤 pH 值和有机质含量作为辅助变量进行协同克里金插值。需要构建交叉变异函数矩阵，并保证其正定性（有效模型约束）。</p>
+
+<h3>4.3 样条插值（Spline Interpolation）</h3>
+
+<p>样条插值使用分段多项式函数拟合数据，使生成的表面通过所有样本点（精确插值），同时最小化整体曲率。常用的薄板样条（Thin Plate Spline, TPS）类比将一块薄金属板弯曲使其通过所有控制点，同时最小化弯曲能量：</p>
+
+<div class="formula">
+最小化目标函数：<br>
+J = &sum;ᵢ₌₁ⁿ [Z(xᵢ) - f(xᵢ)]² + &tau; &middot; &int;&int; [(∂²f/∂x²)² + 2(∂²f/∂x∂y)² + (∂²f/∂y²)²] dxdy<br><br>
+其中 &tau; 为张力（tension）参数，控制表面的平滑程度。<br>
+&tau; &rarr; 0：表面完全通过数据点但可能剧烈振荡<br>
+&tau; &rarr; &infin;：表面趋近于最小二乘平面
+</div>
+
+<h3>4.4 插值方法比较与应用场景</h3>
+
+<table>
+<tr><th>方法</th><th>类型</th><th>通过数据点</th><th>不确定性</th><th>适用场景</th></tr>
+<tr><td>IDW</td><td>确定性</td><td>是</td><td>不提供</td><td>快速预览、均匀分布的数据</td></tr>
+<tr><td>普通克里金</td><td>地统计</td><td>是（精确模式）</td><td>克里金方差</td><td>环境监测、矿产评估</td></tr>
+<tr><td>泛克里金</td><td>地统计</td><td>视情况</td><td>克里金方差</td><td>存在趋势的数据</td></tr>
+<tr><td>协同克里金</td><td>地统计</td><td>视情况</td><td>克里金方差</td><td>多变量辅助、采样稀疏</td></tr>
+<tr><td>样条</td><td>确定性</td><td>是</td><td>不提供</td><td>地形表面、平滑连续面</td></tr>
+<tr><td>自然邻域</td><td>确定性</td><td>是</td><td>不提供</td><td>不规则分布的数据</td></tr>
+</table>
+
+<div class="ref">
+参考文献：Cressie, N. (1993). <em>Statistics for Spatial Data</em> (Revised Edition). Wiley. 克里金插值和地统计学的权威教材。<br>
+Isaaks, E.H. & Srivastava, R.M. (1989). <em>An Introduction to Applied Geostatistics</em>. Oxford University Press.
+</div>
+
+<!-- ============================== -->
+<!-- 5. 核密度估计 -->
+<!-- ============================== -->
+<h2>5. 核密度估计（Kernel Density Estimation, KDE）</h2>
+
+<p>核密度估计是一种非参数统计方法，用于从离散的点事件数据中估计连续的概率密度或强度表面。在 GIS 中，KDE 将离散分布的点事件（犯罪案件、交通事故、商铺位置等）转换为连续的"热力面"，直观揭示事件的空间聚集模式。</p>
+
+<h3>5.1 一维核密度估计</h3>
+
+<div class="formula">
+<strong>一维 KDE 公式：</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp; ⁿ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x - xᵢ<br>
+f&#x0302;(x) = ──── &sum; K( ────── )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nh&nbsp; ᵢ₌₁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h<br><br>
+其中：<br>
+&nbsp;&nbsp;f&#x0302;(x) = 位置 x 处的估计密度值<br>
+&nbsp;&nbsp;n = 样本点数量<br>
+&nbsp;&nbsp;h = 带宽（bandwidth），控制核函数的展开宽度<br>
+&nbsp;&nbsp;K(u) = 核函数，满足 &int; K(u)du = 1 且 K(u) &ge; 0<br>
+&nbsp;&nbsp;xᵢ = 第 i 个样本点的位置
+</div>
+
+<h3>5.2 二维核密度估计</h3>
+
+<p>GIS 中使用的是二维 KDE，将一维公式推广到平面：</p>
+
+<div class="formula">
+<strong>二维 KDE 公式：</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp; ⁿ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dᵢ<br>
+f&#x0302;(x,y) = ───── &sum;  ── K( ── )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nh²&nbsp; ᵢ₌₁&nbsp;&nbsp;&nbsp; h²&nbsp;&nbsp;&nbsp;&nbsp; h<br><br>
+简化形式（径向对称核）：<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp; ⁿ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dᵢ²<br>
+f&#x0302;(x,y) = ──── &sum;  K( ─── )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nh²&nbsp; ᵢ₌₁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h²<br><br>
+其中 dᵢ = &radic;[(x - xᵢ)² + (y - yᵢ)²]，即待估点到第 i 个样本点的欧几里得距离。
+</div>
+
+<h3>5.3 核函数（Kernel Function）</h3>
+
+<p>核函数 K(u) 决定了每个样本点对周围区域密度贡献的衰减方式。常用的核函数包括：</p>
+
+<div class="formula">
+<strong>高斯核（Gaussian Kernel）：</strong><br>
+K(u) = (1/&radic;(2&pi;)) &middot; exp(-u²/2)，定义域 (-&infin;, +&infin;)<br>
+特点：光滑、无截断，但计算范围无限<br><br>
+
+<strong>Epanechnikov 核：</strong><br>
+K(u) = (3/4)(1 - u²)，|u| &le; 1<br>
+K(u) = 0，|u| &gt; 1<br>
+特点：理论最优（最小均方积分误差 MISE），有限支撑<br><br>
+
+<strong>四次核（Quartic / Biweight Kernel）：</strong><br>
+K(u) = (15/16)(1 - u²)²，|u| &le; 1<br>
+K(u) = 0，|u| &gt; 1<br>
+特点：ArcGIS 默认核函数，比 Epanechnikov 更平滑<br><br>
+
+<strong>三角核（Triangular Kernel）：</strong><br>
+K(u) = 1 - |u|，|u| &le; 1<br>
+K(u) = 0，|u| &gt; 1<br>
+特点：最简单，但在峰值处不可微
+</div>
+
+<p>核函数选择对结果的影响通常远小于带宽选择。Epanechnikov 核在理论上是最优的（最小化 MISE），但各核函数之间的效率差异不超过 6%，实际应用中差异可忽略。</p>
+
+<h3>5.4 带宽选择（Bandwidth Selection）</h3>
+
+<p>带宽 h 是 KDE 中最关键的参数。<strong>带宽过小</strong>：密度面过于粗糙，出现大量尖峰，过度拟合噪声；<strong>带宽过大</strong>：密度面过于平滑，真正的聚集模式被抹平，欠拟合。最优带宽应在偏差（bias）和方差（variance）之间取得平衡。</p>
+
+<div class="formula">
+<strong>Silverman 经验法则（Rule of Thumb）：</strong><br><br>
+一维：h = 0.9 &middot; min(&sigma;, IQR/1.34) &middot; n⁻¹/⁵<br><br>
+二维（各向同性）：<br>
+h = [(&sigma;_x + &sigma;_y) / 2] &middot; n⁻¹/⁶<br><br>
+或更精确的 Scott 法则：<br>
+h_x = &sigma;_x &middot; n⁻¹/⁶<br>
+h_y = &sigma;_y &middot; n⁻¹/⁶<br><br>
+其中 &sigma; 为标准差，IQR 为四分位距，n 为样本量。
+</div>
+
+<p>更精确的带宽选择方法包括：<strong>最小二乘交叉验证（LSCV）</strong>——通过最小化积分均方误差的无偏估计确定最优带宽；<strong>似然交叉验证（LCV）</strong>——最大化留一交叉验证对数似然。这些方法计算成本较高但结果更可靠。此外，<strong>自适应带宽 KDE</strong>允许带宽随局部数据密度变化：在数据密集区使用较小带宽以捕捉细节，在数据稀疏区使用较大带宽以减少噪声。</p>
+
+<h3>5.5 应用案例</h3>
+
+<div class="card-grid">
+<div class="card">
+<h4>犯罪热点分析</h4>
+<p>将一定时间段内的犯罪事件点进行 KDE，生成犯罪密度面。警务部门据此识别犯罪热点区域，优化巡逻路线和警力部署。带宽通常取 200-500m（城市尺度）。可进一步区分犯罪类型（盗窃、抢劫、伤害等），生成各类犯罪的分层密度面。时空 KDE 还可以揭示热点的时间演变趋势。</p>
+</div>
+<div class="card">
+<h4>交通事故密度</h4>
+<p>基于道路网络的核密度估计（Network KDE）将事故点的核密度沿路网展开，避免了平面 KDE 可能将密度"泄漏"到道路之外区域的问题。网络 KDE 使用沿路网的最短路径距离替代欧几里得距离，更准确地反映事故风险的空间分布。可识别高风险路段，指导交通安全改善措施。</p>
+</div>
+<div class="card">
+<h4>商业选址分析</h4>
+<p>对目标客户群体的居住地点进行 KDE，生成人口密度面；叠加竞争对手的 KDE 密度面（取反）和交通可达性面，综合评估候选选址的商业潜力。高客户密度、低竞争密度和高可达性的区域为最优选址。</p>
+</div>
+</div>
+
+<!-- ============================== -->
+<!-- 6. 空间统计 -->
+<!-- ============================== -->
+<h2>6. 空间统计（Spatial Statistics）</h2>
+
+<p>空间统计将经典统计学扩展到空间数据领域，核心任务包括：检验空间数据是否表现出显著的空间模式（聚集、离散或随机），度量空间关系的强度和方向，以及建立考虑空间效应的回归模型。</p>
+
+<h3>6.1 空间自相关分析</h3>
+
+<h4>全局 Moran's I</h4>
+<p>全局 Moran's I 检验研究区域整体上是否存在空间自相关。其值域为 [-1, 1]：正值表示空间聚集（相似值靠近），负值表示空间离散（不同值靠近），接近零表示空间随机分布。</p>
+
+<div class="formula">
+<strong>全局 Moran's I 公式：</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &sum;ᵢ &sum;ⱼ wᵢⱼ(xᵢ - x&#x0304;)(xⱼ - x&#x0304;)<br>
+I = ───── &middot; ──────────────────────────<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S₀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &sum;ᵢ (xᵢ - x&#x0304;)²<br><br>
+其中：<br>
+&nbsp;&nbsp;n = 空间单元数量<br>
+&nbsp;&nbsp;xᵢ = 空间单元 i 的属性值<br>
+&nbsp;&nbsp;x&#x0304; = 全局均值<br>
+&nbsp;&nbsp;wᵢⱼ = 空间权重矩阵元素（邻接 = 1，非邻接 = 0，或距离反函数）<br>
+&nbsp;&nbsp;S₀ = &sum;ᵢ &sum;ⱼ wᵢⱼ（权重矩阵元素总和）<br><br>
+期望值：E[I] = -1/(n-1)<br>
+显著性检验：Z = (I - E[I]) / SD[I]，与标准正态分布比较
+</div>
+
+<h4>局部 Moran's I（LISA）</h4>
+<p>局部 Moran's I（Local Indicators of Spatial Association）由 Luc Anselin 于 1995 年提出，用于识别局部空间聚集的位置和类型：</p>
+
+<div class="formula">
+<strong>局部 Moran's I：</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(xᵢ - x&#x0304;)<br>
+Iᵢ = ─────────── &middot; &sum;ⱼ wᵢⱼ(xⱼ - x&#x0304;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S²<br><br>
+其中 S² = (1/n) &sum;ᵢ (xᵢ - x&#x0304;)²
+</div>
+
+<p>根据局部 Moran's I 的值和显著性，每个空间单元被分类为四种模式：<strong>HH（High-High）</strong>——高值被高值包围，热点聚集；<strong>LL（Low-Low）</strong>——低值被低值包围，冷点聚集；<strong>HL（High-Low）</strong>——高值被低值包围，空间异质点；<strong>LH（Low-High）</strong>——低值被高值包围，空间异质点。这四种模式在 LISA 聚类图中用不同颜色标示。</p>
+
+<h3>6.2 Getis-Ord Gi* 热点分析</h3>
+
+<p>Getis-Ord Gi* 统计量（读作"G-i-star"）是另一种广泛使用的局部空间统计方法，用于识别统计上显著的热点和冷点。与 LISA 不同，Gi* 关注的是局部加权平均值与全局平均值的偏离程度：</p>
+
+<div class="formula">
+<strong>Getis-Ord Gi* 公式：</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&sum;ⱼ wᵢⱼ xⱼ - X&#x0304; &sum;ⱼ wᵢⱼ<br>
+Gi* = ──────────────────────────────────────<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   ___________________________________<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S &middot; &radic;[ (n&sum;ⱼ w²ᵢⱼ - (&sum;ⱼ wᵢⱼ)²) / (n-1) ]<br><br>
+其中：<br>
+&nbsp;&nbsp;X&#x0304; = (1/n) &sum;ⱼ xⱼ（全局均值）<br>
+&nbsp;&nbsp;S = &radic;[(1/n) &sum;ⱼ x²ⱼ - X&#x0304;²]（全局标准差）<br>
+&nbsp;&nbsp;wᵢⱼ = 空间权重（通常为固定距离阈值内的二元权重或距离衰减权重）<br><br>
+Gi* 服从标准正态分布。Gi* &gt; 1.96 (p &lt; 0.05) 表示显著热点；Gi* &lt; -1.96 表示显著冷点。
+</div>
+
+<p>Gi* 的关键优势在于直接输出 Z 值和 p 值，无需额外的统计检验。在 ArcGIS 中的"热点分析"工具即基于 Gi* 统计量。常见应用包括：疾病聚集区识别、房价热点分析、犯罪热点制图等。</p>
+
+<h3>6.3 地理加权回归（GWR）</h3>
+
+<p>传统的全局回归模型（OLS）假设自变量与因变量的关系在整个研究区域内恒定不变。但在空间数据中，这种关系往往因位置不同而变化——即存在<strong>空间非平稳性（Spatial Non-stationarity）</strong>。地理加权回归（Geographically Weighted Regression）由 Fotheringham、Brunsdon 和 Charlton 于 1996 年提出，允许回归系数随空间位置变化：</p>
+
+<div class="formula">
+<strong>OLS 全局模型</strong>：y = &beta;₀ + &beta;₁x₁ + &beta;₂x₂ + ... + &beta;ₖxₖ + &epsilon;<br><br>
+<strong>GWR 局部模型</strong>：yᵢ = &beta;₀(uᵢ,vᵢ) + &beta;₁(uᵢ,vᵢ)x₁ᵢ + ... + &beta;ₖ(uᵢ,vᵢ)xₖᵢ + &epsilon;ᵢ<br><br>
+其中 (uᵢ, vᵢ) 是第 i 个观测点的空间坐标，&beta;ₖ(uᵢ,vᵢ) 为位置相关的回归系数。<br><br>
+<strong>局部系数估计</strong>：<br>
+&beta;&#x0302;(uᵢ,vᵢ) = [X<sup>T</sup> W(uᵢ,vᵢ) X]⁻¹ X<sup>T</sup> W(uᵢ,vᵢ) Y<br><br>
+其中 W(uᵢ,vᵢ) 是以 (uᵢ,vᵢ) 为中心的空间权重对角矩阵，通常使用高斯核或双平方核：<br>
+wⱼ = exp(-dᵢⱼ² / 2h²)（高斯核）<br>
+wⱼ = [1 - (dᵢⱼ/h)²]²，dᵢⱼ &le; h（双平方核）
+</div>
+
+<p>GWR 的输出不是一组全局系数，而是每个观测点位置处的一组局部系数。通过将各系数制图，可以直观地观察自变量影响强度的空间变化模式。带宽 h 的选择通过最小化 AIC（赤池信息准则）或交叉验证 CV 确定。</p>
+
+<h3>6.4 点模式分析</h3>
+
+<h4>最近邻分析（Nearest Neighbor Analysis）</h4>
+<div class="formula">
+<strong>平均最近邻指数 R：</strong><br><br>
+R = D_obs / D_exp<br><br>
+D_obs = (1/n) &sum;ᵢ dᵢ（观测平均最近邻距离）<br>
+D_exp = 0.5 &middot; &radic;(A/n)（完全空间随机 CSR 下的期望平均最近邻距离）<br><br>
+R &lt; 1 → 聚集分布<br>
+R = 1 → 随机分布<br>
+R &gt; 1 → 均匀分布（最大值约 2.149）<br><br>
+Z = (D_obs - D_exp) / SE，其中 SE = 0.26136 / &radic;(n²/A)
+</div>
+
+<h4>Ripley's K 函数与 L 函数</h4>
+<p>K 函数描述不同尺度下的空间聚集/离散程度，克服了最近邻分析仅考虑单一尺度（最近邻距离）的局限：</p>
+
+<div class="formula">
+<strong>K 函数：</strong><br>
+K(d) = (A/n²) &sum;ᵢ &sum;ⱼ≠ᵢ I(dᵢⱼ &le; d) / wᵢⱼ<br><br>
+其中 A = 研究区域面积，dᵢⱼ = 点 i 与 j 之间的距离，I(&middot;) 为指示函数，wᵢⱼ 为边缘校正权重。<br><br>
+在 CSR 下：K(d) = &pi;d²<br><br>
+<strong>L 函数（方差稳定化变换）：</strong><br>
+L(d) = &radic;(K(d)/&pi;) - d<br><br>
+在 CSR 下 L(d) = 0。L(d) &gt; 0 表示尺度 d 上的聚集，L(d) &lt; 0 表示尺度 d 上的离散。<br>
+通过 Monte Carlo 模拟生成置信包络线，判断偏离 CSR 的统计显著性。
+</div>
+
+<!-- ============================== -->
+<!-- 7. 地形分析 -->
+<!-- ============================== -->
+<h2>7. 地形分析（Terrain Analysis）</h2>
+
+<p>地形分析基于数字高程模型（DEM），提取地形的定量特征。DEM 以规则栅格形式存储地表高程值，地形分析的核心操作是在每个栅格单元的局部邻域（通常为 3&times;3 窗口）上进行差分运算。</p>
+
+<h3>7.1 坡度（Slope）</h3>
+
+<p>坡度描述地表在某一点处的最大倾斜率，是地形分析中最基本的派生参数。在 DEM 的 3&times;3 窗口中，使用 Horn (1981) 提出的三阶有限差分方法计算：</p>
+
+<div class="formula">
+<strong>3&times;3 窗口高程值命名约定：</strong><br><br>
+| a  b  c |<br>
+| d  e  f |<br>
+| g  h  i |<br><br>
+e 为中心单元，a-i 为 8 个邻域单元的高程值。<br><br>
+
+<strong>东西方向偏导数（&part;z/&part;x）：</strong><br>
+dz/dx = [(c + 2f + i) - (a + 2d + g)] / (8 &middot; cellsize)<br><br>
+
+<strong>南北方向偏导数（&part;z/&part;y）：</strong><br>
+dz/dy = [(g + 2h + i) - (a + 2b + c)] / (8 &middot; cellsize)<br><br>
+
+<strong>坡度（度）：</strong><br>
+Slope = arctan(&radic;[(dz/dx)² + (dz/dy)²]) &middot; (180/&pi;)<br><br>
+
+<strong>坡度（百分比）：</strong><br>
+Slope% = &radic;[(dz/dx)² + (dz/dy)²] &middot; 100
+</div>
+
+<p>Horn 算法中，中心行/列的权重为 2，角点权重为 1，这一加权方案比简单的 2 点差分更能抑制噪声。对于 DEM 边缘的单元格，邻域不完整，通常采用镜像填充或最近邻复制处理。</p>
+
+<h3>7.2 坡向（Aspect）</h3>
+
+<p>坡向表示坡面最陡方向的方位角，从正北方向顺时针度量，取值范围 [0&deg;, 360&deg;)。平坦区域（坡度为 0）的坡向通常标记为 -1（无意义）。</p>
+
+<div class="formula">
+<strong>坡向计算公式：</strong><br><br>
+Aspect = atan2(dz/dy, -dz/dx) &middot; (180/&pi;)<br><br>
+转换为 0-360 范围：<br>
+if Aspect &lt; 0: Aspect = Aspect + 360<br><br>
+方位角约定：0&deg;/360&deg; = 北，90&deg; = 东，180&deg; = 南，270&deg; = 西
+</div>
+
+<p>坡向在生态学中至关重要：北坡（阴坡）和南坡（阳坡）接收的太阳辐射量差异显著，直接影响植被类型、土壤湿度和积雪融化速率。在中国北方山地，阳坡以草本和灌木为主，阴坡则以针叶林为主。</p>
+
+<h3>7.3 曲率（Curvature）</h3>
+
+<p>曲率描述地表的凹凸性，是坡度的二阶导数。主要包含三种曲率参数：</p>
+
+<ul>
+<li><strong>剖面曲率（Profile Curvature）</strong>：沿最大坡降方向的曲率。正值表示坡面凸起（流速加快），负值表示坡面凹陷（流速减慢），零值表示匀坡。影响水流加速/减速和侵蚀/沉积。</li>
+<li><strong>平面曲率（Plan Curvature）</strong>：垂直于最大坡降方向的曲率。正值表示等高线凸出（水流发散），负值表示等高线凹入（水流汇聚）。影响水流的汇聚和分散。</li>
+<li><strong>总曲率（Total / General Curvature）</strong>：剖面曲率与平面曲率之和，描述整体地表弯曲程度。</li>
+</ul>
+
+<h3>7.4 地形湿度指数（TWI）</h3>
+
+<p>地形湿度指数（Topographic Wetness Index）由 Beven 和 Kirkby 于 1979 年提出，是水文-地貌分析中广泛使用的地形参数，描述地形对土壤水分空间分布的控制作用：</p>
+
+<div class="formula">
+TWI = ln(a / tan&beta;)<br><br>
+其中：<br>
+&nbsp;&nbsp;a = 单位等高线长度的上坡汇水面积（Specific Catchment Area, m²/m）<br>
+&nbsp;&nbsp;&beta; = 局部坡度（弧度）<br><br>
+TWI 值高 → 大汇水面积 + 缓坡 → 容易积水（沟谷、平地）<br>
+TWI 值低 → 小汇水面积 + 陡坡 → 排水良好（山脊、陡坡）
+</div>
+
+<p>TWI 已被广泛应用于土壤湿度制图、植被分布预测、湿地识别和滑坡易发性评估。</p>
+
+<h3>7.5 汇水区划分（Watershed Delineation）</h3>
+
+<p>汇水区（流域）划分是水文分析的基础，目的是确定每个栅格单元的水流路径和最终汇入的出口点。核心步骤包括：</p>
+
+<ol>
+<li><strong>DEM 预处理——填洼（Fill Sinks）</strong>：DEM 中的凹坑（sinks）会导致水流路径中断。填洼操作将凹坑中的单元格高程抬升至溢出口高程，确保水流路径连续。</li>
+<li><strong>流向计算（Flow Direction）</strong>：确定每个单元格的水流方向。</li>
+<li><strong>汇流累积计算（Flow Accumulation）</strong>：计算每个单元格上游有多少个单元格的水流经过它。</li>
+<li><strong>河网提取</strong>：设定汇流累积阈值，超过阈值的单元格构成河流网络。</li>
+<li><strong>流域划分</strong>：从指定的出口点沿流向回溯，所有汇入该出口的单元格构成一个流域。</li>
+</ol>
+
+<h4>D8 算法</h4>
+<p>D8（Deterministic 8）是最经典的流向算法。对于每个单元格，计算其与 8 个相邻单元格之间的坡降（高程差 / 水平距离），水流方向指向坡降最大的邻居。对角线方向的距离取 &radic;2 &middot; cellsize，正交方向取 cellsize。D8 的优点是简单快速，缺点是水流方向被限制为 8 个离散方向之一（45 度整数倍），在平缓坡面上可能产生人工平行水流。</p>
+
+<h4>D-Infinity（D-inf）算法</h4>
+<p>D-inf（Tarboton, 1997）允许水流方向取任意角度（0-2&pi;），消除了 D8 的方向离散化误差。该算法将每个单元格的 8 个邻居分为 8 个三角面（每个由中心格和两个相邻格构成），在每个三角面上计算最大坡降方向，选择坡降最大的三角面的方向作为流向。水流按角度分配到两个下游单元格，分配比例与角度偏离成反比。D-inf 生成的河网更加自然流畅，但计算量比 D8 大。</p>
+
+<div class="formula">
+<strong>D-inf 流量分配规则：</strong><br><br>
+设流向角度 &alpha; 落在单元格 e₁ 和 e₂ 的方向之间：<br><br>
+&alpha;₁ = &alpha; 与 e₁ 方向的夹角<br>
+&alpha;₂ = &alpha; 与 e₂ 方向的夹角<br><br>
+分配给 e₁ 的比例：p₁ = &alpha;₂ / (&alpha;₁ + &alpha;₂)<br>
+分配给 e₂ 的比例：p₂ = &alpha;₁ / (&alpha;₁ + &alpha;₂)<br>
+满足 p₁ + p₂ = 1
+</div>
+
+<!-- ============================== -->
+<!-- 8. 可视域分析 -->
+<!-- ============================== -->
+<h2>8. 可视域分析（Viewshed Analysis）</h2>
+
+<p>可视域分析确定从一个或多个观测点出发，在地形遮挡条件下能够看到哪些区域。它是景观规划、军事侦察、通信基站选址和环境影响评估中的重要工具。</p>
+
+<h3>8.1 通视线分析（Line of Sight）</h3>
+
+<p>通视线分析是可视域分析的基础操作。给定观测点 A 和目标点 B，通过在 A、B 之间绘制一条直线（视线），沿视线逐步采样 DEM 高程值，判断视线是否被地形遮挡。</p>
+
+<div class="formula">
+<strong>通视线判定算法：</strong><br><br>
+1. 建立观测点 A(x_A, y_A, z_A + h_obs) 和目标点 B(x_B, y_B, z_B + h_tgt) 的三维连线<br>
+&nbsp;&nbsp;其中 h_obs 为观测者高度，h_tgt 为目标高度<br><br>
+2. 沿 AB 连线等距采样中间点 P_k（k = 1, 2, ..., m），间隔通常为 DEM 栅格分辨率<br><br>
+3. 对每个中间点 P_k，计算：<br>
+&nbsp;&nbsp;视线高程：z_line(k) = z_A + (z_B - z_A) &middot; (d_k / d_AB)<br>
+&nbsp;&nbsp;地面高程：z_dem(k) = 从 DEM 双线性插值获取<br><br>
+4. 若存在任意 k 使得 z_dem(k) &gt; z_line(k)，则 A、B 之间不通视<br>
+&nbsp;&nbsp;第一个使 z_dem(k) &gt; z_line(k) 的点即为遮挡点
+</div>
+
+<p>通视线分析还可以输出沿视线的高程剖面图，直观展示地形起伏与视线的关系。在军事应用中，通视线分析用于评估射击线和隐蔽性。</p>
+
+<h3>8.2 视域分析（Viewshed）</h3>
+
+<p>视域分析将通视线判定从单条视线扩展到所有方向，确定从观测点能够看到的全部区域。输出为一个二值栅格：可见区域标记为 1，不可见区域标记为 0。</p>
+
+<h4>基本视域算法</h4>
+<p><strong>射线扫描法（Ray Casting）</strong>：从观测点向 360 度方向发射射线，每条射线执行通视线判定。优点是概念直观，缺点是计算量大且远端精度与射线密度有关。射线间隔角度越小，结果越精确但计算时间越长。</p>
+
+<p><strong>参考面法（Reference Plane）</strong>：Wang 等（1996）提出的高效算法。对于每个待判定的目标单元格 T，计算从观测点 O 到 T 的仰角 &alpha;_OT，然后与从 O 沿 OT 方向的所有中间单元格的最大仰角 &alpha;_max 比较：</p>
+
+<div class="formula">
+<strong>参考面法视域判定：</strong><br><br>
+目标单元格 T 的仰角：<br>
+&alpha;_OT = arctan[(z_T - z_O) / d_OT]<br><br>
+O 到 T 方向上所有中间单元格的最大仰角：<br>
+&alpha;_max = max{ arctan[(z_k - z_O) / d_Ok] }，k 为 O 和 T 之间的所有单元格<br><br>
+判定规则：<br>
+若 &alpha;_OT &gt; &alpha;_max，则 T 可见<br>
+若 &alpha;_OT &le; &alpha;_max，则 T 被遮挡
+</div>
+
+<h4>扩展视域分析</h4>
+
+<ul>
+<li><strong>概率视域（Probabilistic Viewshed）</strong>：考虑 DEM 高程的不确定性（误差），通过蒙特卡洛模拟生成多次扰动 DEM 上的视域，输出每个像元的可见概率而非简单的可见/不可见。</li>
+<li><strong>累积视域（Cumulative Viewshed）</strong>：对多个观测点分别计算视域，然后叠加（求和），得到每个像元被多少个观测点可见。用于通信基站覆盖分析和旅游景观评估。</li>
+<li><strong>反向视域（Reverse/Inverse Viewshed）</strong>：确定从一个目标点能被哪些位置看到。等价于以目标点为观测点计算视域。在选址分析中，可用于评估建筑物的视觉影响范围——即周围有多少区域的居民会看到该建筑物。</li>
+<li><strong>受限视域</strong>：添加方位角约束（如仅分析北向 120 度扇形区域）和距离约束（如仅分析 5km 范围内），减少计算量并聚焦于关注区域。</li>
+</ul>
+
+<h3>8.3 视域分析应用场景</h3>
+
+<div class="card-grid">
+<div class="card">
+<h4>通信基站选址</h4>
+<p>在候选塔址处设置不同塔高（30m、50m、80m），分别计算视域（信号覆盖近似为视线覆盖），选择覆盖目标区域最大的方案。累积视域可评估多个基站的联合覆盖率和覆盖重叠区域。</p>
+</div>
+<div class="card">
+<h4>景观影响评估</h4>
+<p>在拟建风力发电场的每台风机位置计算视域，确定风机对周围景观的视觉影响范围。结合居民点分布和主要观景点位置，评估视觉影响的受众范围。英国等国的风电项目环评中，视域分析是法定要求。</p>
+</div>
+<div class="card">
+<h4>军事应用</h4>
+<p>在战术规划中，视域分析用于确定观察哨的最优位置（最大化可视区域）、评估行军路线的暴露风险（最小化被敌方观察到的概率）、规划火力覆盖区域。反向视域可识别目标位置能被敌方哪些阵地观察到。</p>
+</div>
+</div>
+
+<!-- ============================== -->
+<!-- 总结 -->
+<!-- ============================== -->
+<h2>总结与展望</h2>
+
+<p>空间分析是将地理数据转化为决策知识的核心引擎。本章系统介绍了八大核心空间分析技术：<strong>缓冲区分析</strong>解决邻近性问题；<strong>叠加分析</strong>实现多源信息融合；<strong>网络分析</strong>优化路径与配置；<strong>空间插值</strong>从离散到连续的数据转换；<strong>核密度估计</strong>揭示空间聚集模式；<strong>空间统计</strong>提供空间模式的定量检验；<strong>地形分析</strong>提取地表形态的定量特征；<strong>可视域分析</strong>评估视觉可达性。</p>
+
+<p>随着计算技术的发展，空间分析正向几个方向演进：<strong>大规模并行计算</strong>——利用 GPU 和分布式计算框架（如 Apache Spark 的 GeoSpark 扩展）处理海量空间数据；<strong>深度学习与空间分析的融合</strong>——图神经网络（GNN）用于网络分析，卷积神经网络（CNN）用于遥感影像的空间特征提取；<strong>时空分析</strong>——将空间维度与时间维度结合，分析空间模式的时间演变；<strong>三维空间分析</strong>——从二维平面扩展到三维建筑和地下空间。</p>
+
+<p>掌握空间分析技术，不仅需要理解数学原理和算法实现，更需要深入理解应用领域的专业知识，才能选择合适的分析方法、正确设定参数、合理解释结果。空间分析的价值不在于技术本身，而在于它揭示的空间规律和支持的科学决策。</p>
+
+<div class="ref">
+核心参考文献：<br>
+1. de Smith, M.J., Goodchild, M.F. & Longley, P.A. (2018). <em>Geospatial Analysis: A Comprehensive Guide to Principles, Techniques and Software Tools</em> (6th ed.)<br>
+2. O'Sullivan, D. & Unwin, D.J. (2010). <em>Geographic Information Analysis</em> (2nd ed.). Wiley.<br>
+3. Fotheringham, A.S., Brunsdon, C. & Charlton, M. (2002). <em>Geographically Weighted Regression</em>. Wiley.<br>
+4. Burrough, P.A., McDonnell, R.A. & Lloyd, C.D. (2015). <em>Principles of Geographical Information Systems</em> (3rd ed.). Oxford University Press.<br>
+5. Longley, P.A., Goodchild, M.F., Maguire, D.J. & Rhind, D.W. (2015). <em>Geographic Information Science and Systems</em> (4th ed.). Wiley.
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="raster-data.html">&larr; 栅格数据</a>
+  <a href="../index.html">目录</a>
+  <a href="remote-sensing.html">遥感技术 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>

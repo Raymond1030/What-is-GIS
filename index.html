@@ -487,6 +487,26 @@ body::before {
 }
 .ency-nav a:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,176,.05); }
 
+
+/* ========== Read More Buttons ========== */
+.read-more-grid {
+  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+  margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border);
+}
+.read-more-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .7rem 1.5rem; background: rgba(0,229,176,.08);
+  border: 1px solid rgba(0,229,176,.25); border-radius: 10px;
+  color: var(--accent); font-size: .88rem; font-weight: 500;
+  transition: all .3s; font-family: var(--font-body);
+}
+.read-more-btn:hover {
+  background: rgba(0,229,176,.15); border-color: var(--accent);
+  transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,229,176,.15);
+  color: var(--accent);
+}
+.read-more-btn::after { content: ' →'; font-size: 1.1rem; }
+
 /* ========== Responsive ========== */
 @media (max-width: 1024px) {
   .frontier-grid { grid-template-columns: 1fr; }
@@ -835,6 +855,14 @@ body::before {
         </div>
       </div>
     </div>
+  </div>
+
+    <div class="read-more-grid fade-up">
+      <a href="chapters/vector-data.html" class="read-more-btn">矢量数据模型详解</a>
+      <a href="chapters/raster-data.html" class="read-more-btn">栅格数据模型详解</a>
+      <a href="chapters/spatial-analysis.html" class="read-more-btn">空间分析技术详解</a>
+    </div>
+
   </div>
 </section>
 
@@ -1279,6 +1307,16 @@ body::before {
         </ul>
       </div>
     </div>
+  </div>
+
+    <div class="read-more-grid fade-up">
+      <a href="chapters/geoai.html" class="read-more-btn">GeoAI 地理人工智能详解</a>
+      <a href="chapters/digital-twin.html" class="read-more-btn">数字孪生详解</a>
+      <a href="chapters/3d-gis.html" class="read-more-btn">三维GIS与三维重建详解</a>
+      <a href="chapters/lbs.html" class="read-more-btn">LBS 位置服务详解</a>
+      <a href="chapters/remote-sensing.html" class="read-more-btn">遥感技术详解</a>
+    </div>
+
   </div>
 </section>
 
@@ -1755,6 +1793,12 @@ body::before {
       <h4>全球地理空间市场规模</h4>
       <p>全球地理空间分析市场规模 2024 年为 $1,143.2 亿，预计 2030 年达 $2,265.3 亿 (CAGR 11.3%)。GIS 软件市场 2025 年为 $145.8 亿，预计 2030 年达 $312 亿 (CAGR 13.1%)。北美占全球市场份额 34.2%。软件板块收入占比超过 64%。增长驱动：智慧城市、自动驾驶、AI 与大数据融合、可再生能源选址。</p>
       <div class="ency-ref">参考：U.S. BLS Occupational Outlook Handbook (2024), GIS Geography Salary Report, PayScale GIS Analyst 2026, GISCI Applicant Manual (2025), Grand View Research Geospatial Market Report</div>
+    </div>
+
+  </div>
+
+    <div class="read-more-grid fade-up">
+      <a href="chapters/employment.html" class="read-more-btn">就业前景完整分析报告</a>
     </div>
 
   </div>

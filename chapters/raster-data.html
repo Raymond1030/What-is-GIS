@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>栅格数据模型详解 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 04-B</div>
+  <h1>栅格数据模型详解</h1>
+  <p>深入理解栅格数据(Raster Data)的像元结构、四种分辨率体系、高程模型、编码压缩算法、地图代数运算以及与矢量数据的转换机制</p>
+  <div class="hero-img"><img src="../images/raster_data.png" alt="栅格数据模型详解"></div>
+</div>
+
+<article class="content">
+
+<!-- ============================== Section 1 ============================== -->
+<h2>一、栅格数据基本概念</h2>
+
+<h3>1.1 什么是栅格数据</h3>
+<p>栅格数据(Raster Data)是GIS中两大空间数据模型之一，它以规则排列的<strong>像元(Pixel/Cell)</strong>阵列来表达空间信息。与矢量数据使用离散的点、线、面不同，栅格数据将整个研究区域划分为均匀的网格单元，每个网格单元存储一个或多个属性值。这种数据结构天然适合表达连续变化的地理现象，如地表温度、高程、降雨量、植被覆盖度等。</p>
+
+<p>从直觉上看，栅格数据就像一张数字化的照片 —— 照片由无数像素组成，每个像素有其颜色值；同理，栅格数据由无数像元组成，每个像元记录着对应地表位置的某种属性值。卫星遥感影像、数字高程模型(DEM)、扫描地图、土地利用分类图等都属于典型的栅格数据。</p>
+
+<h3>1.2 像元(Pixel/Cell)与行列结构</h3>
+<p>像元是栅格数据的最小组成单位。在GIS中，"Pixel"和"Cell"这两个术语经常混用，但严格来说存在细微区别：<strong>Pixel</strong>多用于遥感影像语境，指传感器采集的一个采样单元；<strong>Cell</strong>则更常见于GIS分析语境，指栅格网格中的一个单元格。</p>
+
+<p>栅格数据的行列结构(Row-Column Structure)遵循矩阵的组织方式。整个栅格被组织为<strong>M行 &times; N列</strong>的二维矩阵。行号从顶部开始向下递增(从0或1开始)，列号从左侧开始向右递增。每个像元可以通过其行列号 (row, col) 唯一确定位置。例如，一幅1000&times;1000的遥感影像包含100万个像元。</p>
+
+<div class="info">
+<h4>像元属性的数据类型</h4>
+<p>像元值可以是多种数据类型：<strong>整型(Integer)</strong> &mdash; 用于分类数据如土地利用类型(1=农田, 2=森林, 3=水体)；<strong>浮点型(Float)</strong> &mdash; 用于连续数据如高程(1234.56m)或温度(23.7&deg;C)；<strong>布尔型(Boolean)</strong> &mdash; 用于二值数据如洪水淹没区(0/1)。单波段栅格每个像元存一个值，多波段(Multi-band)栅格每个像元可同时存储多个波段值。</p>
+</div>
+
+<h3>1.3 栅格坐标系与空间参考</h3>
+<p>栅格数据具有双重坐标系统。<strong>图像坐标系(Image Coordinate System)</strong>以像元的行列号定位，原点通常位于左上角，行号向下增长，列号向右增长。<strong>地理坐标系/投影坐标系(Geographic/Projected Coordinate System)</strong>则将每个像元映射到真实的地球表面位置。</p>
+
+<p>这种映射关系通过<strong>仿射变换(Affine Transformation)</strong>来描述，包含六个参数：</p>
+<div class="formula">
+X_geo = X_origin + col &times; PixelWidth + row &times; RotationX<br>
+Y_geo = Y_origin + col &times; RotationY + row &times; PixelHeight<br>
+<br>
+其中：<br>
+X_origin, Y_origin = 栅格左上角的地理坐标<br>
+PixelWidth, PixelHeight = 像元在X和Y方向上的地面尺寸(PixelHeight通常为负值)<br>
+RotationX, RotationY = 旋转参数(无旋转时为0)
+</div>
+
+<p>在GeoTIFF文件中，这些参数存储在TIFF的GeoKey标签中；在ESRI格式中，则保存在同名的<strong>.tfw</strong>(World File)或<strong>.prj</strong>(投影文件)中。</p>
+
+<h3>1.4 NoData概念</h3>
+<p><strong>NoData</strong>是栅格数据中一个关键概念，表示"此像元没有有效数据"。它不同于数值0 &mdash; 0是一个合法的数据值(例如高程为0表示海平面)，而NoData意味着数据缺失或不适用。常见的NoData设定值包括 <strong>-9999</strong>、<strong>-3.4e38</strong>、<strong>255</strong>(8位无符号整型)等。</p>
+
+<p>NoData产生的原因包括：传感器故障导致的坏像元(Bad Pixel)、云层遮挡无法获取地面信息、影像裁剪后的不规则边界区域、投影变换导致的空值区域等。在空间分析中，NoData像元通常不参与计算 &mdash; 例如计算区域平均高程时，NoData像元会被自动排除，而非以0值参与统计，这对于保证分析结果的准确性至关重要。</p>
+
+<!-- ============================== Section 2 ============================== -->
+<h2>二、四种分辨率详解</h2>
+
+<p>栅格数据的"分辨率"并非单一概念，而是包含<strong>空间分辨率</strong>、<strong>光谱分辨率</strong>、<strong>时间分辨率</strong>和<strong>辐射分辨率</strong>四个维度。这四种分辨率共同决定了栅格数据的信息承载能力和适用场景。</p>
+
+<h3>2.1 空间分辨率(Spatial Resolution)</h3>
+<p>空间分辨率指一个像元所对应的地面实际面积，通常以<strong>地面采样距离 GSD (Ground Sample Distance)</strong>来衡量。GSD越小，空间分辨率越高，能够分辨的地物越细小。例如，0.3m分辨率的卫星影像可以分辨停车场中的单辆汽车，而30m分辨率的影像只能区分不同的土地利用类型。</p>
+
+<p>需要注意，空间分辨率与传感器的<strong>瞬时视场角 IFOV (Instantaneous Field of View)</strong>和<strong>轨道高度</strong>直接相关。IFOV越小、轨道越低，空间分辨率越高，但覆盖范围(Swath Width)越窄。这是遥感系统设计中的一个基本矛盾。</p>
+
+<h4>主流遥感卫星空间分辨率对比</h4>
+<table>
+<tr><th>卫星/传感器</th><th>国家</th><th>全色(Pan)</th><th>多光谱(MS)</th><th>幅宽(km)</th><th>发射年份</th></tr>
+<tr><td>WorldView-3</td><td>美国</td><td>0.31 m</td><td>1.24 m</td><td>13.1</td><td>2014</td></tr>
+<tr><td>Pl&eacute;iades Neo</td><td>法国</td><td>0.30 m</td><td>1.2 m</td><td>14</td><td>2021</td></tr>
+<tr><td>GeoEye-1</td><td>美国</td><td>0.41 m</td><td>1.65 m</td><td>15.2</td><td>2008</td></tr>
+<tr><td>高分二号(GF-2)</td><td>中国</td><td>0.8 m</td><td>3.2 m</td><td>45</td><td>2014</td></tr>
+<tr><td>SPOT-7</td><td>法国</td><td>1.5 m</td><td>6 m</td><td>60</td><td>2014</td></tr>
+<tr><td>高分一号(GF-1)</td><td>中国</td><td>2 m</td><td>8 m</td><td>60</td><td>2013</td></tr>
+<tr><td>Sentinel-2</td><td>ESA</td><td>&mdash;</td><td>10 m</td><td>290</td><td>2015</td></tr>
+<tr><td>Landsat 8/9 OLI</td><td>美国</td><td>15 m</td><td>30 m</td><td>185</td><td>2013/2021</td></tr>
+<tr><td>MODIS (Terra/Aqua)</td><td>美国</td><td>&mdash;</td><td>250/500/1000 m</td><td>2330</td><td>1999/2002</td></tr>
+</table>
+
+<div class="ref">
+参考: 空间分辨率的选择取决于应用目标。城市精细化管理需要亚米级影像(< 1m)，农业监测适用10-30m级别(Sentinel-2, Landsat)，全球尺度植被监测则使用250m-1km级别(MODIS)。分辨率越高，数据量和处理成本呈几何级数增长。
+</div>
+
+<h3>2.2 光谱分辨率(Spectral Resolution)</h3>
+<p>光谱分辨率描述传感器区分不同电磁波长的能力，由<strong>波段数量</strong>和<strong>波段宽度</strong>共同决定。根据光谱分辨率的不同，遥感影像可分为以下几类：</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>全色影像 (Panchromatic)</h4>
+<p>单波段，覆盖可见光范围(约0.45-0.90&mu;m)。空间分辨率最高，但无法区分颜色。常用于与多光谱影像融合(Pan-sharpening)以提高空间细节。</p>
+</div>
+<div class="card">
+<h4>多光谱影像 (Multispectral)</h4>
+<p>3-10个波段，通常包括蓝(B)、绿(G)、红(R)、近红外(NIR)。Landsat有11个波段，Sentinel-2有13个波段。波段宽度较宽(数十至上百nm)，适合地物分类和植被监测。</p>
+</div>
+<div class="card">
+<h4>高光谱影像 (Hyperspectral)</h4>
+<p>数十至数百个连续窄波段(波段宽度5-10nm)。如EO-1 Hyperion有242个波段、PRISMA有240个波段。可获取近乎连续的光谱曲线，适合矿物识别、精细植被分类、水质监测等。</p>
+</div>
+</div>
+
+<p>光谱分辨率的重要性在于：不同地物在不同波长处的反射率存在差异。例如，健康植被在近红外波段(NIR, ~0.7-1.3&mu;m)反射率极高(约40-50%)，而在红光波段(Red, ~0.6-0.7&mu;m)因叶绿素吸收反射率很低(约5-10%)。这种"红边效应(Red Edge)"正是NDVI等植被指数的物理基础。</p>
+
+<h3>2.3 时间分辨率(Temporal Resolution)</h3>
+<p>时间分辨率也称<strong>重访周期(Revisit Period)</strong>，指卫星重复观测同一地点的最短时间间隔。对于需要监测动态变化的应用（如农作物长势监测、洪水应急、森林火灾追踪），高时间分辨率至关重要。</p>
+
+<table>
+<tr><th>卫星</th><th>重访周期</th><th>应用场景</th></tr>
+<tr><td>MODIS (Terra+Aqua)</td><td>1-2天</td><td>全球植被变化、火点监测、海洋温度</td></tr>
+<tr><td>Sentinel-2 (双星)</td><td>5天</td><td>农业监测、土地变化检测</td></tr>
+<tr><td>Landsat 8+9 (双星)</td><td>8天</td><td>土地利用/覆盖制图、长时间序列分析</td></tr>
+<tr><td>WorldView-3</td><td>< 1天 (侧摆)</td><td>应急响应、军事侦察</td></tr>
+<tr><td>Planet (SkySat星座)</td><td>每天</td><td>日变化监测、精准农业</td></tr>
+<tr><td>风云四号(FY-4A)</td><td>15分钟 (静止轨道)</td><td>天气预报、台风追踪</td></tr>
+</table>
+
+<p>时间分辨率与空间分辨率之间通常存在<strong>权衡关系(Trade-off)</strong>：MODIS每天覆盖全球但空间分辨率仅250m-1km，而WorldView-3空间分辨率0.31m但重访周期较长。近年来的小卫星星座(如Planet Labs拥有200+颗卫星)正在打破这一限制，实现"每天全球覆盖+米级分辨率"。</p>
+
+<h3>2.4 辐射分辨率(Radiometric Resolution)</h3>
+<p>辐射分辨率是指传感器区分不同辐射强度差异的能力，以<strong>位深度(Bit Depth)</strong>衡量。位深度决定了像元值可能的取值范围(灰度级数)：</p>
+
+<table>
+<tr><th>位深度</th><th>灰度级数</th><th>取值范围</th><th>典型传感器</th></tr>
+<tr><td>8-bit</td><td>256级</td><td>0 - 255</td><td>早期Landsat MSS、SPOT-1</td></tr>
+<tr><td>11-bit</td><td>2048级</td><td>0 - 2047</td><td>IKONOS、QuickBird</td></tr>
+<tr><td>12-bit</td><td>4096级</td><td>0 - 4095</td><td>Landsat 8 OLI、Sentinel-2</td></tr>
+<tr><td>14-bit</td><td>16384级</td><td>0 - 16383</td><td>WorldView-3</td></tr>
+<tr><td>16-bit</td><td>65536级</td><td>0 - 65535</td><td>某些高光谱传感器</td></tr>
+</table>
+
+<p>更高的辐射分辨率意味着传感器能够捕捉更微小的辐射差异。例如，8-bit传感器只能将入射辐射量化为256个等级，而12-bit传感器可以量化为4096个等级。这对于区分低对比度地物(如不同含水量的土壤、不同密度的植被)至关重要。在暗区域和亮区域同时存在的场景中，高辐射分辨率能够避免信息丢失。</p>
+
+<!-- ============================== Section 3 ============================== -->
+<h2>三、DEM / DSM / DTM 深入对比</h2>
+
+<h3>3.1 三种高程模型的定义</h3>
+<p>在GIS和遥感领域，高程数据是最基础的栅格数据类型之一。三种高程模型经常被提及，但它们的含义存在重要差异：</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>DEM (Digital Elevation Model)</h4>
+<p><strong>数字高程模型</strong> &mdash; 广义上是所有数字化高程数据的统称。狭义上，特指表示<strong>裸露地表</strong>(Bare Earth)高程的栅格数据，不包含建筑物和植被。在美国USGS的定义中，DEM通常等同于DTM。</p>
+</div>
+<div class="card">
+<h4>DSM (Digital Surface Model)</h4>
+<p><strong>数字表面模型</strong> &mdash; 记录地球表面<strong>最高点</strong>的高程，包括建筑物屋顶、树冠顶部、桥梁等人工和自然地物。可以理解为"鸟瞰视角"看到的表面高度。</p>
+</div>
+<div class="card">
+<h4>DTM (Digital Terrain Model)</h4>
+<p><strong>数字地形模型</strong> &mdash; 仅记录<strong>自然地形表面</strong>的高程，去除了所有人工建筑物和植被。在欧洲传统定义中，DTM还可能包含坡度、坡向等附加地形属性。</p>
+</div>
+</div>
+
+<div class="info">
+<h4>nDSM：归一化数字表面模型</h4>
+<p>nDSM = DSM - DTM，得到的是地物相对于地面的高度，即<strong>建筑物高度</strong>或<strong>树木高度</strong>。这在城市三维建模和森林蓄积量估算中非常有用。例如，一栋建筑物的DSM高程为85m，对应位置的DTM高程为50m，则该建筑物高度nDSM = 85 - 50 = 35m。</p>
+</div>
+
+<h3>3.2 高程数据的获取方法</h3>
+
+<h4>摄影测量(Photogrammetry)</h4>
+<p>通过<strong>立体像对(Stereo Pair)</strong>利用视差(Parallax)原理计算地面点的三维坐标。传统航空摄影测量精度可达分米级。卫星立体摄影测量(如ALOS PRISM、WorldView立体对)精度一般在1-5m。近年来，无人机(UAV)摄影测量结合运动恢复结构(SfM, Structure from Motion)技术，可获取厘米级精度的DSM。</p>
+
+<h4>LiDAR (Light Detection and Ranging)</h4>
+<p>激光雷达通过发射激光脉冲并记录回波时间来计算距离。机载LiDAR(Airborne LiDAR)可同时获取<strong>首次回波(First Return)</strong>生成DSM和<strong>末次回波(Last Return)</strong>生成DTM。点云密度通常为2-20点/m&sup2;，高程精度优于15cm(垂直RMSE)。星载LiDAR如ICESat-2采用光子计数技术，虽然覆盖范围大但为剖面式而非面状覆盖。</p>
+
+<h4>InSAR (Interferometric Synthetic Aperture Radar)</h4>
+<p>干涉合成孔径雷达利用两次SAR成像的<strong>相位差</strong>计算地面高程。全球SRTM DEM就是2000年航天飞机雷达地形任务通过InSAR技术获取的。InSAR的优势在于可穿透云层(微波波段不受天气影响)，适合常年多云的热带地区。但InSAR获取的是DSM而非DTM(微波难以完全穿透茂密植被)。</p>
+
+<h3>3.3 全球DEM数据集对比</h3>
+<table>
+<tr><th>数据集</th><th>分辨率</th><th>覆盖范围</th><th>垂直精度(RMSE)</th><th>数据源</th><th>发布年份</th></tr>
+<tr><td>SRTM v3</td><td>30m (1弧秒)</td><td>60&deg;N - 56&deg;S</td><td>~9m (全球)</td><td>InSAR</td><td>2000 (2014开放30m)</td></tr>
+<tr><td>ASTER GDEM v3</td><td>30m (1弧秒)</td><td>83&deg;N - 83&deg;S</td><td>~8.5m</td><td>立体摄影测量</td><td>2019</td></tr>
+<tr><td>ALOS World 3D</td><td>30m (1弧秒)</td><td>全球</td><td>~5m</td><td>PRISM立体对</td><td>2015</td></tr>
+<tr><td>COP-DEM GLO-30</td><td>30m</td><td>全球</td><td>< 4m (相对)</td><td>TanDEM-X InSAR</td><td>2021</td></tr>
+<tr><td>COP-DEM GLO-90</td><td>90m</td><td>全球</td><td>< 4m (相对)</td><td>TanDEM-X InSAR</td><td>2021</td></tr>
+<tr><td>NASADEM</td><td>30m</td><td>60&deg;N - 56&deg;S</td><td>~7m</td><td>SRTM再处理</td><td>2020</td></tr>
+<tr><td>FABDEM</td><td>30m</td><td>全球</td><td>改进的COP-DEM</td><td>COP-DEM去除建筑物+树木</td><td>2022</td></tr>
+</table>
+
+<div class="ref">
+注意: SRTM和TanDEM-X获取的是DSM而非DTM。在森林茂密地区，SRTM高程可能比真实地面高程偏高5-20m。FABDEM基于COP-DEM通过机器学习移除了建筑物和树木影响，更接近于DTM。
+</div>
+
+<h3>3.4 应用场景</h3>
+<ul>
+<li><strong>水文分析</strong>：基于DEM提取流域边界、河网、汇水面积、流向(D8/D-infinity算法)</li>
+<li><strong>地形分析</strong>：计算坡度(Slope)、坡向(Aspect)、曲率(Curvature)、地形湿度指数(TWI)</li>
+<li><strong>视域分析(Viewshed)</strong>：从DEM计算特定观察点的可视范围，应用于通信基站选址、景观规划</li>
+<li><strong>洪水模拟</strong>：高精度DEM是洪水淹没模拟(如HEC-RAS 2D)的关键输入</li>
+<li><strong>城市三维建模</strong>：DSM + nDSM用于建筑物高度提取和LOD1/LOD2三维城市模型构建</li>
+<li><strong>地质灾害评估</strong>：坡度、曲率、地形起伏度等DEM衍生指标是滑坡易发性评估的重要因子</li>
+</ul>
+
+<!-- ============================== Section 4 ============================== -->
+<h2>四、栅格数据编码结构</h2>
+
+<p>原始栅格数据采用逐像元存储的方式，数据量巨大。例如，一幅10000&times;10000的32位单波段栅格需要约381MB存储空间。为了提高存储效率和减少I/O开销，发展出了多种压缩编码结构。</p>
+
+<h3>4.1 直接编码(Direct Coding)</h3>
+<p>最简单的栅格存储方式：按行或按列逐像元记录每个像元值。数据结构就是一个二维矩阵，行数&times;列数即为像元总数。优点是<strong>结构简单、随机访问速度快</strong>(O(1)时间复杂度)，缺点是<strong>不进行任何压缩</strong>，存储空间开销最大。</p>
+
+<div class="formula">
+存储空间 = 行数 &times; 列数 &times; 每像元字节数<br>
+例: 10000 &times; 10000 &times; 4 bytes(Float32) = 400,000,000 bytes &asymp; 381 MB
+</div>
+
+<h3>4.2 游程编码(Run-Length Encoding, RLE)</h3>
+<p>游程编码是最经典的栅格压缩方法之一。其原理是：对于同一行中<strong>连续相同的像元值</strong>，只记录"(值, 连续长度)"这样的二元组，而非重复存储。</p>
+
+<div class="formula">
+原始数据(一行): 3 3 3 3 5 5 7 7 7 7 7 7 2 2 2<br>
+RLE编码: (3,4) (5,2) (7,6) (2,3)<br>
+<br>
+原始存储: 15个值<br>
+RLE存储: 4个二元组 = 8个值<br>
+压缩率: 8/15 &asymp; 53%
+</div>
+
+<p>RLE的压缩效果取决于栅格数据的<strong>空间自相关性</strong>：连续区域越大(如大片农田、湖泊)，压缩率越高；当数据高度碎片化(如分类结果中的椒盐噪声)时，RLE可能反而增加存储量。对于典型的土地利用分类图，RLE通常能实现<strong>60%-90%的压缩率</strong>。</p>
+
+<h3>4.3 链码(Chain Code / Freeman Code)</h3>
+<p>链码由Freeman于1961年提出，主要用于编码<strong>区域边界</strong>。其思想是：选择一个起始点，然后用方向代码(0-7，分别代表8个方向)依次记录边界走向。</p>
+
+<div class="formula">
+Freeman 8方向编码：<br>
+  3  2  1<br>
+  4  &middot;  0<br>
+  5  6  7<br>
+<br>
+0=东, 1=东北, 2=北, 3=西北, 4=西, 5=西南, 6=南, 7=东南<br>
+<br>
+一个矩形区域的边界链码示例：<br>
+起点(2,1), 链码: 0 0 0 6 6 4 4 4 2 2
+</div>
+
+<p>链码适合存储以边界为主的数据(如行政区划边界)，但不适合表达内部属性信息。其变体<strong>差分链码(Differential Chain Code)</strong>只记录方向的变化量，进一步提高了压缩效率。</p>
+
+<h3>4.4 块码(Block Code)</h3>
+<p>块码是游程编码在二维空间上的推广。不同于RLE只在行方向压缩，块码将栅格分解为尽可能大的<strong>矩形块</strong>，每个块用"(起始行, 起始列, 行数, 列数, 值)"来表示。例如，一大片相同值的区域可以用一个矩形块来表示，而非逐行RLE编码。块码的压缩率一般优于RLE，但编码和解码算法更复杂。</p>
+
+<h3>4.5 四叉树编码(Quadtree Encoding)</h3>
+<p>四叉树是栅格数据最重要的层次化压缩编码结构。其原理是<strong>递归四分法</strong>：将整个栅格区域等分为四个象限(NW, NE, SW, SE)；如果某个象限内所有像元值相同，则记录为叶节点；否则继续四分，直到所有子区域均匀或达到单像元。</p>
+
+<div class="formula">
+四叉树递归分解过程：<br>
+Level 0: 整个栅格 (如 8&times;8)<br>
+Level 1: 分为4个 4&times;4 子区域<br>
+Level 2: 不均匀的子区域继续分为4个 2&times;2<br>
+Level 3: 不均匀的2&times;2继续分为4个 1&times;1 (单像元，叶节点)<br>
+<br>
+最大深度 = log2(max(行数, 列数))<br>
+对于 1024&times;1024 栅格，最大深度 = 10
+</div>
+
+<p>四叉树的优势在于：<strong>(1) 自适应压缩</strong> &mdash; 均匀区域用大块表示，碎片区域用小块表示；<strong>(2) 支持高效的空间查询</strong> &mdash; 可以快速判断某点所在区域的值(O(log n)时间)；<strong>(3) 天然支持多尺度表达</strong> &mdash; 不同层级对应不同分辨率。缺点是要求栅格尺寸为2的幂次(不足时需填充)。</p>
+
+<h4>各编码方式对比</h4>
+<table>
+<tr><th>编码方式</th><th>压缩原理</th><th>典型压缩率</th><th>查询效率</th><th>适用数据类型</th></tr>
+<tr><td>直接编码</td><td>无压缩</td><td>1:1</td><td>O(1)</td><td>所有类型</td></tr>
+<tr><td>RLE</td><td>行方向连续值合并</td><td>2:1 ~ 10:1</td><td>O(n)</td><td>分类数据、专题图</td></tr>
+<tr><td>链码</td><td>边界方向编码</td><td>视边界复杂度而定</td><td>O(n)</td><td>边界数据</td></tr>
+<tr><td>块码</td><td>二维矩形块合并</td><td>优于RLE</td><td>O(n)</td><td>大面积均匀区域</td></tr>
+<tr><td>四叉树</td><td>递归四分层次化</td><td>3:1 ~ 20:1</td><td>O(log n)</td><td>分类数据、专题图</td></tr>
+</table>
+
+<!-- ============================== Section 5 ============================== -->
+<h2>五、地图代数 (Map Algebra)</h2>
+
+<p><strong>地图代数</strong>的概念由C. Dana Tomlin于1983年在其博士论文中首次系统提出，并在1990年出版的《Geographic Information Systems and Cartographic Modeling》一书中全面阐述。地图代数将栅格图层视为二维数学函数，定义了一套完整的基于像元的运算体系。根据运算涉及的空间范围，地图代数将运算分为四类：<strong>局部运算(Local)、焦点运算(Focal)、分区运算(Zonal)、全局运算(Global)</strong>。</p>
+
+<div class="ref">
+参考文献: Tomlin, C. Dana (1990). Geographic Information Systems and Cartographic Modeling. Prentice-Hall. 这是GIS栅格分析的奠基性著作。
+</div>
+
+<h3>5.1 局部运算(Local Operations)</h3>
+<p>局部运算对<strong>每个像元独立地</strong>进行计算，输出像元的值仅取决于对应输入像元的值。这是最基本的地图代数运算，计算效率高(可完全并行化)。典型应用包括波段运算(Band Math)和各种遥感指数计算。</p>
+
+<h4>植被指数公式</h4>
+
+<p><strong>NDVI (Normalized Difference Vegetation Index)</strong> &mdash; 归一化差值植被指数，是应用最广泛的植被指数，由Rouse等人于1974年提出：</p>
+<div class="formula">
+NDVI = (NIR - Red) / (NIR + Red)<br>
+<br>
+取值范围: [-1, +1]<br>
+典型值: 水体 &lt; 0, 裸土 0.1-0.2, 稀疏植被 0.2-0.4, 茂密植被 0.6-0.9<br>
+<br>
+其中: NIR = 近红外波段反射率, Red = 红光波段反射率
+</div>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/77/DroneMapper_Processed_NDVI_4cm_GSD.png" alt="NDVI处理结果示例">
+<p class="caption">无人机获取的高分辨率NDVI影像，展示了植被健康状况的空间差异 (来源: Wikimedia Commons)</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/52/NDVI_of_irrigated_fields.jpg" alt="灌溉农田NDVI">
+<p class="caption">灌溉农田的NDVI影像，绿色表示健康植被，红/黄色表示植被稀疏或裸土 (来源: Wikimedia Commons)</p>
+
+<p><strong>EVI (Enhanced Vegetation Index)</strong> &mdash; 增强型植被指数，由Huete等人于2002年为MODIS传感器设计，修正了NDVI在高生物量地区饱和以及大气和土壤背景干扰的问题：</p>
+<div class="formula">
+EVI = G &times; (NIR - Red) / (NIR + C1 &times; Red - C2 &times; Blue + L)<br>
+<br>
+MODIS标准系数: G = 2.5, C1 = 6, C2 = 7.5, L = 1<br>
+<br>
+其中: G = 增益系数, C1/C2 = 大气校正系数, L = 土壤背景调节系数<br>
+Blue = 蓝光波段反射率
+</div>
+
+<p><strong>SAVI (Soil Adjusted Vegetation Index)</strong> &mdash; 土壤调节植被指数，由Huete于1988年提出，引入了土壤亮度校正因子L，减少了土壤背景对植被指数的影响：</p>
+<div class="formula">
+SAVI = (1 + L) &times; (NIR - Red) / (NIR + Red + L)<br>
+<br>
+L = 0.5 (适用于中等植被覆盖度的经验值)<br>
+当 L = 0 时，SAVI退化为NDVI
+</div>
+
+<h3>5.2 焦点运算(Focal Operations)</h3>
+<p>焦点运算(也称<strong>邻域运算 Neighborhood Operations</strong>)以每个像元为中心，在其周围<strong>窗口(Kernel/Window)</strong>范围内进行计算。输出像元的值取决于该像元及其邻域内所有像元的值。窗口通常为3&times;3、5&times;5、7&times;7等奇数尺寸的方形窗口，也可以是圆形或自定义形状。</p>
+
+<h4>卷积滤波(Convolution Filtering)</h4>
+<p>卷积是焦点运算最核心的实现方式。一个卷积核(Kernel)在栅格上滑动，对每个位置，输出值等于窗口内像元值与对应核权重的加权和。</p>
+
+<div class="formula">
+常用卷积核示例：<br>
+<br>
+均值滤波(Mean Filter) 3&times;3:        拉普拉斯锐化(Laplacian) 3&times;3:<br>
+| 1/9  1/9  1/9 |                    |  0  -1   0 |<br>
+| 1/9  1/9  1/9 |                    | -1   4  -1 |<br>
+| 1/9  1/9  1/9 |                    |  0  -1   0 |<br>
+<br>
+高斯滤波(Gaussian) 3&times;3:            Sobel算子(水平梯度):<br>
+| 1/16  2/16  1/16 |                 | -1   0   1 |<br>
+| 2/16  4/16  2/16 |                 | -2   0   2 |<br>
+| 1/16  2/16  1/16 |                 | -1   0   1 |
+</div>
+
+<h4>坡度(Slope)计算</h4>
+<p>坡度是DEM最基本的衍生产品之一。最常用的算法是<strong>Horn (1981)三阶有限差分法</strong>，使用3&times;3邻域窗口：</p>
+
+<div class="formula">
+设3&times;3邻域DEM值为:<br>
+| a  b  c |<br>
+| d  e  f |<br>
+| g  h  i |<br>
+<br>
+东西方向梯度: dz/dx = [(c + 2f + i) - (a + 2d + g)] / (8 &times; cellsize)<br>
+南北方向梯度: dz/dy = [(g + 2h + i) - (a + 2b + c)] / (8 &times; cellsize)<br>
+<br>
+坡度(度): Slope = arctan( sqrt( (dz/dx)&sup2; + (dz/dy)&sup2; ) ) &times; 180 / &pi;<br>
+坡度(百分比): Slope% = sqrt( (dz/dx)&sup2; + (dz/dy)&sup2; ) &times; 100
+</div>
+
+<h4>坡向(Aspect)计算</h4>
+<div class="formula">
+Aspect = arctan2(dz/dy, -dz/dx) &times; 180 / &pi;<br>
+<br>
+结果转换为 [0&deg;, 360&deg;) 范围：<br>
+0&deg;/360&deg; = 北坡, 90&deg; = 东坡, 180&deg; = 南坡, 270&deg; = 西坡<br>
+平坦区域(坡度=0)的坡向设为 -1 (无方向)
+</div>
+
+<h3>5.3 分区运算(Zonal Operations)</h3>
+<p>分区运算以一个<strong>分区图层(Zone Layer)</strong>定义区域边界，对另一个<strong>值图层(Value Layer)</strong>在每个分区内进行汇总统计。输出的每个像元值等于其所在分区内所有像元的统计值。</p>
+
+<p>典型应用包括：</p>
+<ul>
+<li><strong>按行政区统计平均高程</strong>：分区图层=县级行政区(编码为整型栅格)，值图层=DEM，运算=求均值</li>
+<li><strong>按流域统计年降水量</strong>：分区图层=流域边界栅格，值图层=年降水栅格，运算=求和</li>
+<li><strong>按土地利用类型统计NDVI</strong>：分区图层=土地利用分类图，值图层=NDVI栅格，运算=求均值/标准差</li>
+</ul>
+
+<p>常用的分区统计函数包括：<strong>ZonalMean</strong>(分区均值)、<strong>ZonalSum</strong>(分区求和)、<strong>ZonalMax/Min</strong>(分区最大/最小值)、<strong>ZonalSTD</strong>(分区标准差)、<strong>ZonalMajority</strong>(分区众数)、<strong>ZonalRange</strong>(分区极差)等。</p>
+
+<h3>5.4 全局运算(Global Operations)</h3>
+<p>全局运算的输出像元值可能取决于<strong>整个栅格</strong>的所有像元。这类运算通常涉及最优路径搜索、距离累积或累积效应分析，计算复杂度远高于前三类。</p>
+
+<h4>视域分析(Viewshed Analysis)</h4>
+<p>从DEM上的一个或多个观察点出发，沿所有方向进行<strong>视线追踪(Line of Sight)</strong>，判断每个像元是否可被观察到。视域分析的结果是一个二值栅格(0=不可见, 1=可见)。广泛应用于通信基站选址、景观视觉影响评价、军事阵地选择等。</p>
+
+<h4>水流方向分析(Flow Direction)</h4>
+<p><strong>D8算法(Deterministic 8-node)</strong>是最经典的水流方向算法：对每个像元，比较其与8个邻域像元的高程差(或坡度)，水流流向最陡降坡方向。输出为方向编码(1=东, 2=东南, 4=南, 8=西南, 16=西, 32=西北, 64=北, 128=东北)。D8的缺点是水流只能流向一个方向(无法模拟分散流)，改进算法如<strong>D-infinity (Tarboton, 1997)</strong>允许流向任意角度。</p>
+
+<h4>成本距离分析(Cost Distance)</h4>
+<p>成本距离分析基于一个<strong>成本表面(Cost Surface)</strong>计算从源点(Source)到每个像元的<strong>最小累积成本</strong>。与简单的欧氏距离不同，成本距离考虑了穿越每个像元的"代价"(如地形坡度、土地利用类型、道路通行性)。应用包括应急救援路径规划、野生动物廊道设计、输电线路选址等。其核心算法基于<strong>Dijkstra最短路径</strong>在栅格空间上的推广。</p>
+
+<!-- ============================== Section 6 ============================== -->
+<h2>六、重采样方法 (Resampling)</h2>
+
+<p>当栅格数据需要进行投影变换、几何校正、分辨率转换或配准对齐时，需要将原始像元值映射到新的网格位置上。由于新网格点通常不会精确落在原始像元中心，需要通过<strong>重采样(Resampling)</strong>方法来估算新位置的像元值。三种最常用的重采样方法各有特点：</p>
+
+<h3>6.1 最近邻法(Nearest Neighbor)</h3>
+<p>将输出像元的值设为距离最近的输入像元值。这是最简单、最快速的重采样方法。</p>
+
+<div class="card">
+<h4>最近邻法特点</h4>
+<p><strong>优点：</strong>计算速度最快(O(1)每像元)；不改变原始像元值，保持数据的原始分类含义；适用于分类数据(土地利用类型、地质岩性等)和专题栅格。<br>
+<strong>缺点：</strong>输出影像可能出现锯齿状边缘和几何位移(最大偏移为半个像元)；不适用于连续数据，会产生明显的阶梯效应。</p>
+</div>
+
+<h3>6.2 双线性内插(Bilinear Interpolation)</h3>
+<p>利用输出像元位置周围<strong>最近的4个(2&times;2)</strong>输入像元值，通过两次线性插值计算加权平均值。</p>
+
+<div class="formula">
+双线性内插公式：<br>
+<br>
+设目标点坐标为 (x, y)，周围4个像元值为 Q11, Q12, Q21, Q22<br>
+<br>
+先在x方向插值：<br>
+R1 = Q11 &times; (x2 - x)/(x2 - x1) + Q21 &times; (x - x1)/(x2 - x1)<br>
+R2 = Q12 &times; (x2 - x)/(x2 - x1) + Q22 &times; (x - x1)/(x2 - x1)<br>
+<br>
+再在y方向插值：<br>
+P  = R1 &times; (y2 - y)/(y2 - y1) + R2 &times; (y - y1)/(y2 - y1)
+</div>
+
+<div class="card">
+<h4>双线性内插特点</h4>
+<p><strong>优点：</strong>输出影像平滑、无锯齿；计算量适中；适用于连续数据(高程、温度、反射率)。<br>
+<strong>缺点：</strong>产生轻微模糊(低通滤波效应)；会改变原始值(不适合分类数据)；边缘细节有一定损失。</p>
+</div>
+
+<h3>6.3 三次卷积(Cubic Convolution)</h3>
+<p>利用输出像元位置周围<strong>最近的16个(4&times;4)</strong>输入像元值，通过三次多项式插值计算。这是精度最高但计算量最大的方法。</p>
+
+<div class="formula">
+三次卷积核函数 h(x):<br>
+<br>
+h(x) = (a+2)|x|&sup3; - (a+3)|x|&sup2; + 1,        当 |x| &le; 1<br>
+h(x) = a|x|&sup3; - 5a|x|&sup2; + 8a|x| - 4a,      当 1 &lt; |x| &le; 2<br>
+h(x) = 0,                                    当 |x| &gt; 2<br>
+<br>
+其中 a = -0.5 (Catmull-Rom样条) 或 a = -1 (更锐利)
+</div>
+
+<div class="card">
+<h4>三次卷积特点</h4>
+<p><strong>优点：</strong>输出影像最清晰、细节保持最好；兼具平滑性和锐度；是遥感影像正射校正的首选方法。<br>
+<strong>缺点：</strong>计算量最大(需处理16个输入像元)；可能产生轻微的振铃效应(Ringing Artifact)；输出值可能略超出输入值范围。</p>
+</div>
+
+<h4>重采样方法对比</h4>
+<table>
+<tr><th>方法</th><th>采样窗口</th><th>计算复杂度</th><th>平滑度</th><th>适用数据类型</th><th>是否改变原值</th></tr>
+<tr><td>最近邻</td><td>1&times;1</td><td>最低</td><td>无(锯齿)</td><td>分类/专题数据</td><td>否</td></tr>
+<tr><td>双线性内插</td><td>2&times;2</td><td>中等</td><td>适中</td><td>连续数据</td><td>是</td></tr>
+<tr><td>三次卷积</td><td>4&times;4</td><td>最高</td><td>高(最清晰)</td><td>连续数据(遥感影像)</td><td>是</td></tr>
+</table>
+
+<div class="warn">
+<h4>重要提示</h4>
+<p>对于<strong>分类数据</strong>(如土地利用类型图)，<strong>必须使用最近邻法</strong>。双线性内插和三次卷积会产生原始分类中不存在的中间值(例如在"森林=3"和"水体=5"之间插出"4"，但4可能代表"草地"，这种结果毫无意义)。对于<strong>连续型遥感影像</strong>，推荐使用三次卷积以获得最佳视觉质量。</p>
+</div>
+
+<!-- ============================== Section 7 ============================== -->
+<h2>七、主要栅格数据格式</h2>
+
+<p>栅格数据格式定义了像元值、地理参考信息、元数据等如何组织和存储在文件中。不同的应用领域和软件平台发展出了多种栅格格式，了解这些格式的特点对于数据交换和选择合适的存储方案至关重要。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/2016_Miami_by_OLI_Landsat_8_Nasa.jpg" alt="Landsat 8 OLI影像">
+<p class="caption">Landsat 8 OLI传感器获取的迈阿密真彩色合成影像 &mdash; GeoTIFF格式是此类卫星数据的标准分发格式 (来源: NASA, Wikimedia Commons)</p>
+
+<h3>7.1 GeoTIFF</h3>
+<p><strong>GeoTIFF</strong>是目前最通用的地理栅格数据格式，由TIFF(Tagged Image File Format)扩展地理参考标签而来。它在标准TIFF文件中嵌入了坐标系统(Coordinate Reference System)、仿射变换参数、投影信息等地理元数据，使得栅格数据具有空间自描述能力。</p>
+
+<ul>
+<li><strong>核心优势：</strong>行业标准，几乎所有GIS/遥感软件都支持；支持多波段、多种数据类型(8/16/32位整型和浮点型)；支持内部分块(Tiling)和金字塔(Overview)以提高大影像访问效率</li>
+<li><strong>压缩选项：</strong>LZW(无损)、Deflate(无损)、JPEG(有损)、ZSTD(高效无损)</li>
+<li><strong>Cloud Optimized GeoTIFF (COG)：</strong>一种特殊的GeoTIFF组织方式，通过HTTP Range请求支持直接从云端按需读取栅格数据的部分区域，无需下载整个文件。是云原生GIS(Cloud-Native GIS)时代的标准格式</li>
+<li><strong>文件扩展名：</strong>.tif 或 .tiff</li>
+</ul>
+
+<h3>7.2 NetCDF (Network Common Data Form)</h3>
+<p><strong>NetCDF</strong>是气候科学和海洋学领域的主流数据格式，由Unidata开发维护。它是一种自描述的、面向数组的多维数据格式。</p>
+
+<ul>
+<li><strong>核心特点：</strong>原生支持多维数组(经度&times;纬度&times;时间&times;高度等)；内置CF(Climate and Forecast)元数据约定，描述变量单位、坐标、网格映射等</li>
+<li><strong>典型应用：</strong>全球气候模式输出(CMIP6)、ERA5再分析数据、海洋遥感数据(SST、海面高度)</li>
+<li><strong>版本：</strong>NetCDF-3(经典格式，2GB限制)、NetCDF-4(基于HDF5，支持压缩和更大文件)</li>
+<li><strong>文件扩展名：</strong>.nc 或 .nc4</li>
+</ul>
+
+<h3>7.3 HDF (Hierarchical Data Format)</h3>
+<p><strong>HDF</strong>是NASA采用的标准遥感数据分发格式，由NCSA(美国国家超级计算应用中心)开发。HDF采用分层目录结构，可在一个文件中存储多种类型的数据(栅格、表格、元数据)。</p>
+
+<ul>
+<li><strong>HDF4：</strong>MODIS、MISR等NASA经典遥感产品的标准格式(文件扩展名 .hdf)</li>
+<li><strong>HDF5：</strong>更现代的版本，支持更大文件和更灵活的数据组织(文件扩展名 .h5 或 .he5)。Sentinel-5P、ICESat-2、GPM降水产品使用此格式</li>
+<li><strong>HDF-EOS：</strong>HDF的扩展，增加了Swath(卫星条带)、Grid(网格)、Point(点)三种地球科学数据结构</li>
+</ul>
+
+<h3>7.4 ERDAS IMG</h3>
+<p><strong>IMG格式</strong>是ERDAS IMAGINE软件的原生栅格格式。它采用分层分块的存储结构(Hierarchical File Architecture, HFA)，支持金字塔层、多波段、属性表和统计信息。虽然由商业软件开发，但GDAL库提供了完整的读写支持。文件扩展名为 <strong>.img</strong>。</p>
+
+<h3>7.5 ASCII Grid (Esri Grid)</h3>
+<p><strong>ASCII Grid</strong>是一种纯文本的栅格格式，人类可直接阅读和编辑。文件以6行头信息开始(ncols, nrows, xllcorner, yllcorner, cellsize, NODATA_value)，随后是以空格分隔的像元值矩阵。</p>
+
+<div class="formula">
+ASCII Grid 文件示例:<br>
+ncols         5<br>
+nrows         4<br>
+xllcorner     100.0<br>
+yllcorner     30.0<br>
+cellsize      0.01<br>
+NODATA_value  -9999<br>
+120 135 142 138 -9999<br>
+118 130 145 140 136<br>
+115 125 -9999 137 133<br>
+110 120 128 132 130
+</div>
+
+<p>ASCII Grid的优点是格式简单透明、便于调试和教学；缺点是文件体积大(文本编码比二进制大3-5倍)、不支持多波段和投影信息。文件扩展名为 <strong>.asc</strong>。</p>
+
+<h4>栅格格式对比总览</h4>
+<table>
+<tr><th>格式</th><th>类型</th><th>多波段</th><th>压缩</th><th>多维数组</th><th>主要应用领域</th><th>GDAL支持</th></tr>
+<tr><td>GeoTIFF</td><td>二进制</td><td>是</td><td>LZW/Deflate/JPEG</td><td>否</td><td>通用GIS/遥感</td><td>完整读写</td></tr>
+<tr><td>COG</td><td>二进制</td><td>是</td><td>同GeoTIFF</td><td>否</td><td>云原生GIS</td><td>完整读写</td></tr>
+<tr><td>NetCDF</td><td>二进制</td><td>是</td><td>Deflate/Shuffle</td><td>是(核心优势)</td><td>气候/海洋</td><td>完整读写</td></tr>
+<tr><td>HDF4/5</td><td>二进制</td><td>是</td><td>多种</td><td>是</td><td>NASA遥感产品</td><td>完整读写</td></tr>
+<tr><td>IMG</td><td>二进制</td><td>是</td><td>内置</td><td>否</td><td>ERDAS生态系统</td><td>完整读写</td></tr>
+<tr><td>ASCII Grid</td><td>文本</td><td>否</td><td>无</td><td>否</td><td>教学/数据交换</td><td>完整读写</td></tr>
+</table>
+
+<!-- ============================== Section 8 ============================== -->
+<h2>八、栅格与矢量的转换</h2>
+
+<p>栅格数据和矢量数据各有优势，在实际GIS项目中经常需要在两者之间转换。理解转换的原理和注意事项，对于保证数据质量和分析结果的准确性至关重要。</p>
+
+<h3>8.1 栅格转矢量(Raster to Vector)</h3>
+<p>栅格转矢量是将连续的像元网格转化为离散的点、线或面要素的过程。根据目标矢量类型，转换方法不同：</p>
+
+<h4>栅格转面(Polygonize)</h4>
+<p>将具有相同像元值的连通区域(Connected Components)转换为多边形。算法首先通过<strong>连通域标记(Connected Component Labeling)</strong>识别同值区域，然后<strong>追踪每个区域的边界</strong>生成多边形。GDAL的 <code>gdal_polygonize</code> 工具和ArcGIS的 <code>Raster to Polygon</code> 工具都实现了此功能。</p>
+
+<p>转换注意事项：</p>
+<ul>
+<li><strong>阶梯效应(Staircase Effect)</strong>：转换后的多边形边界呈锯齿状(因为像元本身是方形的)。可通过后续的平滑(Smooth)操作改善</li>
+<li><strong>碎片问题</strong>：噪声像元会生成大量微小多边形，转换前通常需要进行<strong>众数滤波(Majority Filter)</strong>去除椒盐噪声</li>
+<li><strong>数据膨胀</strong>：高分辨率栅格转矢量可能产生海量多边形顶点，导致文件极大</li>
+</ul>
+
+<h4>栅格转线 &mdash; 等值线追踪(Contour Tracing)</h4>
+<p>从连续数值栅格(如DEM)中提取等值线(Contour Lines)是一种经典的栅格转矢量操作。最常用的算法是<strong>Marching Squares</strong>(二维版本的Marching Cubes)：</p>
+
+<ol>
+<li>遍历所有2&times;2像元组，根据4个角点值与等值线阈值的大小关系，形成16种可能的构型(Case)</li>
+<li>对于每种构型，根据预定义的查找表确定等值线穿过该2&times;2块的线段位置</li>
+<li>通过线性插值确定等值线与像元边界的精确交点</li>
+<li>将相邻2&times;2块中的线段连接成完整的等值线</li>
+</ol>
+
+<p>GDAL的 <code>gdal_contour</code> 工具可以从DEM生成等高线矢量。在GIS中，等高线是DEM的经典可视化方式，也是传统纸质地形图的核心要素。</p>
+
+<h4>栅格转点</h4>
+<p>将每个有效像元(非NoData)转换为一个点要素，点位于像元中心，属性为像元值。这种转换数据量最大(每个像元一个点)，通常仅用于采样或结合插值分析。</p>
+
+<h3>8.2 矢量转栅格(Rasterization / Vector to Raster)</h3>
+<p>矢量转栅格(栅格化)是将矢量要素"烧录(Burn)"到栅格网格中的过程。核心问题是确定每个像元是否被矢量要素覆盖、以及赋予什么值。</p>
+
+<h4>栅格化规则</h4>
+<ul>
+<li><strong>面要素栅格化</strong>：判断每个像元中心是否落在多边形内部(Point-in-Polygon测试)。若是，则该像元值设为多边形的指定属性值。也可以使用面积占比法(像元被多边形覆盖的面积比例)来处理边界像元</li>
+<li><strong>线要素栅格化</strong>：判断线段是否穿过像元。通常使用<strong>Bresenham直线算法</strong>来确定线段经过的所有像元，将这些像元的值设为线要素的属性值</li>
+<li><strong>点要素栅格化</strong>：将点所在的像元值设为点要素的属性值。当多个点落在同一像元时，可选择最大值/最小值/均值/计数等聚合方式</li>
+</ul>
+
+<h4>栅格化的关键参数</h4>
+<table>
+<tr><th>参数</th><th>说明</th><th>影响</th></tr>
+<tr><td>输出分辨率(Cell Size)</td><td>栅格像元的地面尺寸</td><td>分辨率过大导致细节丢失，过小导致文件巨大且可能引入虚假精度</td></tr>
+<tr><td>烧录值(Burn Value)</td><td>赋予被覆盖像元的值</td><td>可以是固定值(如1)或来自矢量属性字段</td></tr>
+<tr><td>空间范围(Extent)</td><td>输出栅格的地理范围</td><td>需覆盖所有矢量要素或与其他栅格对齐</td></tr>
+<tr><td>NoData值</td><td>未被矢量覆盖的像元值</td><td>通常设为-9999或0</td></tr>
+<tr><td>ALL_TOUCHED选项</td><td>是否栅格化所有被触及的像元</td><td>TRUE=要素触及的所有像元都赋值; FALSE=仅中心点被覆盖的像元</td></tr>
+</table>
+
+<div class="info">
+<h4>转换精度与信息损失</h4>
+<p>无论是栅格转矢量还是矢量转栅格，都不可避免地存在<strong>信息损失</strong>。栅格化时，小于半个像元的矢量细节会丢失(类似于信号采样中的奈奎斯特定理 &mdash; 空间分辨率应至少为最小特征尺寸的一半)。矢量化时，原本连续的曲线边界变为阶梯状折线。因此，应尽量避免反复在两种格式之间转换，以免累积误差。在实际工程中，应根据分析目的选择最合适的数据模型，减少不必要的格式转换。</p>
+</div>
+
+<h3>8.3 栅格与矢量的协同分析</h3>
+<p>在现代GIS分析中，栅格和矢量数据往往<strong>协同使用</strong>而非相互替代。例如：</p>
+<ul>
+<li><strong>分区统计(Zonal Statistics)</strong>：用矢量多边形(如行政区边界)作为分区，统计栅格数据(如NDVI)在每个分区内的均值、总和等。无需将矢量转栅格，GIS软件直接支持矢量-栅格叠加分析</li>
+<li><strong>裁剪提取(Clip/Extract by Mask)</strong>：用矢量边界裁剪栅格数据，仅保留边界内的像元值，边界外设为NoData</li>
+<li><strong>采样(Sample/Extract Values)</strong>：在矢量点位置提取栅格值(如在气象站点位置提取DEM高程)，常用于模型验证和地统计分析</li>
+</ul>
+
+<!-- ============================== Section summary ============================== -->
+<h2>总结</h2>
+
+<p>栅格数据模型是GIS空间信息表达的两大基石之一。从最基本的像元结构到复杂的地图代数运算，从四种分辨率的权衡到多种编码压缩算法，从丰富的数据格式生态到栅格-矢量转换的原理与实践，栅格数据贯穿了遥感影像处理、地形分析、环境建模、城市规划等GIS应用的方方面面。</p>
+
+<p>理解栅格数据的核心要点包括：<strong>(1)</strong> 像元是栅格的基本单位，NoData是不可忽视的重要概念；<strong>(2)</strong> 空间、光谱、时间、辐射四种分辨率共同决定了数据的信息承载能力；<strong>(3)</strong> DEM/DSM/DTM虽然都是高程数据但含义不同，选择错误的高程模型会导致分析结果出现系统性偏差；<strong>(4)</strong> 四叉树等压缩编码在大数据时代仍然具有重要的实用价值；<strong>(5)</strong> Tomlin的地图代数四类运算体系(局部/焦点/分区/全局)为栅格空间分析提供了完整的理论框架；<strong>(6)</strong> 重采样方法的选择必须匹配数据类型(分类vs连续)；<strong>(7)</strong> GeoTIFF/COG是当前最通用的栅格格式，而NetCDF和HDF在专业领域不可替代；<strong>(8)</strong> 栅格与矢量的转换存在固有的信息损失，协同分析优于频繁转换。</p>
+
+<p>随着云计算、AI和星载传感器技术的发展，栅格数据的规模正以指数级增长。Google Earth Engine、Microsoft Planetary Computer等云平台使得PB级栅格数据的分析成为可能。深度学习技术(如U-Net、ResNet)在遥感影像的语义分割、变化检测等方面展现出巨大潜力。理解栅格数据的底层原理，是充分利用这些新兴技术的基础。</p>
+
+<div class="ref">
+主要参考文献：<br>
+1. Tomlin, C.D. (1990). Geographic Information Systems and Cartographic Modeling. Prentice-Hall.<br>
+2. Longley, P.A., Goodchild, M.F., Maguire, D.J., Rhind, D.W. (2015). Geographic Information Science and Systems. 4th ed. Wiley.<br>
+3. Jensen, J.R. (2015). Introductory Digital Image Processing: A Remote Sensing Perspective. 4th ed. Pearson.<br>
+4. Rouse, J.W. et al. (1974). Monitoring vegetation systems in the Great Plains with ERTS. NASA SP-351.<br>
+5. Huete, A.R. et al. (2002). Overview of the radiometric and biophysical performance of the MODIS vegetation indices. Remote Sensing of Environment, 83, 195-213.<br>
+6. Horn, B.K.P. (1981). Hill shading and the reflectance map. Proceedings of the IEEE, 69(1), 14-47.
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="vector-data.html">&larr; 矢量数据</a>
+  <a href="../index.html">目录</a>
+  <a href="spatial-analysis.html">空间分析 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>

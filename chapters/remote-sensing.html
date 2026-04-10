@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>遥感技术详解 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 06</div>
+  <h1>遥感技术详解</h1>
+  <p>从电磁波谱理论到卫星影像处理，系统掌握遥感科学的核心原理、技术体系与前沿应用，理解遥感如何成为 GIS 数据获取的关键手段。</p>
+  <div class="hero-img"><img src="../images/remote_sensing.png" alt="遥感技术详解"></div>
+</div>
+
+<article class="content">
+
+<!-- ============================================================ -->
+<!-- 第一节：遥感基本原理 -->
+<!-- ============================================================ -->
+<h2>一、遥感基本原理</h2>
+
+<p>遥感（Remote Sensing）是指不直接接触目标物体，通过探测器接收来自目标物体的电磁辐射信息，经过传输、处理和分析，从而识别和研究目标物体性质及其变化规律的综合性技术。遥感技术是 GIS 最重要的数据源之一，它能够以宏观、快速、周期性的方式获取地球表面信息，是现代地理信息科学不可或缺的技术基础。</p>
+
+<h3>1.1 电磁波谱</h3>
+
+<p>电磁波谱（Electromagnetic Spectrum）是遥感技术的物理基础。电磁波按照波长或频率的不同，可以划分为多个波段区间，每个波段具有独特的物理特性和应用价值。理解电磁波谱是掌握遥感原理的第一步。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/EM_Spectrum_Properties_edit.svg" alt="电磁波谱">
+<p class="caption">电磁波谱全景图：从伽马射线到无线电波的完整波段分布</p>
+
+<table>
+<tr><th>波段名称</th><th>波长范围</th><th>频率范围</th><th>遥感应用</th></tr>
+<tr><td><strong>伽马射线</strong> (Gamma Ray)</td><td>&lt; 0.01 nm</td><td>&gt; 3×10<sup>19</sup> Hz</td><td>放射性矿物探测，核辐射监测</td></tr>
+<tr><td><strong>X射线</strong> (X-Ray)</td><td>0.01 nm ~ 10 nm</td><td>3×10<sup>16</sup> ~ 3×10<sup>19</sup> Hz</td><td>大气层吸收强，遥感应用极少</td></tr>
+<tr><td><strong>紫外线</strong> (Ultraviolet)</td><td>10 nm ~ 380 nm</td><td>7.9×10<sup>14</sup> ~ 3×10<sup>16</sup> Hz</td><td>臭氧层监测，矿物荧光探测</td></tr>
+<tr><td><strong>可见光</strong> (Visible Light)</td><td>380 nm ~ 760 nm</td><td>3.9×10<sup>14</sup> ~ 7.9×10<sup>14</sup> Hz</td><td>真彩色/假彩色合成，最直观的遥感数据</td></tr>
+<tr><td><strong>近红外</strong> (NIR)</td><td>760 nm ~ 1.4 &mu;m</td><td>2.1×10<sup>14</sup> ~ 3.9×10<sup>14</sup> Hz</td><td>植被监测、水体识别、生物量估算</td></tr>
+<tr><td><strong>短波红外</strong> (SWIR)</td><td>1.4 &mu;m ~ 3 &mu;m</td><td>1×10<sup>14</sup> ~ 2.1×10<sup>14</sup> Hz</td><td>矿物识别、土壤湿度、积雪/云区分</td></tr>
+<tr><td><strong>中红外</strong> (MIR)</td><td>3 &mu;m ~ 8 &mu;m</td><td>3.7×10<sup>13</sup> ~ 1×10<sup>14</sup> Hz</td><td>火点探测、工业热源监测</td></tr>
+<tr><td><strong>热红外</strong> (TIR)</td><td>8 &mu;m ~ 14 &mu;m</td><td>2.1×10<sup>13</sup> ~ 3.7×10<sup>13</sup> Hz</td><td>地表温度反演、城市热岛效应</td></tr>
+<tr><td><strong>远红外</strong> (FIR)</td><td>14 &mu;m ~ 1 mm</td><td>3×10<sup>11</sup> ~ 2.1×10<sup>13</sup> Hz</td><td>大气温度/湿度廓线探测</td></tr>
+<tr><td><strong>微波</strong> (Microwave)</td><td>1 mm ~ 1 m</td><td>3×10<sup>8</sup> ~ 3×10<sup>11</sup> Hz</td><td>全天候对地观测、SAR成像、土壤湿度</td></tr>
+<tr><td><strong>无线电波</strong> (Radio Wave)</td><td>&gt; 1 m</td><td>&lt; 3×10<sup>8</sup> Hz</td><td>通信、GPS定位信号载波</td></tr>
+</table>
+
+<div class="info">
+<h4>可见光细分波段</h4>
+<p>可见光（380~760nm）可进一步细分为：<strong>紫色</strong>（380~450nm）、<strong>蓝色</strong>（450~495nm）、<strong>绿色</strong>（495~570nm）、<strong>黄色</strong>（570~590nm）、<strong>橙色</strong>（590~620nm）、<strong>红色</strong>（620~760nm）。在遥感中，通常将可见光波段简称为蓝（Blue）、绿（Green）、红（Red）三个宽波段，分别对应 B2、B3、B4 等波段编号（以 Landsat 8 OLI 为例）。</p>
+</div>
+
+<h3>1.2 电磁辐射与地物的相互作用</h3>
+
+<p>当电磁辐射到达地球表面时，会与地表物质发生四种基本的物理作用过程，这些过程的相对强度取决于地物的物理化学性质和电磁波的波长：</p>
+
+<h4>反射（Reflection）</h4>
+<p>电磁辐射到达地物表面后被反射回来的部分。反射又可分为<strong>镜面反射</strong>（Specular Reflection）和<strong>漫反射</strong>（Diffuse/Lambertian Reflection）。镜面反射遵循入射角等于反射角的规律，通常出现在光滑水面上；漫反射则是入射能量向各个方向均匀散射，粗糙表面更接近漫反射。遥感传感器主要接收地物的漫反射能量。反射率（Reflectance）定义为反射能量与入射总能量之比，是遥感识别地物的核心物理量。</p>
+
+<h4>吸收（Absorption）</h4>
+<p>电磁辐射被地物吸收并转化为内能（热能）的过程。不同物质在不同波长处的吸收特性不同，形成特征性的吸收谱带。例如，水分子在 1.4&mu;m、1.9&mu;m、2.7&mu;m 处有强吸收峰；叶绿素在蓝光（~450nm）和红光（~680nm）处有明显的吸收特征。吸收特征是光谱识别的关键依据。</p>
+
+<h4>透射（Transmission）</h4>
+<p>电磁辐射穿透地物的过程。透射率取决于物质的光学厚度和波长。清澈水体对可见光中的蓝绿光有较强的透射能力，可穿透数米至数十米深度；但对近红外和短波红外几乎完全吸收。大气对某些波段的电磁辐射具有较高的透射率，这些波段形成所谓的"大气窗口"。</p>
+
+<h4>发射（Emission）</h4>
+<p>任何温度高于绝对零度（0K）的物体都会向外发射电磁辐射。根据斯特藩-玻尔兹曼定律（Stefan-Boltzmann Law），物体辐射的总能量与其绝对温度的四次方成正比。地球表面的平均温度约为 288K（约15&deg;C），其辐射峰值位于热红外波段（约 10&mu;m），这是热红外遥感的物理基础。发射率（Emissivity）描述实际物体相对于同温度黑体的辐射能力。</p>
+
+<div class="formula">
+能量守恒定律：&rho;(&lambda;) + &alpha;(&lambda;) + &tau;(&lambda;) = 1<br>
+其中 &rho; = 反射率，&alpha; = 吸收率，&tau; = 透射率<br><br>
+基尔霍夫定律：在热平衡条件下，&alpha;(&lambda;) = &epsilon;(&lambda;)（吸收率 = 发射率）<br><br>
+斯特藩-玻尔兹曼定律：M = &epsilon;&sigma;T<sup>4</sup><br>
+其中 &sigma; = 5.67 &times; 10<sup>-8</sup> W&middot;m<sup>-2</sup>&middot;K<sup>-4</sup>（斯特藩-玻尔兹曼常数）
+</div>
+
+<h3>1.3 典型地物光谱特征曲线</h3>
+
+<p>不同地物类型在不同波长处的反射率形成独特的光谱特征曲线（Spectral Signature），这是遥感地物识别的理论基础。以下是四种最典型地物的光谱特征描述：</p>
+
+<h4>植被的光谱特征</h4>
+<p>健康植被的光谱曲线是遥感中最具辨识度的特征之一，呈现出高度规律性的"三峰两谷"形态。在<strong>蓝光波段（450nm）</strong>处，叶绿素 a 和 b 的强吸收使反射率仅有约 5%~8%。在<strong>绿光波段（550nm）</strong>处，由于叶绿素吸收相对减弱形成反射峰值，反射率约 10%~15%，这就是植物呈现绿色的原因。在<strong>红光波段（680nm）</strong>处，叶绿素再次产生强烈吸收，反射率降至 5%~8%。从红光到近红外的过渡区域（700~750nm），反射率急剧上升，这个区域称为<strong>"红边"（Red Edge）</strong>，是植被健康状态的灵敏指示器。在<strong>近红外波段（750~1300nm）</strong>，由于叶片内部海绵组织的多次散射，反射率高达 40%~60%。在<strong>短波红外</strong>区域，水分吸收带（1.4&mu;m、1.9&mu;m、2.5&mu;m）造成明显的反射率降低。植被胁迫（干旱、病虫害等）会导致红边蓝移、近红外反射率下降。</p>
+
+<h4>水体的光谱特征</h4>
+<p>清澈水体的光谱特征显著区别于其他地物类型。在<strong>蓝光和绿光波段</strong>，水体有一定的反射率（约 4%~8%），其中蓝光反射最强，这是清水呈蓝色的原因。随着波长增加，水体的反射率迅速下降，到<strong>近红外波段（&gt;700nm）</strong>后几乎完全吸收电磁辐射，反射率趋近于零（通常低于 2%）。这一特性使得近红外波段成为水体提取的理想波段。浑浊水体（含泥沙）会导致绿光和红光反射率升高；富营养化水体（含藻类）会在绿光和近红外出现类似植被的特征；水中悬浮物浓度增加会使整体反射率增大并使峰值向长波方向移动。</p>
+
+<h4>土壤的光谱特征</h4>
+<p>裸土的光谱曲线总体上呈单调递增趋势，从可见光到短波红外反射率缓慢升高，缺乏显著的吸收或反射特征峰。典型干燥裸土的反射率从蓝光波段的约 10% 逐渐增加到短波红外的约 30%~40%。影响土壤反射率的因素包括：<strong>含水量</strong>（水分增加使各波段反射率降低，并在 1.4&mu;m 和 1.9&mu;m 出现吸收谷）、<strong>有机质含量</strong>（有机质越多反射率越低，颜色越暗）、<strong>矿物组成</strong>（铁氧化物在可见光波段产生特征吸收）、<strong>质地</strong>（砂质土反射率高于黏土）、<strong>粗糙度</strong>（表面越光滑，方向反射越明显）。</p>
+
+<h4>城市建成区的光谱特征</h4>
+<p>城市地表由混凝土、沥青、金属屋顶、玻璃等多种人工材料组成，光谱特征具有明显的异质性。<strong>沥青路面</strong>在所有波段的反射率都较低（约 5%~15%），呈现较为平坦的光谱曲线。<strong>混凝土</strong>的反射率略高（15%~30%），整体也呈缓慢上升趋势。<strong>金属屋顶</strong>在可见光和近红外波段可能呈现较高的反射率并可能出现镜面反射效应。城市区域的混合像元问题尤为突出，一个像元内通常包含建筑、植被、道路、阴影等多种组分，其光谱是各组分光谱的加权混合。</p>
+
+<h3>1.4 大气窗口</h3>
+
+<p>地球大气由多种气体分子组成（氮气、氧气、水汽、二氧化碳、臭氧等），它们会选择性地吸收和散射电磁辐射。<strong>大气窗口</strong>（Atmospheric Window）是指大气透过率较高的波段区间，遥感传感器必须工作在大气窗口波段内才能有效接收地表信号。主要的大气窗口包括：</p>
+
+<ul>
+<li><strong>可见光-近红外窗口（0.3~1.3&mu;m）</strong>：最重要的大气窗口，大气透射率可达 80% 以上。绝大多数光学遥感传感器工作在此窗口。但在 0.72&mu;m、0.82&mu;m、0.94&mu;m 处存在水汽吸收带。</li>
+<li><strong>短波红外窗口 I（1.5~1.8&mu;m）</strong>：位于两个水汽吸收带之间，透过率约 60%~80%，适用于矿物识别和雪/冰探测。</li>
+<li><strong>短波红外窗口 II（2.0~2.5&mu;m）</strong>：透过率稍低，但对矿物和岩石的光谱诊断非常重要。</li>
+<li><strong>中红外窗口（3.5~5.0&mu;m）</strong>：受水汽和 CO<sub>2</sub> 吸收影响，透过率约 60%~70%。在此窗口内可同时接收到太阳反射辐射和地表热辐射。常用于火点探测。</li>
+<li><strong>热红外窗口（8~14&mu;m）</strong>：大气透过率约 70%~80%（在 9.6&mu;m 附近有臭氧吸收带），是热红外遥感的主要工作波段，用于地表温度反演。</li>
+<li><strong>微波窗口（&gt;1mm）</strong>：大气对微波的吸收和散射很弱（除降水外），因此微波遥感几乎不受云雾影响，可实现全天候观测。</li>
+</ul>
+
+<div class="ref">
+大气散射也是影响遥感图像质量的重要因素。瑞利散射（Rayleigh Scattering）主要影响短波长（蓝光），使图像产生雾霾感；米氏散射（Mie Scattering）由气溶胶引起，影响更宽的波段范围；非选择性散射（Non-selective Scattering）由大粒子（水滴、冰晶）引起，对所有波长影响相似，这就是云呈白色的原因。
+</div>
+
+<!-- ============================================================ -->
+<!-- 第二节：被动遥感 vs 主动遥感 -->
+<!-- ============================================================ -->
+<h2>二、被动遥感 vs 主动遥感</h2>
+
+<p>根据传感器是否自身携带辐射源，遥感技术可以分为被动遥感和主动遥感两大类别。这一分类是遥感技术体系中最基本的划分方式。</p>
+
+<h3>2.1 被动遥感（Passive Remote Sensing）</h3>
+
+<p>被动遥感传感器不主动发射电磁辐射，而是依赖外部辐射源（主要是太阳辐射和地表自身的热辐射）来获取信息。传感器仅作为接收器，记录地物反射或发射的电磁辐射。</p>
+
+<p><strong>主要传感器类型：</strong></p>
+<ul>
+<li><strong>多光谱成像仪</strong>：如 Landsat 8 OLI、Sentinel-2 MSI，在若干离散波段进行成像</li>
+<li><strong>高光谱成像仪</strong>：如 AVIRIS、Hyperion、PRISMA，具有上百个连续窄波段</li>
+<li><strong>全色相机</strong>：如 WorldView-3 全色波段，提供高空间分辨率灰度影像</li>
+<li><strong>热红外扫描仪</strong>：如 Landsat TIRS、ASTER TIR，探测地表热辐射</li>
+<li><strong>微波辐射计</strong>：如 AMSR-E/AMSR2，被动接收地表微波发射信号</li>
+</ul>
+
+<p><strong>优势：</strong>技术成熟、数据丰富、光谱信息量大、空间分辨率可达亚米级（商业卫星）、历史存档数据丰富（Landsat 自 1972 年以来的连续记录）。</p>
+<p><strong>局限：</strong>依赖光照条件（无法夜间可见光成像）、受云雾天气影响严重（全球平均云量约 67%）、大气散射和吸收影响信号质量。</p>
+
+<h3>2.2 主动遥感（Active Remote Sensing）</h3>
+
+<p>主动遥感传感器自身携带辐射源，主动向目标发射特定的电磁辐射，然后接收目标的回波信号。通过分析发射信号与回波信号之间的差异（时间延迟、强度变化、相位差、频率偏移等），获取目标的距离、形状、运动状态等信息。</p>
+
+<p><strong>主要传感器类型：</strong></p>
+<ul>
+<li><strong>合成孔径雷达（SAR）</strong>：如 Sentinel-1、ALOS-2 PALSAR-2、TerraSAR-X，发射微波信号成像</li>
+<li><strong>激光雷达（LiDAR）</strong>：如 ICESat-2 ATLAS、GEDI，发射激光脉冲测量距离</li>
+<li><strong>雷达高度计</strong>：如 Jason-3、Sentinel-6，精确测量海面/冰盖高度</li>
+<li><strong>散射计</strong>：如 ASCAT，测量海面风速和风向</li>
+</ul>
+
+<p><strong>优势：</strong>不依赖太阳辐射，可全天时（昼夜）观测；微波能穿透云层、薄雾和小雨，实现全天候观测；可获取独特的信息维度（如表面粗糙度、介电常数、三维结构）；SAR 可通过干涉技术实现毫米级地表形变监测。</p>
+<p><strong>局限：</strong>系统复杂、成本较高、能耗大；图像几何特性特殊（存在叠掩、阴影等）；图像解译需要专业知识；激光雷达数据量巨大。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>被动遥感典型数据</h4>
+<p>Landsat 多光谱影像、Sentinel-2 影像、MODIS 数据、ASTER 热红外、高光谱 Hyperion、VIIRS 夜光遥感数据、气象卫星可见光/红外图像。</p>
+</div>
+<div class="card">
+<h4>主动遥感典型数据</h4>
+<p>Sentinel-1 SAR 影像、TerraSAR-X 高分辨率 SAR、ALOS-2 L波段 SAR、ICESat-2 激光高度计点云、机载 LiDAR 三维点云数据、SRTM 地形数据。</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第三节：三大遥感技术体系 -->
+<!-- ============================================================ -->
+<h2>三、三大遥感技术体系</h2>
+
+<h3>3.1 光学遥感</h3>
+
+<p>光学遥感是最早发展、应用最广的遥感技术，其传感器工作在可见光至短波红外波段，以接收太阳辐射经地表反射后的信号为主。按照光谱分辨率的不同，光学遥感可分为以下三种类型：</p>
+
+<h4>全色影像（Panchromatic）</h4>
+<p>全色传感器在一个覆盖范围较宽的单一波段内成像（通常覆盖蓝光至近红外的整个可见光范围，如 450~900nm），仅记录辐射强度的灰度信息，不包含色彩。其最大优势是<strong>空间分辨率高</strong>：由于整个宽波段的能量被集中到一个通道中，信噪比高，因此可以设计更小的探测单元来提高空间分辨率。例如 WorldView-3 的全色波段空间分辨率为 0.31m，Landsat 8 OLI 全色波段为 15m。全色影像常用于与多光谱影像的<strong>融合（Pan-sharpening）</strong>，以获得兼具高空间分辨率和多光谱信息的图像产品。</p>
+
+<h4>多光谱影像（Multispectral）</h4>
+<p>多光谱传感器同时在多个离散的较宽光谱波段内成像，通常包含 4~12 个波段，每个波段的带宽约为 40~200nm。这是最常用的遥感数据类型。典型的多光谱配置包括蓝（B）、绿（G）、红（R）、近红外（NIR）四个基本波段，高级传感器还增加了红边（Red Edge）、短波红外（SWIR）、水汽、卷云等波段。多光谱数据可以进行真彩色/假彩色合成显示、计算各种植被/水体/建筑指数、进行地物分类等。代表性传感器包括 Landsat 8 OLI（9个反射波段+2个热红外波段）、Sentinel-2 MSI（13个波段）、高分一号 PMS（4个波段）。</p>
+
+<h4>高光谱影像（Hyperspectral）</h4>
+<p>高光谱传感器在连续的窄波段内成像，波段数量通常超过 100 个，每个波段的带宽仅 5~20nm。这使得每个像元可以获取近乎连续的光谱曲线，实现所谓的<strong>"图谱合一"</strong>。高光谱数据蕴含极其丰富的光谱信息，可识别细微的光谱差异，因此能够进行矿物精细识别、植被种类鉴别、水质参数反演等精密分析。其详细内容将在 3.3 节专题讨论。</p>
+
+<table>
+<tr><th>对比维度</th><th>全色</th><th>多光谱</th><th>高光谱</th></tr>
+<tr><td>波段数量</td><td>1 个</td><td>4 ~ 12 个</td><td>100 ~ 300+ 个</td></tr>
+<tr><td>波段带宽</td><td>200 ~ 500 nm</td><td>40 ~ 200 nm</td><td>5 ~ 20 nm</td></tr>
+<tr><td>光谱分辨率</td><td>低</td><td>中等</td><td>高（可识别精细光谱特征）</td></tr>
+<tr><td>空间分辨率</td><td>最高（亚米级）</td><td>中等（1~30m）</td><td>较低（5~30m）</td></tr>
+<tr><td>数据量</td><td>小</td><td>中等</td><td>极大</td></tr>
+<tr><td>典型传感器</td><td>WorldView PAN、GF-2 PAN</td><td>Landsat OLI、Sentinel-2 MSI</td><td>AVIRIS、Hyperion、PRISMA、珠海一号</td></tr>
+<tr><td>主要应用</td><td>目视解译、融合基底</td><td>土地覆盖分类、指数计算</td><td>矿物识别、精准农业、水质监测</td></tr>
+</table>
+
+<h3>3.2 SAR 雷达遥感</h3>
+
+<p>合成孔径雷达（Synthetic Aperture Radar，SAR）是微波遥感中最重要的成像技术。它利用卫星或飞机的运动来合成一个等效的大口径天线，从而在保持全天候、全天时观测能力的同时，获得高空间分辨率的雷达图像。</p>
+
+<h4>合成孔径原理</h4>
+<p>真实孔径雷达（Real Aperture Radar）的方位向分辨率由天线长度决定，要在轨道高度数百公里的条件下获得米级分辨率，需要长达数公里的天线，这在工程上不可实现。SAR 利用了一个巧妙的原理：当平台沿航迹方向飞行时，同一地面目标在雷达波束覆盖范围内会被连续照射多次。将每次回波信号按照多普勒频移进行相干叠加处理，等效于一个长度为<strong>实际飞行距离</strong>的虚拟天线，从而大幅提高方位向分辨率。SAR 的方位向分辨率理论上等于实际天线长度的一半（L/2），与距离和波长无关。距离向分辨率则通过脉冲压缩技术（发射线性调频信号 Chirp）来提高。</p>
+
+<h4>SAR 工作波段</h4>
+<table>
+<tr><th>波段</th><th>波长范围</th><th>频率范围</th><th>穿透能力</th><th>典型应用</th><th>代表卫星</th></tr>
+<tr><td><strong>X 波段</strong></td><td>2.4 ~ 3.8 cm</td><td>8 ~ 12 GHz</td><td>弱（表面散射为主）</td><td>高分辨率城市监测、军事侦察</td><td>TerraSAR-X、COSMO-SkyMed</td></tr>
+<tr><td><strong>C 波段</strong></td><td>3.8 ~ 7.5 cm</td><td>4 ~ 8 GHz</td><td>中等</td><td>海洋监测、地表形变、农作物</td><td>Sentinel-1、Radarsat-2</td></tr>
+<tr><td><strong>L 波段</strong></td><td>15 ~ 30 cm</td><td>1 ~ 2 GHz</td><td>强（可穿透植被冠层、干沙）</td><td>森林生物量、地质构造、冻土</td><td>ALOS-2 PALSAR-2、NISAR</td></tr>
+<tr><td><strong>P 波段</strong></td><td>30 ~ 100 cm</td><td>0.3 ~ 1 GHz</td><td>最强（可穿透茂密森林达地面）</td><td>森林地上生物量、冰层内部结构</td><td>BIOMASS（ESA，2024发射）</td></tr>
+</table>
+
+<h4>极化方式</h4>
+<p>SAR 系统可以控制发射和接收电磁波的极化方向（水平 H 或垂直 V），形成四种基本极化组合：</p>
+<ul>
+<li><strong>HH（水平发射-水平接收）</strong>：对平滑表面和水平结构敏感，适合海面监测、洪水检测</li>
+<li><strong>VV（垂直发射-垂直接收）</strong>：对垂直结构（如树干、建筑立面）较敏感</li>
+<li><strong>HV（水平发射-垂直接收）</strong>：交叉极化，对体散射（如茂密植被冠层）敏感，是估算森林生物量的关键极化</li>
+<li><strong>VH（垂直发射-水平接收）</strong>：与 HV 类似，在单站后向散射条件下理论上 VH=HV</li>
+</ul>
+<p><strong>全极化 SAR（PolSAR）</strong>同时获取所有四种极化通道的幅度和相位信息，可构建完整的 2&times;2 极化散射矩阵。通过极化分解（如 Freeman-Durden 三分量分解、Cloude-Pottier 分解），可将回波分解为表面散射、体散射和二面角散射三种机制，从而更精确地识别地物类型。</p>
+
+<h4>InSAR 干涉测量</h4>
+<p><strong>干涉合成孔径雷达（InSAR）</strong>是利用两幅或多幅复数 SAR 影像之间的相位差信息来提取地形高程或监测地表微小形变的技术。其基本原理如下：</p>
+<ol>
+<li><strong>干涉对生成</strong>：选取覆盖同一区域、从略有不同的空间位置（或不同时间）获取的两幅 SAR 复数影像（Single Look Complex，SLC），计算它们的共轭乘积，提取干涉相位。</li>
+<li><strong>干涉相位组成</strong>：干涉相位 &phi; = &phi;<sub>flat</sub> + &phi;<sub>topo</sub> + &phi;<sub>defo</sub> + &phi;<sub>atmo</sub> + &phi;<sub>noise</sub>，分别对应平地效应、地形、形变、大气延迟和噪声的贡献。</li>
+<li><strong>DEM 生成</strong>：利用空间基线不为零的干涉对（如 SRTM 双天线系统），去除平地效应后，地形相位可转换为高程信息，生成数字高程模型。</li>
+<li><strong>形变监测（DInSAR）</strong>：利用时间基线不为零的重复轨道干涉对，去除地形相位后，残余相位中包含地表形变信息。一个完整的干涉条纹（2&pi;相位变化）对应半个波长的视线向位移（如 C 波段约 2.83cm）。</li>
+<li><strong>时序 InSAR（PSInSAR/SBAS）</strong>：利用大量（通常 20 幅以上）时序 SAR 影像，通过持久散射体（PS）或小基线子集（SBAS）方法，消除大气延迟影响，可实现毫米级精度的长期地表形变时序监测，广泛用于地面沉降、滑坡蠕变、火山活动、地震同震/震后形变等研究。</li>
+</ol>
+
+<div class="info">
+<h4>SAR 影像的独特几何特性</h4>
+<p>SAR 采用侧视成像方式，其图像几何与光学影像截然不同，存在三种特殊的几何畸变现象：<strong>透视收缩（Foreshortening）</strong>——朝向传感器的山坡在影像上被压缩；<strong>叠掩（Layover）</strong>——当地形坡度大于雷达入射角时，山顶的回波先于山脚到达传感器，导致影像上位置颠倒；<strong>阴影（Shadow）</strong>——背向传感器的陡坡无法被雷达波照射到，形成无信号的暗区。此外，SAR 图像中普遍存在<strong>相干斑噪声（Speckle Noise）</strong>，是由同一分辨单元内多个散射体的回波相干叠加引起的，呈现为"盐和胡椒"状的颗粒感，通常需要通过多视处理（Multi-looking）或空间滤波来抑制。</p>
+</div>
+
+<h3>3.3 高光谱遥感</h3>
+
+<p>高光谱遥感（Hyperspectral Remote Sensing）是光学遥感的高级形态，其核心特征是能够以极高的光谱分辨率（通常 5~10nm 的连续窄波段，波段数超过 100 个）获取地物信息，实现<strong>"图谱合一"</strong>的目标——每个像元既有空间位置信息，又有近乎连续的完整光谱曲线。</p>
+
+<h4>"图谱合一"概念</h4>
+<p>传统多光谱遥感在少数宽波段上采样，相当于对地物光谱的粗略"素描"；而高光谱则在数百个窄波段上连续采样，可以获取精细的光谱"肖像"。高光谱数据通常表示为三维数据立方体（Hyperspectral Data Cube），两个空间维度加上一个光谱维度。从光谱维度切一个像元，得到该位置完整的反射率光谱曲线；从空间维度切一个波段，得到该波长的灰度影像。这种丰富的光谱信息使得高光谱遥感具备多光谱无法比拟的精细识别能力。</p>
+
+<h4>矿物识别</h4>
+<p>不同矿物在短波红外波段（2.0~2.5&mu;m）具有独特的吸收特征。例如：高岭石在 2.16&mu;m 和 2.21&mu;m 处有双吸收峰；蒙脱石在 2.21&mu;m 处有单吸收峰；方解石在 2.34&mu;m 处有吸收特征；明矾石在 2.17&mu;m 处有特征吸收。高光谱数据可以通过<strong>光谱角匹配（SAM）</strong>、<strong>光谱特征拟合（SFF）</strong>、<strong>混合像元分解</strong>等方法，精确识别矿物种类并估算其丰度，在地质找矿中具有巨大价值。</p>
+
+<h4>植被精细监测</h4>
+<p>高光谱可以捕捉到多光谱忽略的精细光谱特征：叶绿素含量、叶片含水量、氮素含量、叶面积指数等生化参数都有对应的特征吸收波段。红边位置（Red Edge Position）的精确定位、叶绿素荧光信号的提取、植被胁迫的早期诊断，都需要高光谱的窄波段采样能力。在精准农业中，高光谱可以实现田块内部的作物长势差异监测和病虫害早期预警。</p>
+
+<h4>水质遥感</h4>
+<p>水体的光谱变化非常微弱，需要高光谱的高灵敏度来捕捉。通过分析蓝绿波段的精细光谱特征，可以反演叶绿素 a 浓度、悬浮物浓度、有色溶解有机物（CDOM）浓度等水质参数，监测水体富营养化程度和水华爆发。</p>
+
+<div class="ref">
+高光谱数据处理面临的主要挑战包括：数据量巨大（"维度灾难"）、信噪比相对较低、波段间高度相关（信息冗余）、混合像元问题（空间分辨率通常较低）。常用的降维方法包括主成分分析（PCA）、最小噪声分离变换（MNF）和独立成分分析（ICA）。
+</div>
+
+<!-- ============================================================ -->
+<!-- 第四节：主要卫星系统 -->
+<!-- ============================================================ -->
+<h2>四、主要卫星系统</h2>
+
+<p>对地观测卫星是遥感数据的核心来源。以下系统介绍当今国际与国内最具代表性的卫星遥感平台及其技术参数。</p>
+
+<h3>4.1 Landsat 系列</h3>
+
+<p>Landsat（Land Satellite）计划是全球历史最悠久、影响最深远的地球观测卫星系列，由美国 NASA 与 USGS 联合管理。自 1972 年发射 Landsat 1 以来，已建立超过 50 年的连续地表观测记录，是全球变化研究的基石数据集。2008 年起 Landsat 数据全部免费开放。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/2016_Miami_by_OLI_Landsat_8_Nasa.jpg" alt="Landsat 8 OLI 影像">
+<p class="caption">Landsat 8 OLI 传感器拍摄的迈阿密地区真彩色合成影像</p>
+
+<table>
+<tr><th>卫星</th><th>发射年份</th><th>传感器</th><th>波段数</th><th>空间分辨率</th><th>重访周期</th><th>幅宽</th><th>状态</th></tr>
+<tr><td>Landsat 1</td><td>1972</td><td>MSS</td><td>4 (绿/红/2×NIR)</td><td>80m</td><td>18 天</td><td>185 km</td><td>退役 (1978)</td></tr>
+<tr><td>Landsat 2</td><td>1975</td><td>MSS</td><td>4</td><td>80m</td><td>18 天</td><td>185 km</td><td>退役 (1982)</td></tr>
+<tr><td>Landsat 3</td><td>1978</td><td>MSS + TIR</td><td>5</td><td>80m / TIR 240m</td><td>18 天</td><td>185 km</td><td>退役 (1983)</td></tr>
+<tr><td>Landsat 4</td><td>1982</td><td>MSS + TM</td><td>MSS 4 / TM 7</td><td>30m / TIR 120m</td><td>16 天</td><td>185 km</td><td>退役 (1993)</td></tr>
+<tr><td>Landsat 5</td><td>1984</td><td>MSS + TM</td><td>MSS 4 / TM 7</td><td>30m / TIR 120m</td><td>16 天</td><td>185 km</td><td>退役 (2013)</td></tr>
+<tr><td>Landsat 6</td><td>1993</td><td>ETM</td><td>8</td><td>15m PAN / 30m MS</td><td>—</td><td>—</td><td>发射失败</td></tr>
+<tr><td>Landsat 7</td><td>1999</td><td>ETM+</td><td>8</td><td>15m PAN / 30m / TIR 60m</td><td>16 天</td><td>185 km</td><td>运行中 (SLC故障)</td></tr>
+<tr><td>Landsat 8</td><td>2013</td><td>OLI + TIRS</td><td>OLI 9 + TIRS 2</td><td>15m PAN / 30m / TIR 100m</td><td>16 天</td><td>185 km</td><td>运行中</td></tr>
+<tr><td>Landsat 9</td><td>2021</td><td>OLI-2 + TIRS-2</td><td>OLI-2 9 + TIRS-2 2</td><td>15m PAN / 30m / TIR 100m</td><td>16 天</td><td>185 km</td><td>运行中</td></tr>
+</table>
+
+<div class="info">
+<h4>Landsat 8/9 OLI 波段详情</h4>
+<p>B1 海岸气溶胶 (0.43-0.45&mu;m, 30m) | B2 蓝 (0.45-0.51&mu;m, 30m) | B3 绿 (0.53-0.59&mu;m, 30m) | B4 红 (0.64-0.67&mu;m, 30m) | B5 近红外 (0.85-0.88&mu;m, 30m) | B6 SWIR-1 (1.57-1.65&mu;m, 30m) | B7 SWIR-2 (2.11-2.29&mu;m, 30m) | B8 全色 (0.50-0.68&mu;m, 15m) | B9 卷云 (1.36-1.38&mu;m, 30m) | B10 TIR-1 (10.6-11.19&mu;m, 100m) | B11 TIR-2 (11.5-12.51&mu;m, 100m)。Landsat 8 与 9 交替运行，联合重访周期缩短至 8 天。</p>
+</div>
+
+<h3>4.2 Sentinel 系列</h3>
+
+<p>Sentinel 系列是欧空局（ESA）哥白尼计划（Copernicus Programme）的核心，为欧洲和全球用户提供免费、开放、持续的地球观测数据。</p>
+
+<table>
+<tr><th>卫星</th><th>发射年份</th><th>类型</th><th>主要参数</th><th>重访周期</th><th>主要应用</th></tr>
+<tr><td><strong>Sentinel-1A/B</strong></td><td>2014/2016</td><td>C波段SAR</td><td>IW模式: 5×20m, 250km幅宽; SM模式: 5×5m</td><td>6天 (双星)</td><td>地表形变、海冰、洪水、船舶检测</td></tr>
+<tr><td><strong>Sentinel-2A/B</strong></td><td>2015/2017</td><td>光学多光谱</td><td>13波段: 4×10m, 6×20m, 3×60m; 290km幅宽</td><td>5天 (双星)</td><td>土地覆盖、农业、植被、水质</td></tr>
+<tr><td><strong>Sentinel-3A/B</strong></td><td>2016/2018</td><td>光学+微波</td><td>OLCI 21波段 300m; SLSTR 9波段 500m/1km</td><td>< 2天 (双星)</td><td>海洋颜色、海面温度、地表温度</td></tr>
+<tr><td><strong>Sentinel-5P</strong></td><td>2017</td><td>大气监测</td><td>TROPOMI: UV-VIS-NIR-SWIR, 5.5×3.5km</td><td>1天</td><td>大气成分 (NO2, SO2, CO, O3, CH4)</td></tr>
+</table>
+
+<div class="ref">
+Sentinel-2 MSI 的 13 个波段包括：B1 气溶胶 (443nm, 60m)、B2 蓝 (490nm, 10m)、B3 绿 (560nm, 10m)、B4 红 (665nm, 10m)、B5 红边-1 (705nm, 20m)、B6 红边-2 (740nm, 20m)、B7 红边-3 (783nm, 20m)、B8 近红外 (842nm, 10m)、B8A 窄近红外 (865nm, 20m)、B9 水汽 (945nm, 60m)、B10 卷云 (1375nm, 60m)、B11 SWIR-1 (1610nm, 20m)、B12 SWIR-2 (2190nm, 20m)。其中三个红边波段是 Sentinel-2 的独特设计，对植被监测极为有利。
+</div>
+
+<h3>4.3 中国高分系列</h3>
+
+<p>中国高分辨率对地观测系统（简称"高分专项"）是《国家中长期科学和技术发展规划纲要（2006-2020年）》中确定的 16 个重大专项之一，旨在建设我国自主的高分辨率对地观测系统。</p>
+
+<table>
+<tr><th>卫星</th><th>发射年份</th><th>类型</th><th>主要参数</th><th>重访周期</th><th>特色与应用</th></tr>
+<tr><td><strong>高分一号 (GF-1)</strong></td><td>2013</td><td>光学</td><td>PMS: 2m PAN / 8m MS (4波段); WFV: 16m MS, 800km幅宽</td><td>4天 (WFV)</td><td>高分辨率与宽覆盖结合，农业、环境</td></tr>
+<tr><td><strong>高分二号 (GF-2)</strong></td><td>2014</td><td>光学</td><td>PMS: 0.81m PAN / 3.24m MS (4波段)</td><td>5天</td><td>亚米级民用光学卫星，城市规划、国土</td></tr>
+<tr><td><strong>高分三号 (GF-3)</strong></td><td>2016</td><td>C波段SAR</td><td>12种成像模式, 最高1m (聚束), 全极化</td><td>可变</td><td>中国首颗民用C波段全极化SAR卫星</td></tr>
+<tr><td><strong>高分四号 (GF-4)</strong></td><td>2015</td><td>光学（GEO）</td><td>50m PAN / 400m 中波红外, 地球同步轨道</td><td>实时凝视</td><td>中国首颗地球同步轨道遥感卫星, 灾害</td></tr>
+<tr><td><strong>高分五号 (GF-5)</strong></td><td>2018</td><td>高光谱+大气</td><td>AHSI: 30m, 330波段 (0.4-2.5&mu;m); VIMS等6台载荷</td><td>—</td><td>综合高光谱与大气环境监测</td></tr>
+<tr><td><strong>高分六号 (GF-6)</strong></td><td>2018</td><td>光学</td><td>PMS: 2m PAN / 8m MS (8波段, 含红边); WFV: 16m, 800km</td><td>2天 (与GF-1组网)</td><td>新增红边波段，农业精细监测</td></tr>
+<tr><td><strong>高分七号 (GF-7)</strong></td><td>2019</td><td>光学立体测图</td><td>0.65m PAN / 2.6m MS, 前后视立体; 激光高度计</td><td>—</td><td>1:10000比例尺立体测图, 高程精度优于1m</td></tr>
+</table>
+
+<h3>4.4 商业遥感卫星</h3>
+
+<p>商业遥感卫星市场在过去二十年间蓬勃发展，提供了更高空间分辨率和更灵活的获取方式。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>WorldView 系列 (Maxar)</h4>
+<p><strong>WorldView-3</strong>（2014）：0.31m PAN / 1.24m 8波段MS / 3.7m 8波段SWIR / 30m 12波段CAVIS。目前民用最高分辨率光学卫星之一。<strong>WorldView-Legion</strong>（2023-）：6颗小卫星星座，0.29m PAN，单点日内 15 次重访能力。</p>
+</div>
+<div class="card">
+<h4>Planet Labs</h4>
+<p><strong>PlanetScope</strong>（200+ 颗鸽群卫星 Dove）：3m 分辨率，8 波段（含红边），每日全球覆盖。<strong>SkySat</strong>：0.5m 分辨率，可视频拍摄。<strong>Tanager</strong>（2024-）：高光谱+热红外，用于甲烷和CO2点源监测。</p>
+</div>
+<div class="card">
+<h4>吉林一号 (长光卫星)</h4>
+<p>中国最大的商业遥感卫星星座，在轨超过 100 颗卫星。<strong>高分03系列</strong>：0.75m PAN / 3m MS。<strong>宽幅01系列</strong>：0.75m / 150km 幅宽。<strong>视频卫星</strong>：亚米级分辨率视频拍摄能力。具备全球任意地点一天内多次重访能力。</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第五节：影像处理流程 -->
+<!-- ============================================================ -->
+<h2>五、影像处理流程</h2>
+
+<p>从卫星传感器获取的原始数据到可用于分析的地表反射率产品，需要经过一系列严格的预处理步骤。这些步骤的规范执行是保证遥感分析结果科学性和准确性的基础。</p>
+
+<h3>5.1 辐射定标（Radiometric Calibration）</h3>
+
+<p>辐射定标是将传感器记录的原始数字量化值（DN，Digital Number）转换为有物理意义的辐射量的过程。这一过程分为几个层次：</p>
+
+<h4>DN &rarr; 辐亮度（Radiance）</h4>
+<p>利用传感器的增益（Gain）和偏置（Offset）系数，将无量纲的 DN 值转换为到达传感器入瞳处的光谱辐亮度（Spectral Radiance），单位为 W&middot;m<sup>-2</sup>&middot;sr<sup>-1</sup>&middot;&mu;m<sup>-1</sup>。</p>
+
+<div class="formula">
+L<sub>&lambda;</sub> = Gain &times; DN + Offset<br>
+或 (Landsat 8):<br>
+L<sub>&lambda;</sub> = M<sub>L</sub> &times; Q<sub>cal</sub> + A<sub>L</sub><br>
+其中 M<sub>L</sub> = 辐亮度乘性缩放因子，A<sub>L</sub> = 辐亮度加性缩放因子，Q<sub>cal</sub> = DN 值
+</div>
+
+<h4>辐亮度 &rarr; 大气层顶反射率（TOA Reflectance）</h4>
+<p>大气层顶反射率消除了太阳照射角度和日地距离变化的影响，使不同时相、不同纬度的影像具有可比性：</p>
+
+<div class="formula">
+&rho;<sub>&lambda;</sub> = (&pi; &times; L<sub>&lambda;</sub> &times; d<sup>2</sup>) / (ESUN<sub>&lambda;</sub> &times; cos&theta;<sub>s</sub>)<br><br>
+其中：&rho;<sub>&lambda;</sub> = 大气层顶反射率<br>
+L<sub>&lambda;</sub> = 光谱辐亮度<br>
+d = 日地距离（天文单位）<br>
+ESUN<sub>&lambda;</sub> = 大气层顶太阳辐照度<br>
+&theta;<sub>s</sub> = 太阳天顶角
+</div>
+
+<p>Landsat 8 还提供直接从 DN 计算 TOA 反射率的简化公式，利用元数据文件中提供的反射率缩放因子和太阳高度角即可完成。</p>
+
+<h3>5.2 大气校正（Atmospheric Correction）</h3>
+
+<p>大气校正是将大气层顶反射率（TOA）转换为地表反射率（Surface Reflectance）的过程，目的是去除大气散射和吸收对遥感信号的影响，获取地物本身的真实反射特性。这对于多时相分析、定量遥感和光谱匹配至关重要。</p>
+
+<h4>FLAASH（Fast Line-of-sight Atmospheric Analysis of Spectral Hypercubes）</h4>
+<p>FLAASH 基于 MODTRAN 辐射传输模型，是目前精度最高的大气校正方法之一。它考虑了大气分子和气溶胶的散射与吸收、水汽含量、大气廓线等参数，并可从影像自身估算水汽和气溶胶光学厚度。FLAASH 在 ENVI 软件中集成使用，需要输入传感器类型、获取日期时间、地理位置、海拔高度、大气模型和气溶胶模型等参数。其优势在于物理模型严格、精度高，尤其适合高光谱数据的大气校正。</p>
+
+<h4>6S（Second Simulation of the Satellite Signal in the Solar Spectrum）</h4>
+<p>6S 是由法国里尔大学开发的辐射传输模型，通过对太阳-地表-大气-传感器系统中的辐射传输过程进行正向模拟，计算大气对信号的影响。6S 模型考虑了大气分子散射（Rayleigh散射）、气溶胶散射和吸收、气体吸收、地表双向反射分布函数（BRDF）和邻近效应等因素。用户需要输入几何条件（太阳/观测角度）、大气模型、气溶胶模型、地表反射率等参数。6S 的 Python 封装版本 Py6S 使得批量自动化处理成为可能。</p>
+
+<h4>DOS（Dark Object Subtraction）</h4>
+<p>DOS 是一种简单的图像层面大气校正方法，基本假设是影像中应存在某些完全黑暗的像元（如深水、深阴影），其真实地表反射率为零或接近零，但由于大气路径辐射的存在，这些像元在影像上的 DN 值大于零。因此，将每个波段中最小 DN 值（或最小亮度区域的均值）从整幅影像中减去，即可近似去除大气路径辐射的影响。DOS 方法计算简单、不需要辅助大气参数数据，但精度有限，仅适用于对精度要求不高的快速处理或缺乏大气参数的历史数据。其改进版本包括 DOS1SOB（加入了太阳辐照度和传感器标定系数校正）。</p>
+
+<h3>5.3 几何校正（Geometric Correction）</h3>
+
+<p>由于传感器姿态变化、地球曲率、地形起伏和大气折射等因素，原始遥感影像中的几何位置与地面真实位置存在偏差。几何校正的目的是消除这些几何畸变，使影像上的像元坐标与实际地理坐标精确对应。</p>
+
+<h4>地面控制点法（GCP）</h4>
+<p>通过在影像上选取若干已知准确地理坐标的控制点（Ground Control Points），建立影像坐标与地面坐标之间的数学变换关系（多项式模型：一次多项式为仿射变换，二次多项式可修正非线性畸变等），然后利用该变换对整幅影像进行重采样。GCP 的选取应遵循均匀分布、数量充足（一次多项式至少 3 个、二次至少 6 个、三次至少 10 个）、地物特征明显（如道路交叉口、桥梁拐角等）的原则。重采样方法包括最近邻法（保持原始 DN 值，但几何精度稍低）、双线性内插法（平滑效果好但可能改变光谱值）和三次卷积法（精度最高但计算量大）。</p>
+
+<h4>有理多项式系数法（RPC）</h4>
+<p>对于高分辨率卫星影像（如 WorldView、GF-2 等），影像通常随附有理多项式系数（Rational Polynomial Coefficients，RPC），这些系数描述了地面三维坐标（经度、纬度、高程）与影像二维坐标（行、列）之间的映射关系。RPC 模型是一种通用的几何模型，可以替代严格的传感器物理模型。利用 RPC 进行几何校正时，通常只需配合少量 GCP（甚至零GCP，使用 RPC 零阶修正）和 DEM 数据即可获得较高的定位精度。</p>
+
+<h4>正射校正（Orthorectification）</h4>
+<p>正射校正是几何校正的最高级形式，它不仅消除了传感器姿态和地球曲率引起的几何畸变，还利用数字高程模型（DEM）消除了地形起伏引起的投影位移。正射校正后的影像具有正射投影特性，即每个像元都严格对应于地面的真实平面位置，可以直接进行量测和叠加分析。正射校正需要的输入包括：影像数据、传感器模型参数（或 RPC）、DEM 数据和（可选的）GCP。在山区和城市高层建筑区域，正射校正的效果尤为明显。</p>
+
+<h3>5.4 影像增强（Image Enhancement）</h3>
+
+<p>影像增强是通过数学变换改善影像的视觉效果或突出某些地物特征的处理方法，目的是使影像更适合目视解译或后续自动化分析。</p>
+
+<h4>直方图均衡化（Histogram Equalization）</h4>
+<p>直方图均衡化通过非线性变换将原始影像的灰度分布转换为近似均匀分布，使灰度值充分利用整个动态范围，显著提高影像对比度。当原始影像集中在较窄的灰度范围内时（如低对比度影像），均衡化效果最为明显。其数学本质是利用累积分布函数（CDF）进行灰度映射。</p>
+
+<h4>线性拉伸（Linear Stretch）</h4>
+<p>线性拉伸将原始灰度值从其实际分布范围线性映射到显示器的完整显示范围（通常 0-255）。最简单的形式是最小-最大拉伸，将影像最小 DN 映射为 0，最大 DN 映射为 255。改进形式包括百分比截断拉伸（如 2%-98% 拉伸），将极端亮/暗像元截断以避免离群值的影响，是遥感影像显示中最常用的增强方式。标准差拉伸则以均值为中心，根据标准差的倍数设定拉伸范围。</p>
+
+<h4>主成分分析（Principal Component Analysis, PCA）</h4>
+<p>PCA 是一种统计变换方法，将原始多个相关波段数据线性变换为一组互不相关的主成分。第一主成分（PC1）包含最大的信息方差，通常代表影像的整体亮度；第二主成分（PC2）包含第二大方差，通常突出地物间的色彩差异；后续主成分依次包含递减的信息量，最后几个主成分通常主要包含噪声。PCA 广泛用于多光谱/高光谱数据降维、信息压缩、波段融合和变化检测。PCA 也是影像融合（Pan-sharpening）常用方法之一：将多光谱数据做 PCA 变换后，用全色波段替代 PC1，再反变换即可获得融合影像。</p>
+
+<!-- ============================================================ -->
+<!-- 第六节：影像分类 -->
+<!-- ============================================================ -->
+<h2>六、影像分类</h2>
+
+<p>遥感影像分类是将影像中的每个像元或对象划分为特定地物类别的过程，是遥感信息提取的核心环节。按照是否需要训练样本，分类方法可分为监督分类和非监督分类两大类。</p>
+
+<h3>6.1 监督分类（Supervised Classification）</h3>
+
+<p>监督分类需要分析者预先选择具有代表性的训练样本（Training Samples），通过训练分类器学习各类别的光谱/空间特征模式，然后将学到的模式应用于整幅影像进行分类。训练样本的质量（数量充足、分布合理、类内纯净）直接决定分类精度。</p>
+
+<h4>最大似然分类（Maximum Likelihood Classification, MLC）</h4>
+<p>MLC 是经典的参数化统计分类器。它假设每个类别的光谱特征服从多元正态分布，根据训练样本计算各类别的均值向量和协方差矩阵，然后对每个待分类像元计算其属于各类别的后验概率（通过贝叶斯定理），将其归入概率最大的类别。MLC 的优点是考虑了波段间的相关性（通过协方差矩阵），理论基础完善；缺点是假设正态分布在许多实际情况下不成立，且需要足够多的训练样本来准确估计协方差矩阵（每类样本数建议为波段数的 10~30 倍）。</p>
+
+<h4>支持向量机（Support Vector Machine, SVM）</h4>
+<p>SVM 是一种基于统计学习理论的非参数化分类器，其核心思想是在特征空间中寻找一个最优超平面来分隔不同类别，使得两个类别之间的间隔（Margin）最大化。通过核函数（如径向基函数 RBF、多项式核）可将数据映射到高维空间，解决线性不可分问题。SVM 在遥感分类中的优势包括：对训练样本数量要求较低（通常几十个高质量样本即可）、对高维数据（如高光谱）具有较强泛化能力、不假设数据分布形式。SVM 的关键参数包括核函数类型、惩罚参数 C（控制间隔宽度与误分类的权衡）和 RBF 核的 &gamma; 参数。</p>
+
+<h4>随机森林（Random Forest, RF）</h4>
+<p>随机森林是一种基于集成学习的分类方法，通过构建大量决策树（通常 100~500 棵），每棵树使用随机选取的训练样本子集（Bootstrap Sampling）和随机选取的特征子集进行训练，最终通过多数投票决定分类结果。RF 的优势包括：分类精度高且稳定、可处理高维数据、对噪声和离群值鲁棒、可输出特征重要性排序（Feature Importance）、训练速度快、不易过拟合。RF 在遥感中广泛应用于土地覆盖分类、作物类型识别等任务。</p>
+
+<h4>深度学习方法</h4>
+<p><strong>卷积神经网络（CNN）</strong>通过多层卷积-池化-全连接结构自动学习图像的层次化特征表示。在遥感影像分类中，CNN 可以同时利用光谱信息和空间上下文信息（纹理、形状、邻域关系），分类精度通常优于传统方法。常见的架构包括 VGG、ResNet、Inception 等。</p>
+<p><strong>U-Net</strong> 是一种全卷积编码器-解码器网络架构，专为像素级语义分割设计。其编码器路径通过卷积和池化逐步提取特征并降低空间分辨率；解码器路径通过上采样和转置卷积逐步恢复空间分辨率；跳跃连接（Skip Connection）将编码器各层的特征直接传递给解码器对应层，保留精细的空间信息。U-Net 在遥感影像的建筑提取、道路提取、农田分割等像素级任务中表现突出，即使训练样本较少也能获得较好效果。其改进版本包括 Attention U-Net、U-Net++、DeepLabV3+ 等。</p>
+
+<h3>6.2 非监督分类（Unsupervised Classification）</h3>
+
+<p>非监督分类不需要训练样本，通过聚类算法自动将光谱相似的像元归为同一类别，然后由分析者对各聚类赋予实际的地物类别含义。</p>
+
+<h4>K-Means 聚类</h4>
+<p>K-Means 是最简单的聚类算法。用户预设类别数 K，算法随机初始化 K 个聚类中心，然后交替执行两步：（1）将每个像元分配到距离最近的聚类中心；（2）重新计算各聚类的均值作为新的聚类中心。迭代直到聚类中心不再显著变化或达到最大迭代次数。K-Means 计算效率高但对初始中心敏感，结果可能陷入局部最优。</p>
+
+<h4>ISODATA（Iterative Self-Organizing Data Analysis Technique Algorithm）</h4>
+<p>ISODATA 是 K-Means 的改进版本，增加了自动分裂和合并聚类的功能。当某个聚类内部离散度过大时，自动分裂为两个类；当两个聚类中心距离过近时，自动合并为一个类。因此 ISODATA 的最终类别数可以与初始设定不同，适应性更强。用户需要设定的参数包括：初始类别数、最小/最大类别数、最大迭代次数、最小样本数阈值、最大标准差（分裂阈值）和最小类间距离（合并阈值）。ISODATA 是遥感非监督分类中最常用的方法。</p>
+
+<h3>6.3 面向对象分类（OBIA）</h3>
+
+<p>面向对象影像分析（Object-Based Image Analysis, OBIA）是相对于传统基于像元分类的一种新范式。OBIA 的处理流程分为两步：（1）<strong>影像分割</strong>——将影像划分为由同质像元组成的对象（Object/Segment），常用方法包括多尺度分割（Multi-resolution Segmentation）、均值漂移（Mean Shift）、分水岭算法等；（2）<strong>对象分类</strong>——以对象为基本分析单元，利用对象的光谱特征（均值、标准差）、几何特征（面积、形状指数、长宽比、紧凑度）、纹理特征（GLCM 灰度共生矩阵统计量）以及上下文关系（邻域对象类型、层次关系）进行分类。OBIA 能有效利用高分辨率影像中丰富的空间信息和结构信息，减少"椒盐噪声"现象，分类结果更符合实际地物边界。eCognition（Trimble）是最知名的 OBIA 商业软件，开源替代方案包括 Orfeo ToolBox (OTB) 和 RSGISLib。</p>
+
+<h3>6.4 精度评价</h3>
+
+<p>分类精度评价是遥感分类的必要环节，用于定量衡量分类结果与真实地物类型之间的一致性程度。</p>
+
+<h4>混淆矩阵（Confusion Matrix / Error Matrix）</h4>
+<p>混淆矩阵是精度评价的基础工具，它是一个 n&times;n 的方阵（n 为类别数），行表示分类结果，列表示参考数据（真实类别）。矩阵对角线上的元素表示正确分类的样本数，非对角线元素表示分类错误的样本。从混淆矩阵可以计算以下精度指标：</p>
+
+<ul>
+<li><strong>总体精度（Overall Accuracy, OA）</strong> = 对角线元素之和 / 总样本数。表示所有类别整体的正确分类比例。</li>
+<li><strong>生产者精度（Producer's Accuracy, PA）</strong> = 某类对角线元素 / 该类列总和（= 1 - 漏分误差）。又称召回率（Recall），反映某一类别被正确识别的程度。</li>
+<li><strong>用户精度（User's Accuracy, UA）</strong> = 某类对角线元素 / 该类行总和（= 1 - 错分误差）。又称精确率（Precision），反映分类为某一类别的像元中真正属于该类的比例。</li>
+<li><strong>Kappa 系数</strong>：考虑了随机一致性的分类精度指标，计算公式如下：</li>
+</ul>
+
+<div class="formula">
+Kappa = (P<sub>o</sub> - P<sub>e</sub>) / (1 - P<sub>e</sub>)<br><br>
+其中：P<sub>o</sub> = 总体精度（观测一致性比例）<br>
+P<sub>e</sub> = 期望一致性比例 = &Sigma;(行总和<sub>i</sub> &times; 列总和<sub>i</sub>) / N<sup>2</sup><br><br>
+Kappa 值域：[-1, 1]<br>
+Kappa &lt; 0.4: 差  |  0.4~0.6: 中等  |  0.6~0.8: 较好  |  &gt; 0.8: 优秀
+</div>
+
+<div class="ref">
+精度评价中验证样本的选取应与训练样本独立，避免"自我验证"导致精度虚高。验证样本的采集方式包括随机采样、分层随机采样、系统采样等。每个类别的验证样本数建议不少于 50 个。近年来，F1 分数（精确率与召回率的调和均值）和 IoU（Intersection over Union，交并比）也越来越多地用于遥感分类精度评价，尤其是在深度学习语义分割任务中。
+</div>
+
+<!-- ============================================================ -->
+<!-- 第七节：植被指数 -->
+<!-- ============================================================ -->
+<h2>七、植被指数</h2>
+
+<p>植被指数（Vegetation Index, VI）是通过遥感影像不同波段的数学运算构造的、用于定量表征植被生长状况的参数。它们利用植被在不同波段的独特光谱响应特征（红光强吸收、近红外强反射），消除部分非植被因素的干扰，广泛应用于植被覆盖度估算、生物量反演、作物长势监测、生态环境评价等领域。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/52/NDVI_of_irrigated_fields.jpg" alt="NDVI 灌溉农田">
+<p class="caption">灌溉农田的 NDVI 影像：绿色表示高 NDVI（茂密植被），黄色/棕色表示低 NDVI（裸土或稀疏植被）</p>
+
+<h3>7.1 NDVI（归一化差值植被指数）</h3>
+
+<p>NDVI（Normalized Difference Vegetation Index）是最经典、应用最广泛的植被指数，由 Rouse 等人于 1974 年提出。</p>
+
+<div class="formula">
+NDVI = (NIR - Red) / (NIR + Red)<br><br>
+其中：NIR = 近红外波段反射率，Red = 红光波段反射率<br>
+值域：[-1, +1]
+</div>
+
+<p><strong>NDVI 值域解释：</strong></p>
+<ul>
+<li><strong>-1 ~ 0</strong>：通常对应水体（深水 NDVI 趋近 -1，因 NIR 反射率极低而 Red 有一定反射）、云、雪和人工表面</li>
+<li><strong>0 ~ 0.1</strong>：裸土、岩石、沙漠等无植被覆盖区域</li>
+<li><strong>0.1 ~ 0.2</strong>：极稀疏植被或干旱草地</li>
+<li><strong>0.2 ~ 0.4</strong>：灌木、草地或农作物早期生长阶段</li>
+<li><strong>0.4 ~ 0.6</strong>：中等覆盖度的植被，如农作物旺盛生长期、稀疏林地</li>
+<li><strong>0.6 ~ 0.8</strong>：茂密植被，如成熟农田、阔叶林</li>
+<li><strong>0.8 ~ 1.0</strong>：极其茂密的热带雨林或灌溉条件下的高产农田</li>
+</ul>
+
+<p>NDVI 的主要局限在于：（1）在植被覆盖度很高时趋于饱和（LAI &gt; 3 时对 LAI 变化不敏感）；（2）受土壤背景影响较大（尤其在稀疏植被区域）；（3）受大气影响（未经大气校正时误差较大）。</p>
+
+<h3>7.2 EVI（增强型植被指数）</h3>
+
+<div class="formula">
+EVI = G &times; (NIR - Red) / (NIR + C1 &times; Red - C2 &times; Blue + L)<br><br>
+标准参数：G = 2.5, C1 = 6, C2 = 7.5, L = 1<br>
+值域：约 [-0.2, +1.0]
+</div>
+
+<p>EVI 由 MODIS 科学团队提出，引入蓝光波段来校正气溶胶对红光波段的影响，并加入背景调节因子 L 来减少土壤背景的干扰。与 NDVI 相比，EVI 在高植被覆盖区域不易饱和，对植被冠层结构变化更敏感，在热带雨林等高 LAI 地区表现显著优于 NDVI。MODIS 标准产品 MOD13 同时提供 NDVI 和 EVI 两种植被指数。</p>
+
+<h3>7.3 SAVI（土壤调节植被指数）</h3>
+
+<div class="formula">
+SAVI = (1 + L) &times; (NIR - Red) / (NIR + Red + L)<br><br>
+L = 土壤调节因子（取值 0~1，通常取 0.5）<br>
+L = 0 时 SAVI 退化为 NDVI<br>
+L = 1 时背景调节效果最强
+</div>
+
+<p>SAVI 由 Huete（1988）提出，专门用于减少土壤背景对植被指数的影响。在植被覆盖度较低的干旱、半干旱地区，裸露的土壤背景对 NDVI 的干扰很大。SAVI 通过引入经验性的土壤调节因子 L，将"等 NDVI 线"（等植被密度线）调整为通过光谱空间原点的方向，从而显著减少不同土壤亮度引起的植被指数变异。其改进版本 MSAVI（Modified SAVI）可以自适应地调整 L 值。</p>
+
+<h3>7.4 NDWI（归一化差值水体指数）</h3>
+
+<div class="formula">
+NDWI = (Green - NIR) / (Green + NIR)   [McFeeters, 1996]<br><br>
+MNDWI = (Green - SWIR) / (Green + SWIR)   [Xu, 2006]
+</div>
+
+<p>NDWI 利用水体在绿光波段有一定反射而在近红外强烈吸收的特性来提取水体信息。水体的 NDWI 值为正，植被和土壤的 NDWI 值为负，通过设定阈值（通常 &gt; 0）可有效提取水体范围。改进型 MNDWI 使用短波红外替代近红外，对城市建成区中水体的提取效果更好，能够有效抑制建筑物的误提取（因为建筑在 SWIR 波段的反射率较高，而水体在 SWIR 反射率极低）。</p>
+
+<h3>7.5 NDBI（归一化差值建筑指数）</h3>
+
+<div class="formula">
+NDBI = (SWIR - NIR) / (SWIR + NIR)   [Zha et al., 2003]
+</div>
+
+<p>NDBI 利用城市建成区在短波红外波段的反射率通常高于近红外波段这一特性来提取建筑用地。城市不透水面的 NDBI 值为正，而植被的 NDBI 值为负（因植被的 NIR 远高于 SWIR）。NDBI 常与 NDVI 联合使用，通过 NDBI - NDVI 差值来增强城市区域的提取效果。在城市热岛效应研究中，NDBI 与地表温度呈正相关。相关的城市遥感指数还包括 IBI（Index-based Built-up Index）、EBBI（Enhanced Built-Up and Bareness Index）等。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Precision_Farming_in_Minnesota_-_False_Colour.jpg" alt="精准农业假彩色影像">
+<p class="caption">明尼苏达州精准农业假彩色合成影像：红色区域表示健康茂密植被（近红外波段高反射），植被指数在精准农业中发挥关键作用</p>
+
+<!-- ============================================================ -->
+<!-- 第八节：Google Earth Engine -->
+<!-- ============================================================ -->
+<h2>八、Google Earth Engine</h2>
+
+<p>Google Earth Engine（GEE）是由 Google 开发的云端地理空间分析平台，自 2010 年正式发布以来，已彻底改变了遥感数据处理和分析的方式。它将海量的地球观测数据存档与强大的云计算能力相结合，使研究者和开发者无需下载数据、无需本地高性能计算资源，即可在浏览器中进行全球尺度的遥感分析。</p>
+
+<h3>8.1 平台架构</h3>
+
+<p>GEE 的架构由以下核心组件构成：</p>
+
+<ul>
+<li><strong>数据存储层</strong>：基于 Google 的分布式文件系统存储了超过 80PB（截至 2025 年）的地球观测数据，涵盖卫星影像、气象数据、地形数据、土地覆盖产品、人口数据等。数据以优化的格式存储，支持快速随机访问和并行读取。</li>
+<li><strong>计算引擎层</strong>：基于 Google 的数据中心基础设施，利用数千台服务器进行大规模并行计算。用户提交的分析任务被自动分解为多个子任务，分配到不同的计算节点上并行执行，结果自动合并返回。</li>
+<li><strong>API 层</strong>：提供 JavaScript API（用于 Code Editor 在线编程环境）和 Python API（用于本地脚本、Jupyter Notebook 或 Colab 集成）两种编程接口。两种 API 功能基本等价，底层调用相同的服务端计算引擎。</li>
+<li><strong>可视化层</strong>：Code Editor 内置了交互式地图显示和时间序列图表绘制功能，可将计算结果直接叠加在底图上进行可视化探索。</li>
+</ul>
+
+<h3>8.2 数据目录（Data Catalog）</h3>
+
+<p>GEE 的公共数据目录是其最大的优势之一，包含数千个公开可用的地理空间数据集，并持续更新。主要类别包括：</p>
+
+<table>
+<tr><th>数据类别</th><th>主要数据集</th><th>时间范围</th></tr>
+<tr><td><strong>光学卫星影像</strong></td><td>Landsat 1-9全系列、Sentinel-2 L1C/L2A、MODIS Terra/Aqua全产品、VIIRS、ASTER</td><td>1972 年至今</td></tr>
+<tr><td><strong>SAR 影像</strong></td><td>Sentinel-1 GRD/SLC、ALOS PALSAR</td><td>2007 年至今</td></tr>
+<tr><td><strong>气象/气候</strong></td><td>ERA5 再分析、CHIRPS 降水、GRIDMET、TerraClimate、WorldClim</td><td>1979 年至今</td></tr>
+<tr><td><strong>地形</strong></td><td>SRTM 30m/90m、ALOS World 3D 30m、NASADEM、FABDEM</td><td>静态</td></tr>
+<tr><td><strong>土地覆盖</strong></td><td>ESA WorldCover 10m、Dynamic World、MODIS Land Cover、GlobeLand30、NLCD</td><td>多时相</td></tr>
+<tr><td><strong>夜间灯光</strong></td><td>DMSP-OLS、VIIRS DNB 月/年度合成</td><td>1992 年至今</td></tr>
+<tr><td><strong>人口/社经</strong></td><td>WorldPop、GHSL、GPW v4</td><td>多时相</td></tr>
+<tr><td><strong>大气</strong></td><td>Sentinel-5P TROPOMI (NO2/SO2/CO/O3/CH4)</td><td>2018 年至今</td></tr>
+</table>
+
+<h3>8.3 核心 API 对象</h3>
+
+<p>GEE 的编程模型基于几个核心数据类型，掌握它们是使用 GEE 的基础：</p>
+
+<h4>ee.Image</h4>
+<p><strong>ee.Image</strong> 是 GEE 中最基本的栅格数据类型，表示一幅由多个波段（Band）组成的遥感影像。每个波段是一个二维像元数组，具有独立的名称、数据类型、空间分辨率和投影。ee.Image 对象支持丰富的像元级运算（加减乘除、逻辑运算、三角函数、条件表达式等）、波段选择与重命名、重投影、重采样、区域统计、可视化参数设定等操作。所有操作都是惰性求值（Lazy Evaluation），只有在显示或导出时才触发实际计算。</p>
+
+<h4>ee.ImageCollection</h4>
+<p><strong>ee.ImageCollection</strong> 是 ee.Image 的有序集合，通常代表一个时间序列或多个传感器的影像栈。GEE 数据目录中的大多数数据集都以 ImageCollection 的形式组织。核心操作包括：<strong>过滤（Filter）</strong>——按日期（filterDate）、空间范围（filterBounds）、元数据属性（filter）筛选影像；<strong>映射（Map）</strong>——对集合中的每幅影像执行相同的函数（如计算 NDVI、云掩膜等）；<strong>归约（Reduce）</strong>——将集合合成为单幅影像（如计算中值合成 median()、年最大值 max()、百分位数 percentile() 等）；<strong>聚合（Aggregate）</strong>——提取统计信息或时间序列。</p>
+
+<h4>ee.Reducer</h4>
+<p><strong>ee.Reducer</strong> 是 GEE 的统计聚合引擎，用于将多个值归约为更少的值。Reducer 可以在空间维度（如 reduceRegion 计算某个多边形内的平均 NDVI）、时间维度（如 ImageCollection.reduce 计算时间序列中值）、波段维度（如 reduce 合并多个波段的统计量）上应用。常用的 Reducer 包括 ee.Reducer.mean()、ee.Reducer.median()、ee.Reducer.min()、ee.Reducer.max()、ee.Reducer.stdDev()、ee.Reducer.percentile()、ee.Reducer.histogram()、ee.Reducer.linearFit()（线性回归）等，还支持组合 Reducer（ee.Reducer.combine）以一次计算多个统计量。</p>
+
+<h4>其他重要对象</h4>
+<ul>
+<li><strong>ee.Geometry</strong>：矢量几何对象（Point、LineString、Polygon、MultiPolygon 等），用于定义空间过滤范围或分析区域。</li>
+<li><strong>ee.Feature</strong>：带属性表的几何对象（类似 GIS 中的要素），包含一个 Geometry 和一个属性字典。</li>
+<li><strong>ee.FeatureCollection</strong>：ee.Feature 的集合，等价于一个矢量图层/Shapefile。支持导入 Shapefile、GeoJSON，也可从 GEE 内置的矢量数据集（如国界、流域边界）加载。</li>
+<li><strong>ee.Classifier</strong>：机器学习分类器对象，支持 CART 决策树、随机森林（smileRandomForest）、SVM（libsvm）、朴素贝叶斯等分类方法，用于影像监督分类。</li>
+<li><strong>ee.Terrain</strong>：地形分析函数集，可从 DEM 计算坡度、坡向、山体阴影等。</li>
+</ul>
+
+<h3>8.4 典型应用示例</h3>
+
+<p>以下是 GEE 在遥感分析中的典型应用场景：</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>全球森林变化监测</h4>
+<p>Hansen et al. (2013) 利用 GEE 处理了 Landsat 7 的 65 万景影像（超过 20TB），生成了全球 30m 分辨率的 2000-2012 年森林覆盖变化图，首次实现了逐年全球森林损失和增长的空间定位。该项目至今仍在 GEE 上持续更新。</p>
+</div>
+<div class="card">
+<h4>全球地表水动态</h4>
+<p>JRC Global Surface Water 数据集利用 GEE 分析了 1984-2021 年间超过 440 万景 Landsat 影像，生成了全球 30m 分辨率的地表水动态变化图，揭示了 38 年间全球水体的季节性变化和长期演变趋势。</p>
+</div>
+<div class="card">
+<h4>Dynamic World 近实时土地覆盖</h4>
+<p>Google 与 World Resources Institute 合作，利用 Sentinel-2 影像在 GEE 上构建了 Dynamic World 全球 10m 近实时土地覆盖产品，为每个像元提供 9 类土地覆盖的概率估计，是全球首个接近实时更新的全球土地覆盖数据集。</p>
+</div>
+<div class="card">
+<h4>大气污染监测</h4>
+<p>利用 GEE 中的 Sentinel-5P TROPOMI 数据，可以快速分析全球和区域尺度的 NO2、SO2、CO、CH4 等大气污染物浓度时空分布和变化趋势，已被广泛用于 COVID-19 封锁期间的空气质量变化研究。</p>
+</div>
+</div>
+
+<div class="info">
+<h4>GEE JavaScript 代码示例：Sentinel-2 NDVI 计算与可视化</h4>
+<div class="formula">
+// 定义研究区域<br>
+var roi = ee.Geometry.Rectangle([116.2, 39.7, 116.6, 40.1]);<br><br>
+// 加载 Sentinel-2 L2A 地表反射率数据<br>
+var s2 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')<br>
+&nbsp;&nbsp;.filterDate('2024-06-01', '2024-09-01')<br>
+&nbsp;&nbsp;.filterBounds(roi)<br>
+&nbsp;&nbsp;.filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20));<br><br>
+// 计算 NDVI 并取中值合成<br>
+var ndvi = s2.map(function(img) {<br>
+&nbsp;&nbsp;return img.normalizedDifference(['B8', 'B4']).rename('NDVI');<br>
+}).median().clip(roi);<br><br>
+// 可视化<br>
+Map.centerObject(roi, 10);<br>
+Map.addLayer(ndvi, {min: 0, max: 0.8, palette: ['brown','yellow','green','darkgreen']}, 'NDVI');
+</div>
+</div>
+
+<h3>8.5 GEE 的局限与替代方案</h3>
+
+<p>尽管 GEE 功能强大，但也存在一些局限：（1）仅支持栅格分析，矢量分析能力有限；（2）计算资源有配额限制（商业用户需付费订阅 Earth Engine for Commercial）；（3）不支持自定义深度学习模型的训练（但可通过 TensorFlow 集成进行推理）；（4）数据导出速度受限；（5）部分国家和地区的网络访问受限。替代方案包括 <strong>Microsoft Planetary Computer</strong>（基于 Azure 云平台，集成了 STAC 数据目录和 Dask 并行计算）、<strong>AWS Earth on AWS</strong>（如 Landsat/Sentinel 的 COG 格式数据，配合 QGIS/Python 使用）、<strong>OpenEO</strong>（欧洲的开放标准云端地理空间处理框架）。</p>
+
+<!-- ============================================================ -->
+<!-- 总结 -->
+<!-- ============================================================ -->
+<h2>总结</h2>
+
+<p>遥感技术作为 GIS 最重要的数据获取手段之一，已经从早期的航空摄影发展成为覆盖全电磁波谱、融合光学-雷达-激光多种传感器技术、具备从亚米级到千米级多尺度观测能力的综合性技术体系。从电磁辐射的物理基础到卫星系统的工程实现，从影像预处理的标准流程到智能分类的前沿方法，从植被指数的定量表征到云计算平台的大数据分析，遥感科学的每一个环节都在不断演进。</p>
+
+<p>随着商业卫星星座的快速部署、高光谱和 SAR 卫星的普及、深度学习技术的深度融合、以及 Google Earth Engine 等云平台降低的使用门槛，遥感正在从专业研究领域走向更广泛的应用场景——从精准农业到智慧城市，从应急救灾到气候变化监测，从矿产勘探到生态保护。掌握遥感技术原理和应用方法，是每一位 GIS 从业者必备的核心能力。</p>
+
+<div class="ref">
+推荐学习资源：<br>
+1. Lillesand, T. M., Kiefer, R. W., & Chipman, J. W. (2015). <em>Remote Sensing and Image Interpretation</em> (7th ed.). Wiley.<br>
+2. Campbell, J. B., & Wynne, R. H. (2011). <em>Introduction to Remote Sensing</em> (5th ed.). Guilford Press.<br>
+3. Google Earth Engine Developers Guide: https://developers.google.com/earth-engine<br>
+4. USGS Landsat Science: https://www.usgs.gov/landsat-missions<br>
+5. ESA Sentinel Online: https://sentinels.copernicus.eu<br>
+6. 梅安新, 彭望琭, 秦其明, 刘慧平. (2015). 《遥感导论》. 高等教育出版社.<br>
+7. 赵英时 主编. (2013). 《遥感应用分析原理与方法》(第二版). 科学出版社.
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="spatial-analysis.html">&larr; 空间分析</a>
+  <a href="../index.html">目录</a>
+  <a href="gis-software.html">GIS软件 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>
