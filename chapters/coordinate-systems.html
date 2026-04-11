@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>坐标系统与地图投影详解 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 03</div>
+  <h1>坐标系统与地图投影详解</h1>
+  <p>从椭球体到 EPSG 代码，从墨卡托到火星坐标——彻底搞懂 GIS 中最容易踩坑也最无法回避的底层基础。</p>
+  <div class="hero-img"><img src="../images/map_projection.png" alt="坐标系统与地图投影详解"></div>
+</div>
+
+<article class="content">
+
+<h2>1. 为什么坐标系这么重要？一个血泪教训</h2>
+
+<p>如果你问十个 GIS 老手：「你职业生涯中最痛的一次教训是什么？」，我敢打赌至少有六个人会告诉你：坐标系搞错了。这听起来是件小事，但实际上它可能让你做白工几天、向客户赔礼道歉，甚至让一座价值几亿的建筑「漂移」到别人家的地块里。</p>
+
+<p>我亲眼见过一个真实案例：某市政项目的规划院收到了施工图，他们把设计院提供的 CAD 文件（使用本地独立坐标系）直接叠加到 ArcGIS 中的底图上（使用 CGCS2000 高斯投影 3 度带）。结果整座新建办公楼在地图上的位置偏移了大约 <strong>800 米</strong>——一头扎进了隔壁的规划绿地。问题直到建设方准备动工、发现和周边地块「对不上」的时候才被发现。项目停摆了整整两周，重新测量、重新报批，光是损失就超过六位数。</p>
+
+<p>这不是个例。只要是做过一段时间 GIS 的人，基本都听说过类似的故事：导出 Shapefile 忘了 .prj 文件导致别人打不开、下载 OpenStreetMap 数据叠加到天地图上发现「错位」、把 GPS 采集的 WGS84 点位直接扔进高德地图 API 然后看着点位集体往西南方向跑了大几百米⋯⋯</p>
+
+<div class="warn">
+  <h4>中国 GIS 工程师最常见的坑：WGS84 与 GCJ-02 混用</h4>
+  <p>中国大陆公开发布的在线地图（高德、腾讯、谷歌中国）统统使用 <strong>GCJ-02</strong>（俗称「火星坐标系」）。但你的手机 GPS 原始输出、无人机 POS 数据、OpenStreetMap、以及大部分境外底图都是 <strong>WGS84</strong>。两者相差在 50&ndash;700 米之间（随地区不同），而且这个偏移是<strong>非线性</strong>的——不是简单的平移，每个点的偏移量都不一样。</p>
+  <p style="margin-top:.8rem;margin-bottom:0">如果你把 WGS84 的 POI 直接叠加在高德底图上，你会看到所有的点都整齐地向西南偏移。反过来，把高德的坐标直接给境外 API 用，也会出问题。正确做法是：明确每一份数据的坐标系来源，然后用转换算法（或离线偏移表）进行校正。</p>
+</div>
+
+<p>所以，掌握坐标系不是为了「学术正确」，而是为了让你的数据能对得上，让你的分析结果有意义，让你不会在深夜接到客户的投诉电话。这一章会从地球的形状讲起，把 GIS 坐标系这件事彻底讲透。</p>
+
+<h2>2. 地球的形状：从圆到椭球到水准面</h2>
+
+<p>我们要把地球上的位置「编号」，第一个问题是：地球长什么样？</p>
+
+<p>小学课本告诉我们地球是个球，中学课本升级了：地球是个「两极稍扁、赤道略鼓」的椭球。但真实情况比这更复杂——地球既不是完美的球，也不是完美的椭球，它的表面凹凸不平，连海平面都不是一个平滑的曲面（因为不同地方的重力场强度不一样）。</p>
+
+<img src="../images/map_projection.png" alt="地球形状示意图：地形、大地水准面与参考椭球的关系">
+<p class="caption">真实地形（Topography）、大地水准面（Geoid）与参考椭球（Ellipsoid）三者的关系</p>
+
+<h3>三个层次：Topography / Geoid / Ellipsoid</h3>
+
+<p>理解地球形状，要分清楚三个完全不同的概念：</p>
+
+<ul>
+  <li><strong>真实地形（Topography）</strong>：就是你看得见的山川湖海、房屋森林，是地球物理表面最真实的样子。起伏高达 20 公里（从马里亚纳海沟到珠峰）。这是最精确但也最没法用公式描述的形状。</li>
+  <li><strong>大地水准面（Geoid）</strong>：想象地球上所有大陆都被「挖掉」，让海水自由流动、最终达到平衡状态时形成的那个曲面。它和重力场严格垂直，是一个不规则的、像土豆一样凹凸的等势面。Geoid 是测量「海拔高程」的真正基准。</li>
+  <li><strong>参考椭球（Reference Ellipsoid）</strong>：为了用数学公式描述地球，我们选一个「最贴近」Geoid 的光滑椭球体作为近似。椭球只需要两个参数（长半轴 a、扁率 f）就能完全定义。这是 GIS 计算的数学基础。</li>
+</ul>
+
+<div class="info">
+  <h4>为什么需要椭球？直接用 Geoid 不行吗？</h4>
+  <p>因为 Geoid 是不规则的，没法用简洁的公式表达。你要算「A 点到 B 点的距离」，在椭球上有优雅的闭式解（比如 Vincenty 公式），而在 Geoid 上你得逐点数值积分，慢且不稳定。所以工程实践里大家默契地使用「三明治结构」：用椭球做水平位置的数学基础，用 Geoid 做垂直高程的基准，两者之间通过「大地水准面差距（Geoid Undulation，记作 N）」进行修正。</p>
+</div>
+
+<h3>参考椭球的历史演变</h3>
+
+<p>不同年代、不同国家的测绘学家用当时最好的观测数据，拟合出了各种椭球。每一个椭球都是那个时代对地球形状的最佳猜测。下面是几个 GIS 圈绕不开的椭球：</p>
+
+<table>
+<thead><tr><th>椭球名称</th><th>年份</th><th>长半轴 a (m)</th><th>扁率 1/f</th><th>典型用途</th></tr></thead>
+<tbody>
+<tr><td>Clarke 1866</td><td>1866</td><td>6378206.4</td><td>294.9786982</td><td>北美 NAD27 的基础</td></tr>
+<tr><td>Krasovsky 1940</td><td>1940</td><td>6378245.0</td><td>298.3</td><td>中国北京 54 坐标系</td></tr>
+<tr><td>IAG-75</td><td>1975</td><td>6378140.0</td><td>298.257</td><td>中国西安 80 坐标系</td></tr>
+<tr><td>GRS80</td><td>1980</td><td>6378137.0</td><td>298.257222101</td><td>NAD83、CGCS2000 的基础</td></tr>
+<tr><td>WGS84</td><td>1984</td><td>6378137.0</td><td>298.257223563</td><td>GPS、全球通用</td></tr>
+</tbody>
+</table>
+
+<p>注意：GRS80 和 WGS84 的长半轴完全一样，扁率差异在小数点后第八位——实际上差别小到只有 0.1 毫米量级。所以在几乎所有工程场景里，你可以把两者视为等价的。而 CGCS2000 直接采用了 GRS80 的参数，和 WGS84 在水平方向上的差异也只有厘米级。</p>
+
+<p>但是！<strong>Krasovsky 1940</strong>（北京 54 用的）和 WGS84 的差异就大得多了：长半轴差了 108 米，这意味着如果你把北京 54 的坐标直接当作 WGS84 来用，你会在全国范围内产生几十米到一百多米的误差。这正是老图纸和新图纸「对不上」的常见原因。</p>
+
+<h3>大地水准面 Geoid 的物理意义</h3>
+
+<p>Geoid 这个概念对很多人来说有点神秘。我换个说法：Geoid 就是「如果让海水静止地覆盖整个地球（包括穿过大陆底下）会形成的那个面」。它的物理本质是一个<strong>重力等势面</strong>，也就是说在 Geoid 上任何两点的重力势能相等。</p>
+
+<p>为什么这个概念重要？因为我们说的「海拔高程」（正高 Orthometric Height），本质上是从 Geoid 算起的。当你站在北京某处看到标牌写「海拔 43.5 米」，意思是你脚下到 Geoid 的垂直距离是 43.5 米。但是 GPS 直接测出来的高程是<strong>椭球高（Ellipsoidal Height）</strong>，是从 WGS84 椭球面算起的。两者之差就是 Geoid 在该点的「起伏量」N：</p>
+
+<div class="formula">
+H<sub>正高</sub> = h<sub>椭球高</sub> &minus; N<sub>大地水准面差距</sub>
+</div>
+
+<p>在中国境内，N 的值大致在 &minus;20 米到 +20 米之间（东北为负，青藏高原为正）。所以如果你直接用 GPS 高程当「海拔」，在某些地区能差出几十米，施工标高可能直接出错。EGM2008 和 EGM96 是两个最常用的全球 Geoid 模型，可以从 NGA 的网站免费下载。</p>
+
+<h2>3. 地理坐标系 (GCS) vs 投影坐标系 (PCS)</h2>
+
+<p>理解了地球形状，我们正式进入 GIS 坐标系的两大阵营：<strong>地理坐标系（Geographic Coordinate System, GCS）</strong> 和 <strong>投影坐标系（Projected Coordinate System, PCS）</strong>。很多初学者分不清两者，但这是 GIS 最基本的区分。</p>
+
+<table>
+<thead><tr><th>对比项</th><th>地理坐标系 GCS</th><th>投影坐标系 PCS</th></tr></thead>
+<tbody>
+<tr><td><strong>坐标形式</strong></td><td>经度、纬度 (λ, φ)</td><td>东偏、北偏 (X/Easting, Y/Northing)</td></tr>
+<tr><td><strong>单位</strong></td><td>度（或度分秒）</td><td>米（有时是英尺）</td></tr>
+<tr><td><strong>所在空间</strong></td><td>三维椭球表面</td><td>二维平面</td></tr>
+<tr><td><strong>是否有变形</strong></td><td>无（直接描述球面位置）</td><td>一定有（投影必然变形）</td></tr>
+<tr><td><strong>距离计算</strong></td><td>需要大圆公式/Vincenty</td><td>直接欧几里得距离</td></tr>
+<tr><td><strong>面积计算</strong></td><td>需要椭球面积公式</td><td>直接 Shoelace 公式（但有缩放误差）</td></tr>
+<tr><td><strong>适用尺度</strong></td><td>全球、跨洲</td><td>区域、城市、工程</td></tr>
+<tr><td><strong>典型例子</strong></td><td>WGS84 (EPSG:4326)</td><td>UTM 50N (EPSG:32650)</td></tr>
+</tbody>
+</table>
+
+<h3>什么时候用 GCS，什么时候用 PCS？</h3>
+
+<p>经验法则：<strong>存储数据用 GCS，分析计算用 PCS。</strong></p>
+
+<p>具体来说：</p>
+<ul>
+  <li>全球尺度的数据交换、底图服务、数据存档——用 GCS（一般是 WGS84）。因为它通用、无偏见、不依赖特定区域。</li>
+  <li>需要测量距离、面积、缓冲区、叠加分析——用 PCS。因为只有在平面坐标系里，「这个圆的半径是 500 米」才是一个有意义的语句。在经纬度下，你没法直接画一个「500 米半径」的圆，因为经度 1 度在赤道是 111 km，在北纬 60 度只有 55 km。</li>
+  <li>制作打印地图——通常转到 PCS，便于控制比例尺和版面。</li>
+</ul>
+
+<div class="warn">
+  <p><strong>常见误区</strong>：很多人在 GIS 软件里直接对 WGS84 坐标的要素做「计算几何&rarr;面积」，结果单位显示「平方度」——这是完全没有物理意义的。1 平方度在赤道约等于 12321 km²，在高纬度地区又完全不同。面积计算前，请务必投影到 PCS（或者使用软件的「椭球面积」选项）。</p>
+</div>
+
+<h2>4. 三种投影族：圆柱、圆锥、方位</h2>
+
+<p>地图投影的本质是一个数学问题：<strong>如何把三维曲面（椭球）上的点对应到二维平面上？</strong> 数学家已经证明，这件事情不可能完美做到——任何投影都会产生某种变形。你要么牺牲面积（让形状对），要么牺牲形状（让面积对），要么都牺牲一点求折中。</p>
+
+<p>虽然投影方法有上百种，但大多数都可以归类到三个大家族，它们的区别在于「用什么形状的可展开曲面去贴着地球」：</p>
+
+<h3>圆柱投影 Cylindrical Projection</h3>
+
+<p>想象把一张纸卷成圆筒包住地球，让它沿着赤道相切（或者切两条纬线）。然后把地球上的点按照某种规则「投」到圆筒上，再把圆筒展开摊平。这就是圆柱投影。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/68/Cylindrical_Projection_basics.svg" alt="圆柱投影原理示意图">
+<p class="caption">圆柱投影：以地球自转轴为圆柱轴，纬线变成水平线，经线变成垂直线 (来源：Wikimedia Commons)</p>
+
+<p><strong>特征</strong>：经线和纬线都变成直线，且相互垂直。在标准纬线附近变形最小，离得越远变形越大。到两极时，纬线被「拉伸」成和赤道一样长，形状和面积畸变都趋于无穷。</p>
+
+<p><strong>典型代表</strong>：墨卡托投影、Web 墨卡托、横轴墨卡托（UTM 的基础）、高斯克吕格。</p>
+
+<p><strong>适合</strong>：中低纬度地区、航海导航、全球在线地图服务。</p>
+
+<h3>圆锥投影 Conic Projection</h3>
+
+<p>这次把纸卷成圆锥形，顶点对着地球某一极，让圆锥面沿着一条纬线（切圆锥）或两条纬线（割圆锥）与地球接触。然后把点投到圆锥上，展开后就得到一个扇形区域。</p>
+
+<p><strong>特征</strong>：经线变成从圆锥顶点发出的放射状直线，纬线变成同心圆弧。在标准纬线附近变形最小，标准纬线之间变形往南北对称分布。</p>
+
+<p><strong>典型代表</strong>：Albers 等面积圆锥投影、Lambert 等角圆锥投影（LCC）。</p>
+
+<p><strong>适合</strong>：中纬度东西向狭长的国家和地区——比如美国、中国、欧盟。中国小比例尺挂图很多都用 Albers 或 Lambert 等角圆锥投影。</p>
+
+<h3>方位投影 Azimuthal Projection</h3>
+
+<p>这次不卷纸了，直接用一张平面纸切在地球的某一点上（通常是某一极或任何感兴趣的中心点）。方位投影最大的特点是：<strong>从中心点到任意一点的方位角（bearing）和实际方位角相等</strong>，这对航空导航非常有用。</p>
+
+<p><strong>特征</strong>：中心点没有变形，离中心越远变形越大。经线（如果中心在极点）变成从中心发出的直线，纬线变成同心圆。</p>
+
+<p><strong>典型代表</strong>：极射赤面投影（Stereographic）、球心投影（Gnomonic）、兰伯特方位等面积投影（LAEA）、正射投影（Orthographic，就是看起来像地球从太空看过去的那种）。</p>
+
+<p><strong>适合</strong>：极地地区制图、航空航线规划、展示从某一点出发的全球视图。</p>
+
+<h3>变形特征总结</h3>
+
+<table>
+<thead><tr><th>投影族</th><th>无变形线</th><th>远离无变形线</th><th>最佳使用区域</th></tr></thead>
+<tbody>
+<tr><td>圆柱（正轴）</td><td>赤道（或两条对称纬线）</td><td>纬度越高变形越大</td><td>低纬度、赤道附近</td></tr>
+<tr><td>圆柱（横轴）</td><td>某条中央经线</td><td>东西方向越远变形越大</td><td>南北狭长地带</td></tr>
+<tr><td>圆锥</td><td>一条或两条标准纬线</td><td>南北方向偏离越远变形越大</td><td>中纬度东西狭长地区</td></tr>
+<tr><td>方位</td><td>中心点（切点）</td><td>距中心越远变形越大</td><td>极地、以某点为中心的区域</td></tr>
+</tbody>
+</table>
+
+<div class="info">
+  <h4>Tissot 变形椭圆：可视化变形的神器</h4>
+  <p>十九世纪法国数学家 Nicolas Tissot 发明了一种直观工具：在地图上均匀地画一圈小圆，看它们在投影后变成什么形状。如果投影是等角的（conformal），小圆依然是圆，但大小不同；如果是等面积的（equal-area），小圆变成椭圆但面积不变；如果两者都不是，小圆既变形又变大小。这种「变形指示椭圆」是快速评估投影变形的标准方法。</p>
+</div>
+
+<h2>5. 最常见的 5 种投影深度讲解</h2>
+
+<h3>5.1 墨卡托投影 Mercator</h3>
+
+<p>墨卡托投影由荷兰人 Gerardus Mercator 在 1569 年发明，是地图史上最有影响力的投影之一。它属于正轴圆柱等角投影（Normal Cylindrical Conformal Projection）。</p>
+
+<p><strong>核心特点</strong>：<strong>等角性（conformal）</strong>——任意两条线的夹角在投影前后保持不变。这意味着在地图上用直尺画的任何直线，都对应地球上一条「恒向线」（Rhumb line），也就是罗盘方位不变的航线。</p>
+
+<p>这对大航海时代的水手是神器：你只需要在地图上画一条直线，然后沿着这个罗盘方向一直开，就能到达目的地。不需要不停地调整航向。虽然这不是最短路线（大圆航线才是），但对帆船时代来说，「不用算」比「省一点距离」重要得多。</p>
+
+<div class="formula">
+x = R &middot; (λ &minus; λ<sub>0</sub>)<br>
+y = R &middot; ln [ tan(π/4 + φ/2) ]
+</div>
+
+<p>公式里 λ 是经度、φ 是纬度、R 是地球半径。注意 y 坐标含有对数函数，当 φ 趋近 ±90°（两极）时 y 趋于无穷——所以墨卡托投影地图永远画不到极点。通常会截断在 ±85° 左右。</p>
+
+<p><strong>致命缺点</strong>：高纬度地区面积被严重夸大。格陵兰在墨卡托地图上看起来和非洲差不多大，但实际面积只有非洲的 1/14。这种视觉欺骗在地缘政治讨论里经常被拿出来批判。</p>
+
+<h3>5.2 Web 墨卡托 Web Mercator (EPSG:3857)</h3>
+
+<p>2005 年 Google Maps 推出时，工程师们需要一种快速的投影方法，能在浏览器里流畅地缩放拖动。他们选了墨卡托，但做了一个偷懒的改动：<strong>把地球当成完美球体来计算</strong>（而不是椭球），这样公式更简单、计算更快。</p>
+
+<p>这个「准墨卡托」后来被标准化为 EPSG:3857，并成为了事实上的 Web 地图标准。OpenStreetMap、Bing Maps、Mapbox、高德地图、百度地图——所有的 Web 瓦片服务几乎都在用它。</p>
+
+<div class="warn">
+  <p><strong>为什么说它「不标准」？</strong> Web 墨卡托假设地球是正球形，但底层数据实际上是基于 WGS84 椭球的。这意味着严格来说它不是等角投影，并且和标准墨卡托（EPSG:3395）会有微小差异。在高精度测绘中，千万不要用 Web 墨卡托做距离或面积计算——专业软件通常会警告你「此坐标系仅用于显示」。</p>
+</div>
+
+<p><strong>坐标范围</strong>：Web 墨卡托的 x 和 y 都在 &plusmn;20037508.34 米之间，这个数字来自 π &middot; R（以赤道长度作为正方形边长）。瓦片层级 z=0 是一张覆盖全球的 256×256 像素图，每增加一层分辨率翻倍。</p>
+
+<h3>5.3 UTM 投影（Universal Transverse Mercator）</h3>
+
+<p>UTM 是美军在 1940 年代为精确制图开发的一套系统。它的核心思路是：既然墨卡托在高纬度变形大，那我们就把地球切成一条条南北向的窄带，每一条带里单独使用横轴墨卡托投影——这样每一带内部变形都很小。</p>
+
+<p>具体做法：<strong>把地球按经度每 6 度切一条带</strong>，从西经 180 度开始编号，共 60 条带（编号 1–60）。每一带都有一条「中央经线」，在这条线上比例尺是精确的 1：1（实际上官方会打一个 0.9996 的缩放因子让误差在边缘平均分布）。南北以赤道为界分 N/S，例如「UTM Zone 50N」指北半球第 50 带。</p>
+
+<table>
+<thead><tr><th>特性</th><th>描述</th></tr></thead>
+<tbody>
+<tr><td>投影类型</td><td>横轴墨卡托（Transverse Mercator）</td></tr>
+<tr><td>每带宽度</td><td>6 度经度</td></tr>
+<tr><td>中央经线缩放因子</td><td>0.9996</td></tr>
+<tr><td>假东（False Easting）</td><td>500000 米</td></tr>
+<tr><td>假北（False Northing）</td><td>北半球 0；南半球 10000000 米</td></tr>
+<tr><td>最大变形</td><td>带边缘约 0.04%</td></tr>
+<tr><td>中国覆盖范围</td><td>第 43&ndash;53 带（东经 72°&ndash;132°）</td></tr>
+</tbody>
+</table>
+
+<p><strong>适用场景</strong>：大比例尺测绘（1:10000 及更大）、军事地图、遥感影像处理、野外考察。几乎全球所有的 Landsat / Sentinel 影像都是按 UTM 带分发的。</p>
+
+<h3>5.4 高斯克吕格投影 Gauss–Krüger</h3>
+
+<p>高斯克吕格和 UTM 其实是「亲兄弟」——都基于高斯（Gauss）在 1820 年代提出的横轴墨卡托算法，后由德国人 Krüger 在 1912 年给出精确公式。区别在于参数：</p>
+
+<ul>
+  <li><strong>带宽</strong>：高斯克吕格用 3 度带或 6 度带（中国测绘规范里 1:25000 及小比例尺用 6 度带，1:10000 及大比例尺用 3 度带）。</li>
+  <li><strong>中央经线缩放因子</strong>：1.0000（精确等角），而 UTM 是 0.9996。</li>
+  <li><strong>编号方式</strong>：中国 6 度带从东经 75 度起算，编号从 13 带开始（覆盖到 23 带）；3 度带从东经 75 度起算，编号 25&ndash;45。</li>
+</ul>
+
+<p><strong>坐标的特殊写法</strong>：中国高斯克吕格坐标常写成「带号 + X + Y」的拼接格式，例如 <code>20 525983 4233455</code>，其中 20 是带号，525983 是「假东」（已加 500000），4233455 是北坐标。这让坐标看起来像一串很长的数字，初学者经常懵圈。</p>
+
+<h3>5.5 Lambert 等角圆锥投影 Lambert Conformal Conic (LCC)</h3>
+
+<p>1772 年 Johann Heinrich Lambert 提出这种圆锥投影，同时具备等角性（保角不保面积）。它使用两条标准纬线，在这两条纬线上没有任何变形，两线之间轻微缩小，两线之外略微放大。</p>
+
+<p><strong>核心优势</strong>：对于东西向狭长、位于中纬度的地区，Lambert 等角圆锥投影能用很简单的数学把整个区域装进一张地图里，同时保持各处形状正确。美国 48 个本土州、欧洲天气图、法国全境地形图——全都在用 LCC。</p>
+
+<p><strong>为什么气象图喜欢用它？</strong> 因为天气图里「锋面」「等压线」「风向」都是有方向含义的。LCC 保角意味着风向不会被地图投影扭曲，气象学家能直接看图说话。中国气象局出的天气图也是 LCC，标准纬线一般取 25°N 和 47°N。</p>
+
+<div class="formula">
+n = sin(φ<sub>0</sub>)   &larr; φ<sub>0</sub> 为标准纬线<br>
+F = cos(φ<sub>1</sub>) &middot; tan<sup>n</sup>(π/4 + φ<sub>1</sub>/2) / n<br>
+ρ = R &middot; F / tan<sup>n</sup>(π/4 + φ/2)<br>
+x = ρ &middot; sin[n(λ − λ<sub>0</sub>)]<br>
+y = ρ<sub>0</sub> − ρ &middot; cos[n(λ − λ<sub>0</sub>)]
+</div>
+
+<h2>6. 中国坐标系完整指南</h2>
+
+<p>中国的坐标系比大多数国家都复杂，因为涉及历史变迁、国家安全和商业惯例的多重叠加。一个做中国地区项目的 GIS 工程师，至少要面对六种坐标系。</p>
+
+<h3>6.1 北京 54（BJZ54）</h3>
+
+<p>新中国成立初期，我们的测绘技术基本上是苏联援助的。北京 54 坐标系采用的是苏联的 <strong>Krasovsky 1940 椭球</strong>，大地原点在普尔科沃（圣彼得堡附近）。虽然叫「北京」，但它其实是一个以苏联原点延伸过来的坐标系。</p>
+
+<p>北京 54 在 1954 年正式启用，伴随了中国整个计划经济时代的测绘工作。大量 1980 年代以前的地形图、地籍图、规划图都是北京 54 的。它的缺点很明显：原点远离中国，整个国家都在这套坐标系的「边缘」，累积误差大（在中国境内最大可达几十米）。</p>
+
+<h3>6.2 西安 80（GDZ80）</h3>
+
+<p>1978 年国家决定启用新的坐标系，采用国际大地测量协会推荐的 <strong>IAG-75 椭球</strong>，大地原点设在陕西泾阳县永乐镇。这就是「西安 80」（也叫「1980 西安坐标系」）。它在 1980 年代后期全面替代了北京 54。</p>
+
+<p>西安 80 的精度比北京 54 有明显提升，而且原点就在中国境内，局部精度更好。但它仍然是一个「参心坐标系」（以一个靠近中国的点为中心），不是严格的地心坐标系，和 GPS 定位结果对接起来依然麻烦。</p>
+
+<h3>6.3 CGCS2000（国家 2000 大地坐标系）</h3>
+
+<p>2008 年 7 月 1 日，国家正式启用 <strong>2000 国家大地坐标系（China Geodetic Coordinate System 2000，CGCS2000）</strong>，这是中国第一个地心坐标系。它采用 GRS80 椭球，原点在地球质量中心，Z 轴指向地极参考点，和 WGS84 在水平方向上基本重合（差异在厘米级以内）。</p>
+
+<p>从 2008 年起，所有新生产的地图和测绘数据都应该使用 CGCS2000。老数据通过「坐标转换参数」从北京 54 或西安 80 批量转换。EPSG 代码 4490 就是 CGCS2000 的地理坐标系。</p>
+
+<h3>6.4 WGS84</h3>
+
+<p>WGS84（World Geodetic System 1984）是美国国防部为 GPS 建立的全球坐标系，也是当今国际上最广泛使用的坐标系。所有消费级 GPS 设备、大部分遥感卫星、OpenStreetMap、Google Maps 全球版——默认都是 WGS84。</p>
+
+<p>WGS84 和 CGCS2000 在水平方向上的差异通常小于 10 厘米，对绝大多数应用场景可以视为等价。但在厘米级精度的项目（如精细测绘、工程放样）中仍需严格转换。</p>
+
+<h3>6.5 GCJ-02 火星坐标系</h3>
+
+<p>这里就到了中国 GIS 圈最「玄学」的部分。<strong>GCJ-02</strong>（GCJ 据说是「国测局」的拼音缩写）是中国国家测绘局 2002 年制定的一套「加密坐标系」。任何在中国大陆境内向公众发布的地图服务——高德、腾讯、谷歌中国、百度——<strong>根据法规都必须使用 GCJ-02 或其衍生坐标系</strong>。</p>
+
+<p>所谓「加密」，就是在 WGS84 的真实经纬度上加一个非线性的偏移量，让它偏离真实位置几十米到几百米。这个偏移量：</p>
+<ul>
+  <li>是<strong>确定性</strong>的，同一个 WGS84 坐标总是偏移到同一个 GCJ-02 坐标；</li>
+  <li>是<strong>非线性</strong>的，不同地方偏移量不同，而且方向不定（大致沿西南方向但不完全）；</li>
+  <li>偏移量<strong>连续且可微</strong>，所以线要素还是连续的；</li>
+  <li><strong>只在中国大陆境内生效</strong>，境外（含港澳台）的坐标保持原样；</li>
+  <li>官方的加密算法<strong>从未公开</strong>，但网络上早已流传出来若干「反向工程」版本，精度据说能到 1&ndash;2 米。</li>
+</ul>
+
+<div class="info">
+  <h4>GCJ-02 加偏算法的简化原理</h4>
+  <p>流传出来的加密算法大致是：先判断坐标是否在中国境内（简单的矩形范围判断），如果是，则根据输入的 (lon, lat) 计算两个与位置相关的伪随机偏移量 dLon 和 dLat。这两个偏移量是经度、纬度的多项式函数加上若干个 sin 和 sqrt 的组合，最后再叠加一个和纬度相关的椭球修正。反向转换（GCJ-02 → WGS84）没有解析解，通常用迭代法逼近。</p>
+</div>
+
+<h3>6.6 BD-09 百度坐标系</h3>
+
+<p>百度在 GCJ-02 的基础上又加了一层加密，得到 <strong>BD-09</strong>。转换方式是先把 GCJ-02 坐标转到极坐标，再叠加一个基于三角函数的偏移。结果是 BD-09 相对 WGS84 的总偏移量更大（几百米级）。</p>
+
+<p>百度这么做的官方解释是「保护用户隐私和数据安全」，实际效果是：<strong>如果你同时用百度地图和高德地图，两家的 POI 坐标是不能互相混用的</strong>。做多源数据融合的时候必须先统一到同一个坐标系。</p>
+
+<h3>中国坐标系总对比</h3>
+
+<table>
+<thead><tr><th>坐标系</th><th>类型</th><th>椭球</th><th>启用时间</th><th>典型用途</th><th>EPSG</th></tr></thead>
+<tbody>
+<tr><td>北京 54</td><td>参心</td><td>Krasovsky 1940</td><td>1954&ndash;2008</td><td>老地形图、老地籍</td><td>4214</td></tr>
+<tr><td>西安 80</td><td>参心</td><td>IAG-75</td><td>1980&ndash;2008</td><td>1980&ndash;2008 年测绘</td><td>4610</td></tr>
+<tr><td>CGCS2000</td><td>地心</td><td>GRS80</td><td>2008&ndash;</td><td>官方法定标准</td><td>4490</td></tr>
+<tr><td>WGS84</td><td>地心</td><td>WGS84</td><td>1984&ndash;</td><td>GPS、国际</td><td>4326</td></tr>
+<tr><td>GCJ-02</td><td>加密</td><td>WGS84 基础</td><td>2002&ndash;</td><td>高德/腾讯/谷歌中国</td><td>无</td></tr>
+<tr><td>BD-09</td><td>加密</td><td>GCJ-02 基础</td><td>2010&ndash;</td><td>百度地图</td><td>无</td></tr>
+</tbody>
+</table>
+
+<div class="ref">
+  注意 GCJ-02 和 BD-09 都没有官方 EPSG 代码，因为它们不是国际认可的测量坐标系。在开源软件中处理这两个坐标系时，通常需要单独的转换库（如 Python 的 coord-convert 或 JavaScript 的 gcoord）。
+</div>
+
+<h2>7. EPSG 代码体系</h2>
+
+<p>EPSG（European Petroleum Survey Group，欧洲石油调查组织）原本是一个由石油公司组成的技术委员会。1985 年，他们为了在跨国项目里能对齐坐标，整理出一个包含几千个坐标系的数据库，每个坐标系都分配一个唯一整数 ID。后来这个数据库被开源社区和 OGC 广泛采纳，成为事实上的国际标准。EPSG 在 2005 年被国际石油天然气生产商协会（OGP，现 IOGP）接管维护，但名字没改。</p>
+
+<p>今天，当你在 QGIS 里选坐标系、在 PostGIS 里插入几何、在 GDAL 里调用 <code>-t_srs</code> 参数时，背后都是 EPSG 代码在起作用。一个坐标系只要给出 EPSG 代码，所有支持它的软件就能准确地还原出椭球、基准、投影参数、单位等全部信息。</p>
+
+<h3>必须记住的几个 EPSG 代码</h3>
+
+<table>
+<thead><tr><th>EPSG</th><th>名称</th><th>类型</th><th>用途</th></tr></thead>
+<tbody>
+<tr><td><strong>4326</strong></td><td>WGS 84</td><td>GCS</td><td>全球通用经纬度</td></tr>
+<tr><td><strong>3857</strong></td><td>WGS 84 / Pseudo-Mercator</td><td>PCS</td><td>Web 地图瓦片（Google/OSM）</td></tr>
+<tr><td><strong>4490</strong></td><td>China Geodetic Coordinate System 2000</td><td>GCS</td><td>中国官方 CGCS2000 地理</td></tr>
+<tr><td>4479</td><td>CGCS2000 / Gauss–Krüger CM 120E</td><td>PCS</td><td>CGCS2000 高斯 6 度带</td></tr>
+<tr><td><strong>32649</strong></td><td>WGS 84 / UTM zone 49N</td><td>PCS</td><td>中国西部（成都、重庆、西藏）</td></tr>
+<tr><td><strong>32650</strong></td><td>WGS 84 / UTM zone 50N</td><td>PCS</td><td>北京、上海以西</td></tr>
+<tr><td>32651</td><td>WGS 84 / UTM zone 51N</td><td>PCS</td><td>东北、华东沿海</td></tr>
+<tr><td>4214</td><td>Beijing 1954</td><td>GCS</td><td>北京 54 地理</td></tr>
+<tr><td>4610</td><td>Xian 1980</td><td>GCS</td><td>西安 80 地理</td></tr>
+<tr><td>2436&ndash;2442</td><td>Beijing 54 / 3-degree Gauss-Kruger</td><td>PCS</td><td>北京 54 高斯 3 度带</td></tr>
+<tr><td>4269</td><td>NAD83</td><td>GCS</td><td>北美大陆地理</td></tr>
+<tr><td>3035</td><td>ETRS89 / LAEA Europe</td><td>PCS</td><td>欧洲等面积统计制图</td></tr>
+</tbody>
+</table>
+
+<h3>如何查询 EPSG 代码</h3>
+
+<p>最方便的工具是 <a href="https://epsg.io" target="_blank">epsg.io</a>，这是一个开源的 EPSG 数据库前端。你可以：</p>
+<ul>
+  <li>按名称搜索（比如输入 "CGCS2000"、"UTM zone 50"）；</li>
+  <li>按位置搜索（点击地图某个位置，它会推荐最合适的几个投影）；</li>
+  <li>查看每个代码的 PROJ 字符串、WKT、WKT2 等各种描述格式；</li>
+  <li>在线做坐标转换（单点）。</li>
+</ul>
+
+<p>另一个权威来源是 <a href="https://epsg.org" target="_blank">epsg.org</a>（IOGP 官网），它有完整的注册表但界面不太友好。对于中国坐标系的补充，可以参考国家测绘地理信息局发布的技术文档。</p>
+
+<h2>8. 坐标转换实操</h2>
+
+<p>理论说了这么多，实际怎么做坐标转换？下面是几个主流工具的用法。</p>
+
+<h3>8.1 ArcGIS Pro：Project 工具</h3>
+
+<p>ArcGIS Pro 里坐标转换的标准工具是 <strong>Project</strong>（数据管理工具箱&rarr;投影和变换）。流程：</p>
+<ol>
+  <li>确保输入要素类已经设置了正确的源坐标系（右键&rarr;属性&rarr;坐标系）；</li>
+  <li>打开 Project 工具，选择输入图层；</li>
+  <li>选择目标坐标系；</li>
+  <li>如果涉及跨基准面转换（如北京 54 &rarr; CGCS2000），要选「地理（坐标）变换」参数。ArcGIS 会列出可用的变换方法，中国境内推荐使用 "Beijing_1954_To_CGCS2000_1"（三参数）或由当地测绘部门提供的七参数；</li>
+  <li>运行即可。</li>
+</ol>
+
+<h3>8.2 QGIS：Reproject Layer</h3>
+
+<p>QGIS 里对应的工具是 <strong>Reproject Layer</strong>（处理工具箱&rarr;Vector general）。或者你也可以直接右键图层&rarr;导出&rarr;另存为，在对话框里选新的 CRS。QGIS 默认使用 PROJ 库做转换，对主流坐标系支持很好。对于北京 54/西安 80 到 CGCS2000 的转换，QGIS 需要你手动输入七参数（或用 GridShift 文件）。</p>
+
+<h3>8.3 Python + pyproj</h3>
+
+<p>pyproj 是 PROJ 库的 Python 绑定，是 GIS 脚本里最常用的坐标转换工具：</p>
+
+<div class="formula">
+from pyproj import Transformer<br><br>
+# WGS84 经纬度 → Web Mercator<br>
+tf = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)<br>
+x, y = tf.transform(116.3974, 39.9093)  # 北京<br>
+print(x, y)  # 约 12957772, 4852834<br><br>
+# WGS84 → UTM Zone 50N<br>
+tf2 = Transformer.from_crs("EPSG:4326", "EPSG:32650", always_xy=True)<br>
+easting, northing = tf2.transform(116.3974, 39.9093)<br><br>
+# 批量转换（快很多）<br>
+lons = [116.3974, 121.4737, 113.2644]<br>
+lats = [39.9093,  31.2304,  23.1291]<br>
+xs, ys = tf.transform(lons, lats)
+</div>
+
+<p>几个关键点：</p>
+<ul>
+  <li><strong>always_xy=True</strong> 必须加，否则 pyproj 会按照每个 CRS 「官方定义」的轴顺序返回结果。对于 EPSG:4326，官方定义是 (纬度, 经度)，但我们习惯 (经度, 纬度)——加了这个参数就强制统一为 (x, y) 顺序；</li>
+  <li>Transformer 是可复用的，创建一次后可以反复调用；</li>
+  <li>对于中国 GCJ-02/BD-09 的转换，pyproj 不支持，需要用专门的第三方库（比如 <code>eviltransform</code> 或 <code>coord-convert</code>）。</li>
+</ul>
+
+<h3>8.4 GDAL 命令行 ogr2ogr</h3>
+
+<p>对于批处理或者脚本化流水线，GDAL 的 <code>ogr2ogr</code> 是最快的选择：</p>
+
+<div class="formula">
+# 把 WGS84 的 shapefile 转成 UTM Zone 50N<br>
+ogr2ogr -t_srs EPSG:32650 out_utm.shp in_wgs84.shp<br><br>
+# 同时指定源坐标系（当原文件没有 .prj 时）<br>
+ogr2ogr -s_srs EPSG:4326 -t_srs EPSG:3857 out.geojson in.geojson<br><br>
+# 批量转换一个目录下所有 shapefile<br>
+for f in *.shp; do<br>
+&nbsp;&nbsp;ogr2ogr -t_srs EPSG:4490 "out_$f" "$f"<br>
+done
+</div>
+
+<p>对栅格数据则用 <code>gdalwarp</code>：</p>
+
+<div class="formula">
+gdalwarp -t_srs EPSG:32650 -r bilinear in.tif out_utm.tif
+</div>
+
+<h3>8.5 水平基准 vs 垂直基准：最容易漏的一环</h3>
+
+<div class="warn">
+  <h4>坐标转换时别忘了高程基准！</h4>
+  <p>我们讨论的坐标系转换几乎都只处理水平位置 (x, y)。但在工程测量里，高程的基准也很重要：中国现在用的是 <strong>1985 国家高程基准</strong>，之前用的是 <strong>1956 黄海高程</strong>，两者相差约 29 毫米；香港用「香港主水准基面」；部分工程独立用「假设高程」。如果你把一份 1956 基准的数据直接叠加到 1985 基准的 DEM 上，不做改正，高程就会系统性错 3 厘米——对高铁、地铁、管线工程来说这是不可接受的。</p>
+  <p style="margin-top:.8rem;margin-bottom:0">另外，GPS 原始输出的「椭球高」和实际的「海拔高」（正高）之间差 Geoid 起伏 N，这个已经在前面讲过。做工程时务必分清楚拿到的是哪种高程。</p>
+</div>
+
+<h2>9. 视频学习推荐</h2>
+
+<p>读完上面的内容，如果你想进一步巩固，以下是几个质量很高的视频教程。</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Esri 官方坐标系教程</h4>
+    <p>Esri 官方的「Understanding Coordinate Systems and Map Projections」系列。从基础概念讲到 ArcGIS Pro 里的实际操作，是英文内容里最系统、最严谨的一套。</p>
+    <p style="margin-top:.6rem"><a href="https://www.youtube.com/results?search_query=Esri+coordinate+systems+map+projections" target="_blank">&rarr; YouTube 搜索</a></p>
+  </div>
+  <div class="card">
+    <h4>QGIS CRS 实操教程</h4>
+    <p>开源社区的 QGIS 投影与坐标参考系统教程，手把手教你在 QGIS 里设置、转换、调试坐标系。对免费用户非常友好。</p>
+    <p style="margin-top:.6rem"><a href="https://www.youtube.com/results?search_query=QGIS+coordinate+reference+system+tutorial" target="_blank">&rarr; YouTube 搜索</a></p>
+  </div>
+  <div class="card">
+    <h4>中国 GCJ-02 偏移详解</h4>
+    <p>B 站上有一些技术博主专门讲过 GCJ-02 火星坐标系的由来、加密原理和实际转换方法，是理解中国特色坐标问题的最佳入口。</p>
+    <p style="margin-top:.6rem"><a href="https://search.bilibili.com/all?keyword=GCJ-02+%E7%81%AB%E6%98%9F%E5%9D%90%E6%A0%87%E7%B3%BB" target="_blank">&rarr; B 站搜索</a></p>
+  </div>
+</div>
+
+<h2>小结</h2>
+
+<p>坐标系是 GIS 所有工作的地基。看似枯燥，但一旦你真正理解了「地球形状 &rarr; 参考椭球 &rarr; 基准 &rarr; 地理坐标系 &rarr; 投影坐标系 &rarr; EPSG 代码」这条链条，你会发现以前令你困惑的很多问题——「为什么图层对不上」「为什么面积算出来是平方度」「为什么 GPS 测的高程和路牌不一样」——都有了一个清晰的答案。</p>
+
+<p>实务建议总结：</p>
+<ol>
+  <li><strong>每份数据都要问清楚坐标系</strong>。没有 .prj 的 shapefile 是耍流氓。</li>
+  <li><strong>存储用 GCS，分析用 PCS</strong>。全球数据存 WGS84，区域计算投到合适的 UTM 或 CGCS2000 高斯带。</li>
+  <li><strong>中国项目默认走 CGCS2000</strong>。新建项目不要再用北京 54 或西安 80 了。</li>
+  <li><strong>Web 地图注意 GCJ-02 和 BD-09</strong>。多源融合前先统一坐标系。</li>
+  <li><strong>精度要求高的项目用七参数或格网转换</strong>。三参数适用于一般应用，厘米级工程需要更严格的方法。</li>
+  <li><strong>Web Mercator 只能用来显示</strong>。不要拿它算距离和面积。</li>
+  <li><strong>记得分清椭球高和海拔</strong>。GPS 直接给你的是椭球高。</li>
+</ol>
+
+<p>下一章我们将深入矢量数据模型，看看 GIS 是如何用点、线、面这三种最基本的几何元素来描述真实世界的。</p>
+
+</article>
+
+<div class="ch-nav">
+  <a href="history.html">&larr; GIS 发展史</a>
+  <a href="../index.html">目录</a>
+  <a href="vector-data.html">矢量数据模型 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>

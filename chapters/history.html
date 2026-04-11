@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIS 发展简史：从霍乱地图到 GeoAI 时代 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 02</div>
+  <h1>GIS 发展简史</h1>
+  <p>从 1854 年伦敦那张拯救生命的霍乱地图，到今日的 GeoAI 与数字孪生地球——一部跨越一百七十年的故事。</p>
+  <div class="hero-img"><img src="../images/hero_earth_gis.png" alt="GIS 发展简史"></div>
+</div>
+
+<article class="content">
+
+<h2>序章：1854 年伦敦，一张地图拯救了生命</h2>
+
+<p>让我们把时间倒回到维多利亚时代的伦敦。那是 1854 年 8 月末的一个闷热夜晚，苏豪区（Soho）宽街（Broad Street）附近弥漫着一种令人作呕的气味。短短几天之内，这条街周围陆续有数百人出现剧烈腹泻、脱水、皮肤发青——这是霍乱典型的症状。一个星期内，这一小片街区死去了超过五百人，整个社区陷入了恐慌。</p>
+
+<p>在那个年代，主流医学界坚信霍乱是由"瘴气"（miasma）——也就是从腐烂有机物中散发出来的污浊空气——传播的。这套理论听起来直观合理，却完全错误。当政府卫生官员忙着烧艾草、喷香料的时候，一位名叫 <strong>约翰·斯诺（John Snow）</strong>的麻醉科医生却提出了一个不那么受欢迎的假设：霍乱不是空气里飘来的，而是喝进肚子里的——具体来说，是饮用水里混进了病人的排泄物。</p>
+
+<p>为了证明这个离经叛道的想法，斯诺做了一件今天看起来理所当然、但在当时却是革命性的事情：他拿出一张伦敦的街道地图，开始在上面标记每一例死亡病例。他挨家挨户走访，询问死者家属最近从哪里取水、喝的是哪口井的水、家里有没有装自己的蓄水池。他把每一个死亡病例用一根黑色的短条画在对应的房屋位置上，然后把这些短条在图纸上堆叠起来。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Snow-cholera-map-1.jpg" alt="John Snow 1854 年伦敦霍乱地图">
+<div class="caption">John Snow 在 1854 年绘制的伦敦苏豪区霍乱死亡分布图。每条黑色小短条代表一例死亡。图片来源：Wikipedia（公有领域）</div>
+
+<p>地图画完的那一刻，答案几乎是跳出来的。黑色的短条像一条河流一样，密集地汇聚在宽街的一个水泵附近，越靠近水泵越密，越远越稀。更有说服力的是那些"反例"：水泵旁边的一家啤酒厂几乎没人得病——因为工人们喝的是啤酒而不是水；一所位于远处的济贫院死亡率也异常低，因为它有自己独立的水井；还有一位住在远离苏豪的老妇人却死于霍乱，斯诺追查下去才发现，她因为怀念年轻时苏豪那口井的水味，每天让人专门去宽街打水送来。</p>
+
+<p>斯诺拿着这张地图去找当地教区委员会，要求他们拆掉宽街水泵的手柄。委员会半信半疑，但是耐不住疫情愈演愈烈，终于同意了。水泵手柄被拆下的那天之后，新增病例急剧下降。事后人们在那口井的旁边挖出了一个被粪便污染的化粪池——正是霍乱弧菌进入饮用水的源头。</p>
+
+<p>今天，几乎所有 GIS 教材都会把约翰·斯诺的这张地图放在第一章作为开场。原因很简单：它几乎完美地展示了 GIS 最核心的思想——<strong>把空间数据和属性数据结合起来，用地理位置作为"索引"进行分析，从而揭示出表格和文字永远也说不清的模式</strong>。在斯诺之前，人们当然也画地图，但他是历史上第一个明确地把"地图"当作"分析工具"而不仅仅是"记录工具"的人。这也是为什么他被后世尊为"流行病学之父"，同时也被 GIS 学界视作空间分析思想的精神祖先。</p>
+
+<div class="ref">
+参考：Wikipedia: "John Snow" / "1854 Broad Street cholera outbreak"。本节为作者基于历史事实的原创叙述。
+</div>
+
+<h2>第一阶段 (1950s–1960s)：计算机时代的黎明</h2>
+
+<p>从斯诺到真正意义上的"计算机化地理信息系统"，中间隔了整整一百年。在这一百年里，制图学（cartography）本身在缓慢进步——航空摄影测量、等值线、专题地图等技术逐渐成熟——但地图依然是"用笔画在纸上的艺术品"。直到二战之后，两样东西的到来改变了一切：<strong>电子计算机</strong>和<strong>政府对土地资源的迫切统计需求</strong>。</p>
+
+<h3>Whirlwind 与最早的计算机制图实验</h3>
+
+<p>1950 年代，美国麻省理工学院（MIT）的 Whirlwind 计算机是当时世界上最先进的实时交互式电子计算机之一。工程师们很快就意识到，既然 Whirlwind 能够在阴极射线管（CRT）上画出雷达航迹，那它应该也能画地图。早期的计算机制图研究者们使用打孔卡输入坐标，让计算机在示波器或者行式打印机上用字符组合的方式"打印"出简易的等值线图。这些图在今天看来粗糙得难以入眼，但它们回答了一个关键问题：<strong>地图是可以用离散数字表示并由机器生成的</strong>。</p>
+
+<h3>Tobler 与地理学第一定律</h3>
+
+<p>1960 年代，一位名叫 <strong>瓦尔多·托布勒（Waldo R. Tobler）</strong>的美国地理学家正在密歇根大学和后来的加州大学圣芭芭拉分校做一件看起来近乎疯狂的事情——他要给地理学找一条"定律"。地理学作为一门传统上偏向描述的学科，一直缺少像物理学那样可以被公式化的普适规律。1970 年，Tobler 在一篇关于底特律人口模拟的论文中轻描淡写地写下了一句话，后来被全世界地理学家奉为圭臬：</p>
+
+<div class="formula">
+"Everything is related to everything else, but near things are more related than distant things."<br>
+"一切事物都与其他事物相关，但近处的事物比远处的事物更相关。"<br>
+—— Waldo Tobler, 1970（地理学第一定律）
+</div>
+
+<p>这句话看起来像是常识，但它其实是整个 GIS 空间分析理论的地基。今天我们做的所有空间插值（克里金法、反距离权重）、空间自相关（Moran's I）、地理加权回归（GWR）——它们在数学上能够成立，根本原因就在于"近处的值比远处的值更相关"这一简单的事实。Tobler 本人同时也是数字地图投影和计算机制图的先驱，他写过许多关于如何用计算机生成投影的关键论文，影响了整整一代地理学者。</p>
+
+<h3>哈佛计算机图形与空间分析实验室</h3>
+
+<p>与此同时，大洋另一边的哈佛大学正在悄悄地孕育着 GIS 的"摇篮"。1965 年，建筑师兼城市规划师 <strong>霍华德·费舍尔（Howard T. Fisher）</strong>在福特基金会的资助下，在哈佛设计研究生院创立了著名的"<strong>哈佛计算机图形与空间分析实验室</strong>"（Harvard Laboratory for Computer Graphics and Spatial Analysis）。费舍尔本人并不是计算机科学家，他是一个对"如何让规划师用好地图"极度着迷的建筑师。他想做的事情很朴素：让普通研究人员不用学习编程就能生成专题地图。</p>
+
+<p>他的第一个产品叫做 <strong>SYMAP</strong>——Synagraphic Mapping System 的缩写。SYMAP 运行在大型机上，使用打印机字符（而不是图形终端）输出灰度等值线图。它的输入是一串坐标加数值，输出是一页用 <code>*</code>、<code>+</code>、<code>.</code> 等字符堆叠出来的粗糙"栅格地图"。就是这样一个看上去像怀旧艺术的软件，在 1960 年代末到 1970 年代初被全世界数百所大学和政府机构使用，许多后来成为 GIS 行业领袖的人——包括后面要登场的杰克·丹杰蒙德（Jack Dangermond）——都是在哈佛实验室里第一次接触到"用计算机做地图"这件事的。</p>
+
+<p>哈佛实验室在 GIS 历史上的地位，大概相当于贝尔实验室对通信、施乐 PARC 对个人计算机。它不仅产出了 SYMAP、GRID、ODYSSEY 等一系列开创性软件，更重要的是它培养了一整代相信"地图应该数字化、应该可以被分析"的年轻人。</p>
+
+<div class="ref">
+参考：Wikipedia: "Harvard Laboratory for Computer Graphics and Spatial Analysis" / "Waldo R. Tobler" / "SYMAP"。
+</div>
+
+<h2>GIS 之父 Roger Tomlinson 与 CGIS（1963–1968）</h2>
+
+<p>如果说哈佛实验室是"GIS 思想的摇篮"，那么<strong>加拿大地理信息系统（Canada Geographic Information System, CGIS）</strong>就是"GIS 作为一个完整工程的诞生地"。而这一切的灵魂人物，是一位名叫<strong>罗杰·汤姆林森（Roger F. Tomlinson）</strong>的英国地理学家。</p>
+
+<h3>一次飞行中的灵感</h3>
+
+<p>故事要从 1960 年代初说起。汤姆林森当时在加拿大一家航空测量公司工作，公司接到了一个来自加拿大林业部门的大活儿——评估东非肯尼亚的土地适宜性。这项工作按照传统方法做下来需要把几十张不同主题的地图（土壤、坡度、降水、植被、土地利用）一张张用透明纸叠起来，人工比对每一格的组合——慢得要命，贵得离谱。汤姆林森算了一笔账：用人工方法做完整个加拿大的土地适宜性评估，光人力成本就要花几百万加元，要几十年才能做完。</p>
+
+<p>在一次从渥太华飞往多伦多的航班上，汤姆林森和邻座聊起这个难题。对方恰好是加拿大农业部的官员，正在为<strong>《加拿大土地调查》（Canada Land Inventory, CLI）</strong>项目发愁——这是一个要把加拿大所有可利用土地按照农业、林业、休闲、野生动物四类潜力打分的庞大国家项目。两个人越聊越兴奋：如果把地图"数字化"、输入计算机，让机器来做叠加运算，会不会更快？</p>
+
+<p>这次对话改变了整个地理学的历史。</p>
+
+<h3>CGIS 的诞生</h3>
+
+<p>1963 年，加拿大政府正式立项支持汤姆林森领导开发一套全新的计算机化地图系统，服务于加拿大土地调查。这个系统后来被命名为 <strong>Canada Geographic Information System</strong>（加拿大地理信息系统），也就是 <strong>CGIS</strong>。它是历史上第一个真正意义上的、可运行的 GIS。"地理信息系统"这个专有名词本身，也是汤姆林森在 1968 年前后的一系列论文和报告中正式提出并推广开来的。</p>
+
+<p>CGIS 解决了许多直到今天都仍是 GIS 核心的技术难题：</p>
+
+<ul>
+  <li><strong>矢量-栅格扫描数字化</strong>——他们发明了一种鼓式扫描仪，可以把纸质地图上的线条扫描成计算机可以处理的坐标；</li>
+  <li><strong>拓扑数据结构</strong>——用"多边形-弧段-节点"的抽象来描述地图要素，避免重复存储共享的边界；</li>
+  <li><strong>分层管理</strong>——土壤、植被、坡度、气候是互相独立的"图层"，可以单独处理也可以叠加分析；</li>
+  <li><strong>空间索引</strong>——为了在当时很弱小的硬盘上快速查找要素，他们开创了最早的空间索引方法。</li>
+</ul>
+
+<p>到 1971 年，CGIS 已经处理了整个加拿大超过一千万平方公里的土地数据，这在当时是人类历史上规模最大的空间数据库。CGIS 一直持续运行到 1990 年代，为加拿大的国家土地政策、自然保护区划定、林业管理提供了几十年的决策支持。</p>
+
+<h3>为什么 Tomlinson 被称为"GIS 之父"</h3>
+
+<div class="info">
+<h4>Roger Tomlinson（1933–2014）的三大贡献</h4>
+<p>① 他主持开发了世界上第一个可运行的 GIS——CGIS；<br>
+② 他在 1968 年前后首次明确使用并定义了"Geographic Information System"这个术语；<br>
+③ 他后来在联合国教科文组织（UNESCO）工作期间，将 GIS 的理念和方法推广到了全世界几十个发展中国家。</p>
+</div>
+
+<p>汤姆林森晚年在渥太华开了自己的咨询公司，继续为各国政府和大型企业提供 GIS 战略规划。他还推动了国际地理联合会（IGU）下设 GIS 委员会，是国际 GIS 学术组织的奠基人之一。2014 年他去世时，全球 GIS 行业几乎同时为他致哀——这是一个行业对自己创始人的深切敬意。</p>
+
+<div class="ref">
+参考：Wikipedia: "Roger Tomlinson" / "Canada Geographic Information System"。
+</div>
+
+<h2>商业 GIS 的诞生：Jack Dangermond 与 Esri（1969）</h2>
+
+<p>1968 年，一个名叫 <strong>杰克·丹杰蒙德（Jack Dangermond）</strong>的年轻人从哈佛设计研究生院毕业了。他的专业是景观建筑与城市设计，但是他在哈佛计算机图形实验室做访问学者的那段时间彻底改变了他的人生方向——他看到了 SYMAP，看到了计算机如何把规划师从繁琐的手工叠图中解放出来，从此便认定这就是自己要一辈子做的事。</p>
+
+<p>1969 年，他和妻子 Laura 回到了加州红兰兹（Redlands）的老家，用家里一万美元的积蓄成立了一家小咨询公司，名字叫 <strong>Environmental Systems Research Institute</strong>，直译是"环境系统研究所"，也就是后来无人不知的 <strong>Esri</strong>（读作 /ˈɛzri/）。公司最初只有两三个人，做的也不是软件，而是帮助地方政府用 SYMAP 这样的工具做土地利用规划报告。</p>
+
+<h3>从咨询到平台</h3>
+
+<p>1970 年代末到 1980 年代，Esri 在承接大量规划项目的过程中积累了自己的一套内部软件工具。1981 年，他们决定把这套工具打磨成产品对外发布，这就是历史上第一个商业 GIS 软件包 <strong>ARC/INFO</strong>。名字里的 "ARC" 代表矢量弧段数据结构，"INFO" 则是当时用于属性数据的关系数据库。ARC/INFO 最初运行在 PRIME 小型机上，后来移植到 UNIX 工作站，再后来移植到 Windows NT，最终演化为今天大家熟悉的 <strong>ArcGIS</strong> 平台。</p>
+
+<p>到 1990 年代中期，ArcGIS 已经成为全世界政府、军方、规划、石油、林业、环境行业事实上的标准。从联邦应急管理到城市给排水，从国家公园管理到农业部的土壤普查，几乎没有哪个领域离得开 Esri 的软件。根据各类行业统计，Esri 在专业 GIS 软件市场的份额长期保持在 40% 以上，是无可争议的龙头。</p>
+
+<h3>一个不上市的帝国</h3>
+
+<div class="card-grid">
+<div class="card">
+<h4>Jack Dangermond 的信条</h4>
+<p>"GIS 不是软件，GIS 是一种看待世界的方式。"他至今坚持 Esri 不上市，因为他相信一个以地球为客户的公司不能被季度财报绑架。</p>
+</div>
+<div class="card">
+<h4>红兰兹"圣地"</h4>
+<p>Esri 总部所在的加州红兰兹被全球 GIS 人戏称为"GIS 麦加"。每年七月的 Esri 用户大会吸引全球两万多人参加，是行业最大的盛会。</p>
+</div>
+</div>
+
+<p>Jack Dangermond 的个人风格非常特别：他至今（2026 年）已经八十多岁，仍然每天出现在 Esri 总部办公，亲自和客户、员工、学生交流。他和夫人把大部分个人财富捐给了环保和保护地购买基金——包括 2017 年向自然保护协会捐赠的 1.65 亿美元、用以收购并永久保护加州海岸线的 Jack and Laura Dangermond Preserve。对他来说，GIS 从一开始就不是一门生意，而是一种保护地球的工具。</p>
+
+<div class="ref">
+参考：Wikipedia: "Esri" / "Jack Dangermond" / "ArcGIS"。
+</div>
+
+<h2>开源 GIS 运动（1982–至今）</h2>
+
+<p>当 Esri 在商业 GIS 世界里高歌猛进时，另一条平行的河流也在缓缓流淌——那就是开源 GIS 运动。它的故事比许多人想象的要早得多。</p>
+
+<h3>GRASS：来自军队的意外礼物</h3>
+
+<p>1982 年，美国陆军工程兵团建设工程研究实验室（USA-CERL）开始开发一套用于军事基地土地管理的栅格 GIS，名字叫 <strong>GRASS</strong>（Geographic Resources Analysis Support System，地理资源分析支持系统）。它的初衷是帮助军方评估基地周边环境影响、规划演习场地、监控土壤侵蚀。由于是美国政府出资开发的软件，根据联邦政策，它从一开始就是"公有领域"的——任何人都可以免费获取和修改。</p>
+
+<p>1990 年代中期，军队逐渐退出了 GRASS 的日常维护，这个本有可能就此消失的软件却被全球的学术社区接了过来。1999 年，以意大利特伦托的 Markus Neteler 为代表的一群学者正式接管了 GRASS 的开发，并把它按照 GPL 协议重新发布。从此 GRASS 成为世界上最老牌的开源 GIS，至今依然活跃，是许多遥感和水文研究者的首选工具。</p>
+
+<h3>QGIS：普通人的 GIS</h3>
+
+<p>2002 年，一位名叫 <strong>Gary Sherman</strong>的美国开发者在读研究生期间想在 Linux 上看一下 PostGIS 数据库里的空间数据，却发现当时几乎没有像样的可视化工具。于是他决定自己写一个，起名 <strong>Quantum GIS</strong>，后来缩写成 <strong>QGIS</strong>。最早的版本简单得几乎令人发笑——只能显示 shapefile——但它有一个决定性的优点：<strong>免费、跨平台、容易上手</strong>。</p>
+
+<p>QGIS 社区在接下来的二十多年里以惊人的速度成长。到 2020 年代，它已经成为全世界非营利组织、发展中国家政府、大学课堂、独立研究者的默认 GIS。它的功能从最初的 shapefile 查看器扩展到了完整的矢量栅格处理、地图出版、Python 脚本、插件市场、三维可视化等等几乎所有专业 GIS 能做的事情。更重要的是，它彻底降低了 GIS 的门槛：一个非洲农村的 NGO 工作人员，只要有一台二手笔记本电脑，就可以开始做真正的空间分析。</p>
+
+<h3>OSGeo 基金会与开源星系</h3>
+
+<p>2006 年，全球开源 GIS 社区终于决定把分散的项目整合起来，在芝加哥成立了<strong>开源地理空间基金会（Open Source Geospatial Foundation, OSGeo）</strong>。OSGeo 目前孵化和支持的项目包括 QGIS、GRASS、PostGIS、GDAL、MapServer、GeoServer、OpenLayers、deck.gl 等等——它们共同构成了今天 GIS 世界的"免费底盘"，几乎所有商业 GIS 产品、包括 Esri 自己，背后都在使用 GDAL 这样的开源库来读写空间数据格式。</p>
+
+<div class="info">
+<h4>为什么开源对 GIS 如此重要？</h4>
+<p>地理信息本质上是一种<strong>公共产品</strong>——道路、河流、边界、人口的数据服务于整个社会。如果这些数据的处理工具被少数公司垄断，那么谁掌握了软件谁就掌握了地理真理的解释权。开源 GIS 保证了任何人——无论国家、收入、语言——都有平等的能力去分析自己所处的土地。这是一种技术层面的地理正义。</p>
+</div>
+
+<div class="ref">
+参考：Wikipedia: "GRASS GIS" / "QGIS" / "Open Source Geospatial Foundation"。
+</div>
+
+<h2>中国 GIS 的发展：从陈述彭到超图</h2>
+
+<p>中国的 GIS 故事起步虽晚，却走了一条极具中国特色的追赶之路。它的开端可以追溯到一位在特殊历史时期依然坚持学术梦想的科学家——<strong>陈述彭</strong>院士。</p>
+
+<h3>陈述彭与"中国 GIS 之父"</h3>
+
+<p>陈述彭（1920–2008）先生是中国现代遥感与地理信息系统事业的奠基人。他早年毕业于浙江大学史地系，后来进入中国科学院地理研究所工作。1970 年代末，当中国刚刚打开国门，他敏锐地意识到计算机制图和遥感技术即将彻底重塑地理学，于是在国内积极倡导建立中国自己的遥感与 GIS 研究体系。</p>
+
+<p>1985 年，在他的推动下，中国科学院成立了"资源与环境信息系统国家重点实验室"（LREIS），这是中国第一个国家级的 GIS 研究机构，至今依然是国内 GIS 学术界的核心阵地之一。陈述彭同时也是国家"863 计划"信息获取与处理技术领域的重要推动者，他主导了中国最早的一批遥感应用项目，包括黄河流域土壤侵蚀调查、三峡工程环境影响评估等。因为这些开创性工作，他被国内学界普遍尊称为"中国 GIS 之父"。</p>
+
+<h3>武测与测绘高校的黄金一代</h3>
+
+<p>与此同时，位于武汉的原<strong>武汉测绘科技大学</strong>（简称"武测"，2000 年并入武汉大学成为现在的武汉大学测绘学院与遥感信息工程学院等单位）也成为了中国 GIS 教育的核心。包括<strong>李德仁</strong>院士、<strong>宁津生</strong>院士、<strong>龚健雅</strong>院士在内的一大批测绘学者，从 1980 年代起就开始在摄影测量、遥感、GIS 理论和软件方面做出国际级贡献。李德仁院士因在高精度摄影测量和对地观测方面的工作，获得了国际摄影测量与遥感学会颁发的布洛克金奖——这是该领域的最高荣誉之一。武汉大学测绘遥感学科至今在 QS 世界学科排名中长期位居全球前列。</p>
+
+<h3>SuperMap 的诞生</h3>
+
+<p>1997 年，在中国科学院地理所的支持下，一个由<strong>钟耳顺</strong>带领的研究团队从实验室里走了出来，成立了 <strong>北京超图软件股份有限公司（SuperMap）</strong>。超图是中国第一家真正意义上的国产 GIS 平台公司，它的目标非常明确：做中国自己的 ArcGIS。在那个正版 ArcGIS 一套要几十万人民币、很多地方政府根本买不起的年代，超图的意义不言而喻。</p>
+
+<p>经过二十多年的发展，SuperMap 如今已经是亚洲地区最大的本土 GIS 平台厂商，产品覆盖桌面、服务器、Web、移动端、三维、云等完整栈。它提出的"二三维一体化 GIS"理念在国际上也颇具影响力，2015 年前后在国际会议上屡被 Esri 等同行引用。</p>
+
+<h3>MapGIS 与国产 GIS 的群星</h3>
+
+<p>比超图更早成立的还有总部位于武汉的<strong>中地数码（MapGIS）</strong>——它由中国工程院院士<strong>吴信才</strong>教授在中国地质大学（武汉）孵化，起源于 1980 年代的"MAPCAD"地质制图系统，是国产 GIS 的另一面旗帜。此外还有中科院地理所系出的 <strong>GeoStar</strong>、以及后来大量出现的专业领域 GIS 厂商，共同支撑起了中国 GIS 产业的生态。</p>
+
+<h3>北斗：天上的"中国版 GPS"</h3>
+
+<p>真正让普通中国人感受到"空间信息"就在身边的，是<strong>北斗卫星导航系统</strong>。北斗计划从 1990 年代启动，分三期实施：北斗一号（2000 年开始区域覆盖）、北斗二号（2012 年完成亚太覆盖）、北斗三号（2020 年 7 月完成全球组网）。到 2020 年北斗三号最后一颗卫星在西昌发射场升空的那一刻，中国成为继美国（GPS）、俄罗斯（GLONASS）、欧盟（Galileo）之后第四个拥有独立全球卫星导航系统的国家——而且北斗的部分指标如全球定位精度、短报文能力在某些场景下已经超越了 GPS。</p>
+
+<p>今天，你用手机打车、外卖配送、农机无人作业、电力巡检、森林防火，几乎每一个动作背后都有北斗在默默工作。北斗不是纯粹的 GIS，但它是让 GIS 真正走进中国人日常生活的那根"定位神经"。</p>
+
+<div class="ref">
+参考：Wikipedia: "陈述彭" / "SuperMap" / "MapGIS" / "BeiDou Navigation Satellite System" / "李德仁"。
+</div>
+
+<h2>遥感时代（1972–至今）</h2>
+
+<p>GIS 的历史如果少了"遥感"这条线，就等于一副戴了近视眼镜但没插电的眼镜——看得到形状，却看不到动态。遥感的故事要从 1972 年 7 月 23 日那一枚划过加州晴空的火箭说起。</p>
+
+<h3>Landsat-1：地球观测的奇点</h3>
+
+<p>那一天，<strong>美国航空航天局（NASA）和美国地质调查局（USGS）联合发射了 ERTS-1 卫星</strong>，也就是后来改名为 <strong>Landsat-1</strong> 的那颗。它搭载的多光谱扫描仪（MSS）可以以大约 80 米的分辨率、在四个不同波段同时拍摄地球表面。这颗卫星从根本上改变了人类观察自己星球的方式——它第一次让人们可以定期地、客观地、全球一致地看到森林在消失、冰川在退缩、城市在扩张、农田在变色。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/2016_Miami_by_OLI_Landsat_8_Nasa.jpg" alt="Landsat 8 拍摄的迈阿密">
+<div class="caption">Landsat-8 OLI 传感器在 2016 年拍摄的美国迈阿密地区图像。Landsat 系列已经为地球拍了超过五十年的"体检照片"。图片来源：NASA / USGS（公有领域）</div>
+
+<p>从 1972 年至今，Landsat 计划已经陆续发射了 9 颗卫星（Landsat 6 发射失败），最新的 Landsat 9 在 2021 年升空。它积累的影像档案是人类历史上规模最大、时间跨度最长的一套地球观测数据集，并且在 2008 年由 USGS 宣布全部免费开放——这一纸命令直接催生了后面 Google Earth Engine 时代的所有全球变化研究。</p>
+
+<h3>Sentinel：欧洲的"免费午餐"</h3>
+
+<p>跟进的是欧洲。欧洲航天局（ESA）从 2014 年起陆续发射<strong>哨兵（Sentinel）</strong>系列卫星，属于欧盟哥白尼计划的核心。Sentinel-1 是 C 波段合成孔径雷达（SAR），可以穿云透雨看地表位移，厘米级的形变测量彻底改变了火山、地震、滑坡监测；Sentinel-2 是多光谱光学卫星，10 米分辨率、5 天重访周期、13 个波段——堪称今天最好用的免费光学数据；Sentinel-5P 则是大气成分监测卫星，每天画出全球二氧化氮、甲烷分布图。Sentinel 所有数据和 Landsat 一样全部免费开放。</p>
+
+<h3>中国的高分与商业遥感崛起</h3>
+
+<p>中国自 2010 年启动"<strong>高分辨率对地观测系统（简称"高分"）</strong>"重大科技专项以来，陆续发射了高分一号到高分十四号等一系列卫星，涵盖光学、SAR、高光谱、视频等多种模式，其中高分二号实现了亚米级分辨率，高分三号是中国首颗 C 波段 SAR。进入 2020 年代，中国还涌现出吉林一号、长光卫星、二十一世纪空间、中科星图等一批商业遥感企业，构建起了从数据获取到应用服务的完整产业链。</p>
+
+<h3>从"遥感影像"到"全球实时监测"</h3>
+
+<p>遥感与 GIS 合流的真正意义在于：今天你想知道亚马逊热带雨林昨天又消失了多少平方公里，或者巴黎周边的小麦什么时候会成熟，答案已经不需要等上半年，而是在几天甚至几小时之内就可以得到。这在 Landsat-1 升空的那一年是完全不可想象的。</p>
+
+<div class="ref">
+参考：Wikipedia: "Landsat program" / "Landsat 1" / "Copernicus Programme" / "Sentinel-2" / "高分专项"。
+</div>
+
+<h2>Web GIS 革命（2005）</h2>
+
+<p>2005 年是 GIS 历史上具有分水岭意义的一年。这一年发生了两件大事，彻底把 GIS 从专业人员的办公桌推到了亿万普通用户的指尖。</p>
+
+<h3>Google Earth 与 Google Maps</h3>
+
+<p>2005 年 2 月，Google 收购了一家叫 Where 2 Technologies 的小公司，并在此基础上推出了 <strong>Google Maps</strong>——一个运行在浏览器里的、可以拖拽平移、可以搜索地点、可以查看卫星图的交互式地图。同年 6 月，Google 又收购了 Keyhole 公司（后者原本是 CIA 投资的一家三维地球浏览器公司），并把它改名发布为 <strong>Google Earth</strong>，免费提供给全世界用户。第一次，普通人只需下载一个免费软件，就可以从太空拉近到自家屋顶看看自家车停在哪里。</p>
+
+<p>Google Maps 在发布当年还做了另一件影响深远的事情——它开放了 <strong>Maps API</strong>。开发者可以免费地在自己的网页里嵌入 Google 地图，还可以在上面标注自己的数据。很快全世界开始涌现各种各样的"地图混搭（mashup）"：房产地图、犯罪地图、公交地图、约会地图……这被许多人视作 Web 2.0 时代真正的起点之一。</p>
+
+<h3>新一代 Web 地图生态</h3>
+
+<p>Google 开了头，后来者迅速跟进。<strong>OpenStreetMap（OSM）</strong>于 2004 年启动，目标是"为地球做一份由志愿者共同维护的、完全自由的地图"。到 2020 年代，OSM 已经有上千万贡献者、覆盖全球几乎每一个角落，数据质量在许多地区已超过商业地图。<strong>Mapbox</strong> 于 2010 年成立，把"可定制矢量地图"推向了新的高度，让每个品牌都能有自己独特风格的地图。<strong>CesiumJS</strong> 于 2011 年开源，成为全球 WebGIS 三维可视化事实上的标准，无数数字孪生城市项目背后跑的就是它。</p>
+
+<div class="ref">
+参考：Wikipedia: "Google Maps" / "Google Earth" / "OpenStreetMap" / "Mapbox" / "Cesium (software)"。
+</div>
+
+<h2>移动与大数据时代（2010s）</h2>
+
+<p>进入 2010 年代，两件事情让 GIS 的用户数量从几百万膨胀到几十亿。第一件是<strong>智能手机</strong>。iPhone 从 2007 年开始带着 GPS 芯片、加速度计、指南针走进口袋，Android 紧随其后。每一部手机都成了一个小型移动 GIS 客户端。从打车、外卖、共享单车到运动记录、健身地图、约会匹配，所有人的所有移动都开始生成"地理足迹"。这就是所谓的 <strong>LBS（Location-Based Services，基于位置的服务）</strong>爆发。</p>
+
+<p>第二件是<strong>云计算和大数据</strong>。传统 GIS 一直以"下载数据到本地处理"为主，但当遥感数据以 PB 为单位增长时，这种模式已经完全不可持续。2010 年 Google 发布了 <strong>Google Earth Engine</strong>——一个把 Landsat、Sentinel 等 PB 级遥感档案直接部署在 Google 数据中心、供研究者用 JavaScript 或 Python 远程调用的云计算平台。你不用下载任何数据，只要写几行代码，就可以在几分钟内分析整个非洲大陆过去 30 年的森林覆盖变化。这个平台成为了全球变化研究、气候科学、生态学的必备工具，为无数顶级论文提供了底层算力。</p>
+
+<p>与此同时，以 <strong>PostGIS + GeoServer + OpenLayers + Leaflet</strong> 为代表的开源技术栈彻底成熟，几乎任何一个中小公司都可以用完全免费的软件搭建起自己的 Web GIS 系统。Python 的 <strong>GeoPandas、Rasterio、Shapely</strong>等库让数据科学家不再需要打开专业 GIS 软件就可以进行空间分析。GIS 的知识从"少数人的技能"变成了"任何数据从业者都会一点"的通用素养。</p>
+
+<h2>GeoAI 与数字孪生时代（2020s）</h2>
+
+<p>到了 2020 年代，我们今天所处的这个时代，GIS 正在经历它诞生以来最深刻的一次范式转移——被人工智能全面重塑。</p>
+
+<h3>Prithvi：地理空间的基础模型</h3>
+
+<p>2023 年，<strong>IBM 与 NASA</strong> 联合发布了 <strong>Prithvi</strong>（梵语中的"地球"），这是世界上第一个开源的地理空间基础大模型。它使用 Landsat 和 Sentinel 的多光谱时序影像进行自监督预训练，参数规模最初在几亿量级，后续版本已经扩展到几十亿。Prithvi 可以被微调用于洪水识别、火灾预警、作物分类、碳汇估算等等下游任务，且在小样本情况下性能显著超越传统有监督模型。它的意义在于把"遥感解译"从一个一个单独训练的小模型，变成了一个统一的大脑，可以像 ChatGPT 处理文字那样处理遥感影像。</p>
+
+<h3>实景三维中国</h3>
+
+<p>在中国，"实景三维中国"是自然资源部于 2022 年正式启动的国家战略。它的目标是在未来几年内用倾斜摄影、激光雷达、卫星影像等多源数据，构建覆盖全国、可以精确到米级甚至厘米级的三维数字国土。这不仅是一份"新时代的地图"，更是未来智慧城市、国土空间规划、数字孪生流域等一切应用的底板。到 2024 年，全国已经有数十个省份和城市完成了实景三维建设。</p>
+
+<h3>NeRF 与 3D Gaussian Splatting 革命</h3>
+
+<p>2020 年 Mildenhall 等人发表的 <strong>NeRF（Neural Radiance Fields）</strong>论文和 2023 年的 <strong>3D Gaussian Splatting</strong> 彻底重写了三维重建的游戏规则。过去要用激光雷达 + 多视图立体匹配才能做出的精细三维模型，现在只需要几十张手机照片加上一块消费级 GPU，就可以在几分钟内重建出可以任意视角漫游的照片级真实场景。这对 GIS 的影响将是深远的——未来的"实景三维"也许不再是预先扫描好的模型，而是从社交媒体上源源不断的照片里被 AI 即时重建出来的活地图。</p>
+
+<h3>GeoGPT 与地理大语言模型</h3>
+
+<p>在另一条轨道上，大语言模型也正在以惊人的速度被注入 GIS。浙江大学等机构 2023 年发布的 <strong>GeoGPT</strong> 尝试让 LLM 直接理解地理查询并自动调用 GIS 工具链进行分析；国内外多个团队在研究将 LLM 与栅格、矢量、三维场景结合的 "<strong>空间智能体（spatial agents）</strong>"；GitHub 上涌现出大量能用自然语言对话式完成空间分析的开源项目。你很可能正在见证的是，传统 GIS 那种"点几十次菜单、写几十行脚本"的交互方式即将被"告诉 AI 你想要什么"所取代。</p>
+
+<div class="info">
+<h4>GeoAI 时代的一句话总结</h4>
+<p>过去我们花了 60 年把地图数字化、矢量化、云化；而未来 10 年的主题是——让地图会思考，会推理，会自己回答"为什么"。</p>
+</div>
+
+<div class="ref">
+参考：Wikipedia: "Neural radiance field" / "Gaussian splatting"；IBM / NASA "Prithvi" 模型卡；自然资源部"实景三维中国"官方文件。
+</div>
+
+<h2>尾声：下一个十年，地球将被"完全数字化"</h2>
+
+<p>回望这趟旅程：从约翰·斯诺在伦敦街头画出那三百多条黑色的死亡小短条，到今天 Prithvi 用几十亿参数吞吐全球遥感数据——整整 172 年。这一路上 GIS 从一个"用地图帮医生找水源"的手工技艺，变成了"用数学和计算机描述整颗行星"的庞大学科，再到今天正逐渐变成"会推理的人工智能体"。</p>
+
+<p>那么下一个十年会怎样？几乎可以确定的是，以下几条主线将会继续加速：</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>地理基础模型的普及</h4>
+<p>就像 GPT-4 改变了文本处理一样，Prithvi、SpectralGPT、SatMAE 等地理基础模型会成为未来所有遥感和空间分析的默认底座。专业知识会被封装进这些模型，而不是每个团队都重新造轮子。</p>
+</div>
+<div class="card">
+<h4>GIS + AR/VR</h4>
+<p>苹果的 Vision Pro 和国内厂商的空间计算头显让"戴着眼镜看真实城市叠加数字信息"从科幻变成产品。未来的城市规划会议也许不再围着屏幕开，而是走进一个全息的"城市副本"里讨论。</p>
+</div>
+<div class="card">
+<h4>数字孪生地球</h4>
+<p>欧盟的"Destination Earth"计划正在构建一个整颗地球的数字孪生体，用以模拟气候变化、极端天气、粮食安全等全球性问题。一旦这样的系统成熟，人类将第一次拥有"给整个星球做 A/B 测试"的能力。</p>
+</div>
+<div class="card">
+<h4>普通人的空间智能</h4>
+<p>GIS 正在变得越来越"看不见"。它会藏在每一个打车 App、每一次导航、每一次外卖 ETA 估算、每一次气候预警里。未来的 GIS 从业者不再只是"做地图的人"，而是所有与空间相关决策的幕后大脑。</p>
+</div>
+</div>
+
+<p>如果约翰·斯诺今天从 1854 年穿越过来，看到我们用手机导航、看无人驾驶汽车在街道上穿行、看卫星实时监测地球的每一个角落，他大概会惊讶得说不出话来。但是我相信他不会感到陌生——因为所有这一切，依然在回答他当年那个最朴素的问题：</p>
+
+<blockquote class="formula">
+"把数据放到地图上，我们就能看见别人看不见的东西。"
+</blockquote>
+
+<p>这，就是 GIS 从始至终的魂。</p>
+
+<div class="ref">
+本章参考综合：Wikipedia 相关条目；Longley 等《Geographic Information Science and Systems》；龚健雅《地理信息系统基础》；自然资源部公开文件；NASA/USGS/ESA 官方资料。全部历史叙述均为原创改写，事实部分以 Wikipedia 为主要参考源。
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="what-is-gis.html">&larr; 第 01 章 什么是 GIS</a>
+  <a href="../index.html">目录</a>
+  <a href="coordinate-systems.html">第 03 章 坐标系统 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>什么是 GIS？5 分钟快速入门 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.warn h4{color:var(--accent2);margin-top:0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+.card .emoji{font-size:1.6rem;display:block;margin-bottom:.5rem}
+
+/* Story block */
+.story{background:linear-gradient(135deg,rgba(0,229,176,.04),rgba(91,141,239,.04));border:1px solid rgba(0,229,176,.15);border-radius:16px;padding:1.8rem 2rem;margin:1.5rem 0;position:relative}
+.story::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--grad);border-radius:16px 0 0 16px}
+.story h4{color:var(--accent);margin-top:0;font-size:1.05rem;display:flex;align-items:center;gap:.6rem}
+.story h4 .num{font-family:var(--fm);font-size:.7rem;background:var(--accent);color:var(--bg);padding:.2rem .5rem;border-radius:4px}
+.story p{margin-bottom:.7rem}
+.story p:last-child{margin-bottom:0}
+
+/* Power card */
+.power{display:flex;gap:1.2rem;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.6rem;margin:1rem 0}
+.power .icon{flex-shrink:0;width:50px;height:50px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--bg);font-weight:800;font-family:var(--ff)}
+.power .body h4{margin:0 0 .4rem;color:var(--text);font-size:1rem}
+.power .body p{margin:0;font-size:.88rem}
+
+/* SVG diagram */
+.svg-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.5rem 0;text-align:center}
+.svg-wrap svg{max-width:100%;height:auto}
+
+/* Video card */
+.video-card{display:flex;gap:1.2rem;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;margin:1rem 0;align-items:center}
+.video-card .thumb{flex-shrink:0;width:140px;height:90px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,#0d1526);display:flex;align-items:center;justify-content:center;font-size:2rem;border:1px solid var(--border);position:relative;overflow:hidden}
+.video-card .thumb::after{content:'▶';position:absolute;color:var(--accent);font-size:1.8rem;text-shadow:0 2px 10px rgba(0,229,176,.4)}
+.video-card .info-body{flex:1;min-width:0}
+.video-card h4{margin:0 0 .4rem;color:var(--text);font-size:.95rem}
+.video-card p{margin:0 0 .8rem;font-size:.8rem;color:var(--text2)}
+.video-card .btn{display:inline-block;padding:.4rem .9rem;background:var(--accent);color:var(--bg);font-size:.75rem;font-weight:600;border-radius:6px;transition:all .2s}
+.video-card .btn:hover{background:var(--accent2);color:var(--bg)}
+.video-card .platform{font-family:var(--fm);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-left:.6rem}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}.video-card{flex-direction:column}.video-card .thumb{width:100%;height:140px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 01</div>
+  <h1>什么是 GIS？5 分钟快速入门</h1>
+  <p>从外卖、地图到疫情热力图 —— 你其实每天都在用 GIS，只是不知道它叫这个名字。这是一份写给完全零基础同学的友好入门指南。</p>
+  <div class="hero-img"><img src="../images/concept_gis_what.png" alt="什么是 GIS" onerror="this.onerror=null;this.src='../images/gis_layers_concept.png'"></div>
+</div>
+
+<article class="content">
+
+<h2>开场：三个你熟悉的小故事</h2>
+<p>在给你讲 GIS 的定义之前，我想先问你三个问题。它们看起来和地理信息系统毫无关系，但其实每一个背后都藏着 GIS 的身影。</p>
+
+<div class="story">
+  <h4><span class="num">故事 1</span>外卖员是怎么"读心术"般选中最快路线的？</h4>
+  <p>某个下雨的晚上，你饿得前胸贴后背，在 APP 上点了一份麻辣烫。下单后 28 分钟，骑手就敲响了你的家门 —— 他从 3 公里外的商家出发，穿过 5 个红绿灯、绕开一段施工的小巷、还避开了一个因为下雨而拥堵的十字路口。</p>
+  <p>这不是巧合，也不是骑手的神级记忆力。平台在下单那一刻，就把你家的坐标、商家的坐标、骑手的实时位置、每条道路的当前车速、红绿灯时长、甚至天气影响全部丢进了一个"地图大脑"。几毫秒之内，这个大脑计算出了几十条候选路线，挑出了最短、最不容易迟到的那一条。</p>
+  <p>这个"地图大脑"，就是 <strong>GIS（Geographic Information System，地理信息系统）</strong>的一种典型应用。</p>
+</div>
+
+<div class="story">
+  <h4><span class="num">故事 2</span>共享单车 APP 怎么知道你身边哪里有车？</h4>
+  <p>早上赶地铁，你打开共享单车 APP，屏幕上立刻出现一张地图，上面密密麻麻点缀着小车车图标。你看到离你 50 米的便利店门口停了 3 辆，拐角的小区门口有 1 辆，再远一点的公园门口有十几辆。你点了"预约"，APP 还帮你画了一条走过去的步行路线。</p>
+  <p>在这个过程里，GIS 做了很多事：它知道你现在在哪里、每一辆车的 GPS 位置、每个还车点的几何范围、从你到车点的最近步行路径，甚至还能根据历史数据预测"这辆车 3 分钟后可能还在不在"。</p>
+  <p>你看到的那张简洁的地图背后，其实是一个非常"忙碌"的空间数据库。</p>
+</div>
+
+<div class="story">
+  <h4><span class="num">故事 3</span>新闻里的疫情热力图是谁做出来的？</h4>
+  <p>2020 年以后，大家对"疫情地图"都不陌生了。打开新闻 APP，你会看到中国地图上不同省份染成不同的颜色，红色表示病例多，蓝色表示病例少；再放大到某个城市，甚至能精确到某个小区的感染情况。</p>
+  <p>这类地图的制作逻辑非常"GIS"：把来自医院、社区、交通部门的原始数据（谁在哪里、什么时候确诊）收集起来，加上每个地点的坐标，然后按行政边界做空间聚合，最后用颜色深浅可视化出来。GIS 在这里扮演的角色，就是把散落的表格数字"翻译"成了一眼就能看懂的空间故事。</p>
+</div>
+
+<p>看完这三个故事，你应该已经大概猜到 GIS 是个什么东西了 —— 它不是一个单独的 APP，也不是某个冷门的专业名词，而是现代生活里无处不在的一种"空间思维 + 技术工具"的组合。下面我们正式给它一个定义。</p>
+
+<h2>GIS 到底是什么？一句话定义</h2>
+
+<div class="info">
+  <h4>友好版定义</h4>
+  <p style="color:var(--text);font-size:1rem"><strong>GIS 就是：给每一个数据加上位置坐标，然后让这些数据在地图上对话。</strong></p>
+</div>
+
+<p>这句话听起来像废话，但它其实抓住了 GIS 的灵魂。传统的数据库里，一条记录可能是：<em>"张三，男，25 岁，工程师"</em>。而在 GIS 的世界里，这条记录会变成：<em>"张三，男，25 岁，工程师，经度 116.407，纬度 39.904"</em>。多了两个数字，整张 Excel 表就突然获得了"空间维度"，可以在地图上展示、分析、对比、计算。</p>
+
+<p>更学术一点的定义是：GIS 是一种用于<strong>采集、存储、管理、分析、可视化地理空间数据</strong>的计算机系统。它的核心能力是处理"带有位置信息"的数据，并且让这些数据之间可以发生空间层面的交互 —— 比如"离我最近的三家咖啡店在哪里"、"这块土地在哪条河的上游"、"明天这场暴雨会影响哪些街道"。</p>
+
+<h3>"图层蛋糕"：理解 GIS 最直观的比喻</h3>
+
+<p>想象你在切一块千层蛋糕：最上面是奶油，中间是水果，下面是海绵胚，最底下是托盘。每一层单独看都是一种食材，但叠在一起就组成了一块完整的甜品。</p>
+
+<p>GIS 的世界观和这块蛋糕几乎一模一样。同一个地区的信息被拆成了一层一层的"图层"（Layer）：道路是一层、建筑是一层、河流是一层、行政边界是一层、人口密度是一层、遥感卫星影像又是一层。每一层都是关于这片土地的一个"切片"。你可以随时打开或关掉某一层，也可以把几层叠在一起做分析。</p>
+
+<div class="svg-wrap">
+  <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#00e5b0" stop-opacity=".6"/><stop offset="1" stop-color="#5b8def" stop-opacity=".6"/></linearGradient>
+      <linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#f7b731" stop-opacity=".5"/><stop offset="1" stop-color="#e056a0" stop-opacity=".5"/></linearGradient>
+    </defs>
+    <g transform="translate(60,30)">
+      <g transform="skewX(-25)">
+        <rect x="0" y="0" width="380" height="50" fill="url(#g1)" stroke="#00e5b0" stroke-width="1.5" rx="4"/>
+        <text x="20" y="30" fill="#e4e8f1" font-family="Noto Sans SC" font-size="14">道路图层 Road</text>
+        <circle cx="120" cy="25" r="3" fill="#00e5b0"/><circle cx="200" cy="25" r="3" fill="#00e5b0"/><line x1="120" y1="25" x2="200" y2="25" stroke="#00e5b0" stroke-width="1.5"/>
+
+        <rect x="0" y="65" width="380" height="50" fill="url(#g2)" stroke="#f7b731" stroke-width="1.5" rx="4"/>
+        <text x="20" y="95" fill="#e4e8f1" font-family="Noto Sans SC" font-size="14">建筑图层 Building</text>
+        <rect x="140" y="80" width="20" height="20" fill="#f7b731" opacity=".7"/><rect x="170" y="82" width="16" height="18" fill="#f7b731" opacity=".7"/>
+
+        <rect x="0" y="130" width="380" height="50" fill="url(#g1)" stroke="#5b8def" stroke-width="1.5" rx="4"/>
+        <text x="20" y="160" fill="#e4e8f1" font-family="Noto Sans SC" font-size="14">河流图层 River</text>
+        <path d="M130,145 Q160,155 190,150 T230,155" stroke="#5b8def" stroke-width="2" fill="none"/>
+
+        <rect x="0" y="195" width="380" height="50" fill="url(#g2)" stroke="#e056a0" stroke-width="1.5" rx="4"/>
+        <text x="20" y="225" fill="#e4e8f1" font-family="Noto Sans SC" font-size="14">人口热力 Population</text>
+        <circle cx="150" cy="220" r="8" fill="#e056a0" opacity=".5"/><circle cx="180" cy="220" r="12" fill="#e056a0" opacity=".4"/>
+
+        <rect x="0" y="260" width="380" height="50" fill="#0d1526" stroke="#8b95a8" stroke-width="1.5" rx="4"/>
+        <text x="20" y="290" fill="#e4e8f1" font-family="Noto Sans SC" font-size="14">卫星底图 Basemap</text>
+      </g>
+    </g>
+    <text x="300" y="325" text-anchor="middle" fill="#8b95a8" font-family="JetBrains Mono" font-size="11">Layer Cake · 多层叠加 = 一张有故事的地图</text>
+  </svg>
+</div>
+
+<p>这就是为什么你在高德地图上可以自由地打开/关掉"实时路况"、"卫星影像"、"公交"、"积水点"等开关 —— 因为它们本来就是一层一层独立存放的数据。你每次勾选一个选项，地图"蛋糕"里就多出一层奶油。</p>
+
+<h3>一个更具体的小例子</h3>
+<p>假设你想在某个城市开一家奶茶店。你打开地图后会怎么找位置？大概率会这么想：</p>
+<ol>
+  <li>看看哪些地方<strong>人流多</strong>（人口图层）</li>
+  <li>避开<strong>已经有竞品</strong>的区域（POI 图层）</li>
+  <li>优先靠近<strong>地铁站</strong>（交通图层）</li>
+  <li>确认<strong>周边租金</strong>在可接受范围内（房产图层）</li>
+  <li>最好在<strong>学校或写字楼</strong>附近（土地利用图层）</li>
+</ol>
+<p>你看，你已经在不知不觉中做 GIS 分析了。你把五个图层叠在一起，找到同时满足所有条件的那个"甜点区域"。这种分析在 GIS 里有个专门的名字叫"选址分析（Site Selection）"，是商业地理学家的日常工作。</p>
+
+<img src="../images/gis_layers_concept.png" alt="GIS 图层叠加概念">
+<div class="caption">图：GIS 的图层叠加是最核心的思维方式</div>
+
+<h2>GIS 能做什么？10 个你每天都在用的 GIS 应用</h2>
+<p>好了，理论到此为止，我们来看点真实的。下面这 10 个应用，只要你是个正常使用智能手机的人，你至少用过 7 个。它们全都依赖 GIS。</p>
+
+<div class="card-grid">
+  <div class="card">
+    <span class="emoji">🗺️</span>
+    <h4>1. 导航地图</h4>
+    <p>高德、百度、腾讯地图 —— 它们是 GIS 最主流的消费级产品。路径规划、实时路况、步行导航、打车路线，全都是典型的空间分析。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">🛵</span>
+    <h4>2. 外卖配送</h4>
+    <p>美团、饿了么的运力调度系统本质上是一个超大规模的实时 GIS。它要同时处理几十万个骑手、商家、用户的位置，完成动态派单和路径规划。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">⛅</span>
+    <h4>3. 天气预报 APP</h4>
+    <p>"你所在的位置 15 分钟后将有小雨" —— 这是 GIS 和数值气象模型配合的结果。雷达回波图就是一张典型的栅格地图。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">📍</span>
+    <h4>4. 地图打卡社交</h4>
+    <p>小红书、大众点评上的"附近"和"地图模式"，让每一条笔记、每一家店都带着坐标。你刷的"同城"内容就是一次空间查询。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">🚕</span>
+    <h4>5. 网约车打车</h4>
+    <p>滴滴、曹操出行不仅要知道司机和乘客在哪里，还要实时预测每一辆车的到达时间（ETA），这是一个非常复杂的时空计算问题。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">🏠</span>
+    <h4>6. 租房买房</h4>
+    <p>贝壳、链家、安居客的"地图找房"功能，本质上是把房源数据空间化，让你能根据通勤时间、周边配套、学区边界来筛选。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">🚌</span>
+    <h4>7. 公交地铁出行</h4>
+    <p>"下一班地铁还有 3 分钟进站"、"从 A 站到 B 站需要换乘 2 次" —— 这背后是一个公共交通专用的时空网络数据库。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">🏃</span>
+    <h4>8. 运动轨迹记录</h4>
+    <p>Keep、悦跑圈、Strava 记录的跑步/骑行轨迹，本质就是一串带时间戳的 GPS 点，在 GIS 里被叫做"轨迹数据（trajectory）"。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">🚨</span>
+    <h4>9. 紧急预警推送</h4>
+    <p>地震预警、暴雨红色预警、台风路径图 —— 这些推送会根据你当前所在的网格精准发送，依赖的是空间订阅与空间触发。</p>
+  </div>
+  <div class="card">
+    <span class="emoji">🏛️</span>
+    <h4>10. 政务地图查询</h4>
+    <p>"天地图"、国土空间规划"一张图"、不动产信息查询，让你能在手机上查地块、查规划、查自然资源，这是最典型的政府 GIS。</p>
+  </div>
+</div>
+
+<div class="info">
+  <h4>意料之外的 GIS 应用</h4>
+  <p>除了这 10 个，GIS 还悄悄藏在很多你意想不到的地方：农业里的无人机植保（根据地块边界精准喷药）、物流里的路径优化（每天给快递员排送货顺序）、保险行业的风险评估（你家小区离活动断层多远）、甚至考古和电影拍摄的外景地选址。空间思维正在渗透到几乎所有行业。</p>
+</div>
+
+<h2>GIS 的两种核心数据：矢量 vs 栅格</h2>
+<p>如果你决定再往前走一小步，就会发现 GIS 里所有数据其实都可以分成两大家族：<strong>矢量（Vector）</strong>和<strong>栅格（Raster）</strong>。它们的差别用一个艺术比喻就能瞬间理解。</p>
+
+<div class="two-col">
+  <div>
+    <h3>矢量数据 = 画画</h3>
+    <p>想象你用铅笔在纸上画一张地图：先画一条弯曲的线表示河流，再画几个方块表示建筑，然后画一个多边形表示公园的边界。每一个要素都是一个<strong>明确的几何对象</strong>，有精确的顶点坐标。这就是矢量数据。</p>
+    <p>矢量有三种基本类型：<strong>点（Point）</strong>用来表示加油站、地铁站；<strong>线（Line）</strong>用来表示道路、河流；<strong>面（Polygon）</strong>用来表示行政区、湖泊。</p>
+    <p>优点是精度高、文件小、可以无限放大不失真；缺点是不适合表达连续变化的现象（比如气温、海拔）。</p>
+    <p>→ 想深入了解？看 <a href="vector-data.html">矢量数据专题</a></p>
+  </div>
+  <div>
+    <h3>栅格数据 = 拼马赛克</h3>
+    <p>现在换一种画法：你找来一堆大小相同的方格子，每个格子染上不同的颜色，从远处看就拼出了一张图。这就是栅格数据的思路 —— 用一个二维网格（grid），每个格子（pixel/cell）存储一个数值。</p>
+    <p>卫星影像、航拍照片、数字高程模型（DEM）、温度场、降雨量分布，几乎所有"连续变化的现象"都适合用栅格存储。</p>
+    <p>优点是表达力强、能描述任何连续量；缺点是文件巨大、几何精度受格子大小限制。</p>
+    <p>→ 想深入了解？看 <a href="raster-data.html">栅格数据专题</a></p>
+  </div>
+</div>
+
+<div class="warn">
+  <h4>小贴士</h4>
+  <p>在真实项目里，矢量和栅格几乎永远是搭配使用的。举个例子：用栅格存卫星影像当底图，再用矢量叠加道路和行政边界 —— 这也是你在导航 APP 里看到的"卫星图+道路线"模式。</p>
+</div>
+
+<h2>GIS 的五大"超能力"</h2>
+<p>把技术术语先放一边，我们用"超能力"的角度来重新看 GIS 到底厉害在哪里。</p>
+
+<div class="power">
+  <div class="icon">1</div>
+  <div class="body">
+    <h4>超能力 1：看见数据的空间关系</h4>
+    <p>一张 Excel 表格里的 10 万行销售数据，盯半小时也看不出规律。但如果把它画到地图上，你立刻能看到"北方省份增长快、南方省份停滞、海岸线沿线是爆发区"。GIS 让隐藏的空间模式瞬间现形 —— 这是人类大脑天生擅长的事，地图只是帮它打开了开关。</p>
+  </div>
+</div>
+
+<div class="power">
+  <div class="icon">2</div>
+  <div class="body">
+    <h4>超能力 2：算出最优路线和最优位置</h4>
+    <p>"从家到公司最快怎么走？"、"新开一家便利店开在哪条街最赚钱？"、"消防站布在哪里能覆盖最多居民？" —— 这些问题都可以被 GIS 建模成数学优化问题，在几秒内给出答案。人一辈子搞不明白的"最优解"，算法只需要喝一口咖啡的时间。</p>
+  </div>
+</div>
+
+<div class="power">
+  <div class="icon">3</div>
+  <div class="body">
+    <h4>超能力 3：预测事情将在哪里发生</h4>
+    <p>犯罪热点预测、疫情扩散预测、山火蔓延模拟、洪水淹没范围估计 —— GIS 可以把历史数据 + 空间规律 + 实时传感器数据结合起来，预测未来某个时间在空间上会发生什么。这是它从"描述世界"进化到"预测世界"的关键一步。</p>
+  </div>
+</div>
+
+<div class="power">
+  <div class="icon">4</div>
+  <div class="body">
+    <h4>超能力 4：把三维世界搬进计算机</h4>
+    <p>现代 GIS 已经不再是二维平面地图了。倾斜摄影、激光雷达（LiDAR）、NeRF、3D Gaussian Splatting 这些技术让我们可以把一整座城市、甚至一整个国家完整建成三维数字模型 —— 这就是最近非常火的"数字孪生"和"三维 GIS"。你可以在电脑里自由飞行、穿墙、拉开任何一栋楼的剖面。</p>
+  </div>
+</div>
+
+<div class="power">
+  <div class="icon">5</div>
+  <div class="body">
+    <h4>超能力 5：用地图讲故事</h4>
+    <p>最后这一条其实最容易被低估。一张制作精良的地图可以瞬间把复杂的议题说清楚：贫富分布、气候变化、选举结果、交通压力。新闻机构越来越喜欢用"交互式地图叙事（Story Map）"来做深度报道。GIS 不只是技术，它也是一种<strong>视觉传达的语言</strong>。</p>
+  </div>
+</div>
+
+<img src="../images/urban_planning.png" alt="城市规划中的 GIS">
+<div class="caption">图：城市规划是 GIS 的经典应用领域之一</div>
+
+<h2>我想学 GIS，从哪里开始？</h2>
+<p>如果你读到这里开始对 GIS 有兴趣了，恭喜你，你已经走完了最难的一步 —— 意识到这门学科的存在并且愿意了解它。接下来的路其实非常友好，因为 GIS 圈子有一个优点：几乎所有核心工具都是免费且开源的。</p>
+
+<h3>给零基础同学的 3 步建议</h3>
+<ol>
+  <li><strong>第一步：装一个 QGIS 玩起来。</strong>QGIS 是一款免费开源的桌面 GIS 软件，功能和商业软件 ArcGIS 差别不大。到官网下载安装后，随便找一份 shapefile 数据打开，花半小时把各种按钮点一遍，你就能摸到 GIS 的"手感"。</li>
+  <li><strong>第二步：做一个属于自己的小项目。</strong>不要一开始就埋头看教材。想一个你真正好奇的问题：比如"我城市的每个地铁站周围 500 米有多少家咖啡店？"、"我老家这 10 年城市扩张了多少？"，然后想办法用 GIS 把它答出来。项目驱动的学习是最快的。</li>
+  <li><strong>第三步：系统学一点基础知识。</strong>坐标系、投影、空间数据库、制图原理 —— 这些是 GIS 的"内功"。可以找一本大学本科教材翻一遍，或者跟着 MOOC 学一门入门课。不需要一上来就学得很深。</li>
+</ol>
+
+<p>这三步走下来大概 1~2 个月，你就已经比 99% 的人更懂 GIS 了。如果想走得更远，推荐去看我们的<a href="learning-resources.html">学习资源专题</a>，里面整理了从入门到进阶的完整学习路径、书单、在线课程、开源数据源、以及我个人推荐的几位值得关注的 GIS 博主。</p>
+
+<div class="info">
+  <h4>一个过来人的小建议</h4>
+  <p>不要担心"数学不好学不会"。GIS 的日常工作里，90% 的时间你用到的数学都不会超过高中水平。真正重要的是：<strong>你有没有空间直觉、愿不愿意动手、有没有解决问题的耐心</strong>。这三样具备了，GIS 很快就会变成你手里最顺手的工具之一。</p>
+</div>
+
+<h2>视频推荐：看比读更直观</h2>
+<p>如果你是视觉型学习者，下面这两段视频比这篇文章还要直观。第一个是 Esri（全球最大 GIS 软件公司）的官方英文介绍视频，讲述 GIS 如何在真实世界中发挥作用；第二个是 B 站上一位中文 UP 主的地理信息系统入门讲解，适合中文用户快速上手。</p>
+
+<a href="https://www.youtube.com/watch?v=LHxPqEp1QjA" target="_blank" rel="noopener" style="color:inherit">
+  <div class="video-card">
+    <div class="thumb"></div>
+    <div class="info-body">
+      <h4>What is GIS? <span class="platform">YouTube · Esri</span></h4>
+      <p>Esri 官方出品的英文入门视频。用三分钟的时间直观展示 GIS 在城市管理、环保、公共安全等领域的实际应用，画面精美、节奏紧凑，非常适合第一次接触 GIS 的朋友。</p>
+      <span class="btn">观看视频 &rarr;</span>
+    </div>
+  </div>
+</a>
+
+<a href="https://search.bilibili.com/all?keyword=%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F%E5%85%A5%E9%97%A8" target="_blank" rel="noopener" style="color:inherit">
+  <div class="video-card">
+    <div class="thumb"></div>
+    <div class="info-body">
+      <h4>地理信息系统入门（中文） <span class="platform">Bilibili</span></h4>
+      <p>B 站搜索"地理信息系统入门"可以找到多位 UP 主制作的中文入门课。内容覆盖 GIS 基础概念、常用软件、数据格式、以及案例演示，全中文讲解，对初学者非常友好。建议从播放量最高的几个视频开始看。</p>
+      <span class="btn">打开 B 站搜索 &rarr;</span>
+    </div>
+  </div>
+</a>
+
+<img src="../images/hero_earth_gis.png" alt="地球与 GIS">
+<div class="caption">图：GIS 的最终画布，是整个地球</div>
+
+<h2>最后几句话：为什么 GIS 值得你了解？</h2>
+<p>回到文章开头的三个小故事。当你点外卖、骑单车、刷疫情新闻的时候，你可能从来没想过这些日常体验的背后是一整套庞大的空间数据基础设施。这其实是现代技术的一种"魔法" —— 越是融入生活，越是隐形，最好的技术都是看不见的。</p>
+
+<p>但作为一个生活在 21 世纪的人，理解这些"看不见的底层"至少有三个好处：第一，你能更聪明地使用这些工具（知道它的能力边界，不会被惊艳也不会被迷惑）；第二，你会获得一种"空间思维"，看待任何现实问题都会多一个"在哪里"的维度，这是一种真正的认知升级；第三，如果你愿意，你完全有机会亲手用这些工具做出一些有趣的东西 —— 一张属于你的家乡地图、一次城市探索项目、一个社区服务工具。</p>
+
+<p>地理信息系统不是一个高高在上的学科，它是一种<strong>重新观察世界的方式</strong>。希望这篇 5 分钟入门文章，让你对 GIS 的大门产生了一点点好奇。下一章我们会讲讲 GIS 的发展历史 —— 从 1960 年代的一堆打孔卡片，到今天能实时渲染一整座城市的三维大模型，这门学科走过了一条非常精彩的路。</p>
+
+<img src="../images/emergency_gis.png" alt="GIS 在应急响应中的应用">
+<div class="caption">图：GIS 正在成为应对灾害和突发事件的关键工具</div>
+
+<div class="info">
+  <h4>本章要点回顾</h4>
+  <ul>
+    <li>GIS = 给数据加上位置坐标，让它们在地图上对话</li>
+    <li>核心思维是"图层叠加"：一个地区的信息被拆成多个独立图层灵活组合</li>
+    <li>数据分为两大家族：矢量（画画）和栅格（马赛克）</li>
+    <li>五大超能力：看关系、找最优、做预测、建三维、讲故事</li>
+    <li>入门路径：装 QGIS → 做小项目 → 系统学基础 → 持续实践</li>
+  </ul>
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="../index.html">&larr; 返回主页</a>
+  <a href="../index.html">目录</a>
+  <a href="history.html">GIS 发展历史 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>

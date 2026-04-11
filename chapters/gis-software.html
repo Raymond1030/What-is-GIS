@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIS 软件生态完整指南 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 07</div>
+  <h1>GIS 软件生态完整指南</h1>
+  <p>从商业巨头 ArcGIS 到开源标杆 QGIS，从云端遥感 GEE 到 Web 地图三剑客，全面盘点 15 款主流 GIS 软件的功能、价格、学习曲线与适用场景，帮助你做出明智的技术选型。</p>
+  <div class="hero-img"><img src="../images/webgis_dev.png" alt="GIS 软件生态完整指南"></div>
+</div>
+
+<article class="content">
+
+<!-- ============================================================ -->
+<!-- 第一节：概览 -->
+<!-- ============================================================ -->
+<h2>一、GIS 软件生态全景</h2>
+
+<p>地理信息系统软件经过半个多世纪的发展，已经从最初的科研工具演化为覆盖桌面、服务端、云端、移动端、前端的庞大生态系统。面对纷繁复杂的产品，初学者常常陷入选择困境：我应该学 ArcGIS 还是 QGIS？做遥感该用 ENVI 还是 Google Earth Engine？开发 Web 地图该选 Leaflet、Mapbox 还是 Cesium？本章将为你系统梳理当今主流 GIS 软件的定位、能力与成本，帮助你根据自身需求做出最合适的选择。</p>
+
+<p>从大类上看，GIS 软件可以划分为六个层次：<strong>桌面 GIS</strong>（ArcGIS Pro、QGIS、SuperMap iDesktop）用于数据编辑、制图与空间分析；<strong>服务端 GIS</strong>（ArcGIS Server、GeoServer、SuperMap iServer）负责发布地图服务；<strong>空间数据库</strong>（PostGIS、Oracle Spatial、SQL Server Spatial）存储海量空间数据；<strong>云端 GIS</strong>（Google Earth Engine、ArcGIS Online）提供弹性计算与共享平台；<strong>Web GIS 前端框架</strong>（Leaflet、OpenLayers、Mapbox GL JS、CesiumJS、Deck.gl）构建浏览器端可视化；<strong>移动 GIS</strong>（ArcGIS Field Maps、QField、Locus Map）支持野外数据采集。理解这六层架构的分工，是选型的第一步。</p>
+
+<div class="info">
+<h4>为什么要区分商业与开源？</h4>
+<p>商业软件通常拥有完善的技术支持、统一的工作流和企业级质保，适合有预算、有合规要求的组织；开源软件则完全免费、代码透明、社区驱动，适合预算有限的学生、研究者和创业团队。事实上，越来越多的机构正在采取"混合栈"策略：核心业务用商业软件保障稳定性，外围脚本与 Web 前端用开源工具降低成本。两者并非对立，而是互补共生。</p>
+</div>
+
+<h3>1.1 2026 年 GIS 软件市场格局</h3>
+
+<p>根据多家独立行业分析机构的长期观察，目前全球桌面 GIS 市场仍由 Esri 的 ArcGIS 系列占据主导地位，市场份额长期稳定在 55%~65% 之间；开源阵营中 QGIS 以其完全免费和持续演进的特性，成为第二大装机量的桌面 GIS；在中国市场，超图软件（SuperMap）和中地数码（MapGIS）作为国产自主可控的代表，在政府、测绘、地质等国家战略行业占据不可替代的位置。Web 前端层面，Leaflet 与 Mapbox GL JS 是全球使用最广泛的两个 JavaScript 地图库，而 CesiumJS 则几乎是三维 WebGIS 的事实标准。</p>
+
+<table>
+<tr><th>层级</th><th>商业代表</th><th>开源代表</th><th>国产代表</th></tr>
+<tr><td>桌面 GIS</td><td>ArcGIS Pro</td><td>QGIS, GRASS GIS</td><td>SuperMap iDesktop, MapGIS</td></tr>
+<tr><td>服务端 GIS</td><td>ArcGIS Enterprise</td><td>GeoServer, MapServer</td><td>SuperMap iServer</td></tr>
+<tr><td>空间数据库</td><td>Oracle Spatial</td><td>PostGIS</td><td>达梦空间数据库, 神通 GIS</td></tr>
+<tr><td>云端 GIS</td><td>ArcGIS Online</td><td>Google Earth Engine*</td><td>天地图云, 超图在线</td></tr>
+<tr><td>Web 前端</td><td>Mapbox GL JS</td><td>Leaflet, OpenLayers, MapLibre, CesiumJS, Deck.gl</td><td>SuperMap iClient</td></tr>
+<tr><td>移动 GIS</td><td>ArcGIS Field Maps</td><td>QField</td><td>超图 iTablet</td></tr>
+</table>
+<p class="caption">* Google Earth Engine 对学术免费、对商业收费，属于混合商业模式</p>
+
+<!-- ============================================================ -->
+<!-- 第二节：商业桌面 GIS -->
+<!-- ============================================================ -->
+<h2>二、商业桌面 GIS</h2>
+
+<h3>2.1 ArcGIS Pro / ArcGIS Online（Esri）</h3>
+
+<p>Esri（Environmental Systems Research Institute）成立于 1969 年，总部位于美国加州 Redlands，是全球 GIS 行业的奠基者和绝对领导者。公司由 Jack Dangermond 和 Laura Dangermond 夫妇共同创立，最初是一家土地利用咨询公司，后来转型为软件产品公司。Esri 的产品线经历了 ARC/INFO（命令行时代）、ArcView（图形界面时代）、ArcGIS Desktop（ArcMap + ArcCatalog）和 ArcGIS Pro（64 位现代化重构）四代演进，目前最新的旗舰产品是 ArcGIS Pro 3.x 系列。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/19/ArcMap_10.3_screenshot.png" alt="ArcMap 10.3 截图">
+<p class="caption">经典的 ArcMap 10.x 界面，ArcGIS Desktop 的标志性产品（已被 ArcGIS Pro 取代）</p>
+
+<p>ArcGIS Pro 于 2015 年正式发布，是 Esri 新一代的 64 位桌面 GIS 平台，采用 Ribbon 风格的现代界面，原生支持二维与三维一体化工作流。它的核心能力包括矢量与栅格数据编辑、拓扑检查、空间分析工具箱、地图制图与出图、地理处理建模（ModelBuilder）、Python 自动化（ArcPy）、Jupyter Notebook 集成（ArcGIS Notebooks）以及与云端 ArcGIS Online 的深度联动。ArcPy 是 ArcGIS Pro 最强大的扩展入口，它让用户能够以 Python 脚本方式批量处理海量数据、自定义工具、嵌入机器学习模型，是 GIS 工程师必须掌握的生产力武器。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>公司背景</h4>
+<p>Esri 美国，1969 年成立，私人持有，由 Dangermond 家族控股。</p>
+</div>
+<div class="card">
+<h4>首发与版本</h4>
+<p>ArcGIS Pro 2015 年首发，2026 年最新版本为 ArcGIS Pro 3.4 LTS 系列。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐ 中高，功能极多，新手需系统学习 1-3 个月才能上手常见工作流。</p>
+</div>
+<div class="card">
+<h4>价格模式</h4>
+<p>Basic 约 $700/年，Standard 约 $2,500/年，Advanced 约 $4,500/年（含维护）；学生版通过学校统一采购可近乎免费。</p>
+</div>
+<div class="card">
+<h4>社区活跃度</h4>
+<p>极高，官方 Esri Community、GeoNet、Stack Exchange GIS 板块均有海量问答。</p>
+</div>
+<div class="card">
+<h4>适用人群</h4>
+<p>企业 GIS 工程师、政府测绘机构、大学 GIS 专业师生、规划院、国土资源部门。</p>
+</div>
+</div>
+
+<div class="card-grid">
+<div class="card">
+<h4>官方网站</h4>
+<p><a href="https://www.esri.com/en-us/arcgis/products/arcgis-pro/overview" target="_blank" rel="noopener">esri.com/arcgis-pro &rarr;</a></p>
+</div>
+<div class="card">
+<h4>B 站中文教程</h4>
+<p><a href="https://search.bilibili.com/all?keyword=ArcGIS%20Pro%20%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">搜索 "ArcGIS Pro 教程" &rarr;</a></p>
+</div>
+<div class="card">
+<h4>YouTube 官方</h4>
+<p><a href="https://www.youtube.com/user/esritv" target="_blank" rel="noopener">Esri 官方 YouTube 频道 &rarr;</a></p>
+</div>
+</div>
+
+<p>ArcGIS Online 是 Esri 的 SaaS 云端产品，用户无需安装任何软件，只需浏览器即可完成地图编辑、数据共享、仪表板制作和应用发布。它与 ArcGIS Pro 之间通过 Portal 实现双向同步，构成了 Esri 所倡导的"Web GIS 模式"的核心。Esri 的商业模式建立在命名用户（Named User）订阅之上，用户数和扩展模块（Spatial Analyst、3D Analyst、Image Analyst、Network Analyst 等）共同决定年费高低。</p>
+
+<h3>2.2 SuperMap GIS（超图软件）</h3>
+
+<p>超图软件（股票代码：A 股 300036）创立于 1997 年，总部位于北京，是中国 GIS 行业的领军企业，也是中国首家在创业板上市的 GIS 公司。公司由中国科学院地理所孵化，经过近三十年的技术积累，已经建成从底层地图内核、桌面客户端、服务中间件、前端 SDK 到云平台的完整产品矩阵，在国产自主可控、信创适配、三维 GIS 和 AI GIS 方面持续创新。</p>
+
+<p>SuperMap 的产品线以 i 字头命名，构成完整的全栈式架构：<strong>iObjects</strong> 是底层组件库，提供 C++/.NET/Java/Python 接口；<strong>iDesktop</strong> 是桌面客户端，定位对标 ArcGIS Pro；<strong>iServer</strong> 是企业级 GIS 服务器，支持 OGC 标准和 RESTful API 发布地图服务；<strong>iClient</strong> 系列涵盖 JavaScript、Mini Program 和 3D 前端 SDK；<strong>iPortal</strong> 提供门户管理；<strong>iManager</strong> 提供集群与容器编排；<strong>iEdge</strong> 支持边缘计算。在三维 GIS 领域，超图基于开源 CesiumJS 深度定制，实现了 BIM+GIS、倾斜摄影、海量点云一体化渲染，是国内三维 WebGIS 的代表方案。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>公司背景</h4>
+<p>北京超图软件股份有限公司，1997 年成立，2009 年深交所创业板上市（300036）。</p>
+</div>
+<div class="card">
+<h4>首发与版本</h4>
+<p>SuperMap GIS 1.0 于 1997 年发布，2026 年最新版本为 SuperMap GIS 2025 系列。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐ 中高，界面与 ArcGIS 相似但 API 自成体系，中文文档与培训资源丰富。</p>
+</div>
+<div class="card">
+<h4>价格模式</h4>
+<p>个人学习版可免费下载；企业版按模块与并发数议价，政府项目常以整体解决方案形式采购。</p>
+</div>
+<div class="card">
+<h4>社区活跃度</h4>
+<p>中国国内活跃度高，官方 SuperMap 技术社区、技术资源中心、知乎账号均有专人运维。</p>
+</div>
+<div class="card">
+<h4>适用人群</h4>
+<p>中国政府单位、规划院、智慧城市项目、信创国产化场景、国家安全相关行业。</p>
+</div>
+</div>
+
+<div class="card-grid">
+<div class="card">
+<h4>官方网站</h4>
+<p><a href="https://www.supermap.com/" target="_blank" rel="noopener">supermap.com &rarr;</a></p>
+</div>
+<div class="card">
+<h4>B 站官方频道</h4>
+<p><a href="https://space.bilibili.com/402528808" target="_blank" rel="noopener">超图软件 Bilibili 官方号 &rarr;</a></p>
+</div>
+<div class="card">
+<h4>技术资源中心</h4>
+<p><a href="https://www.supermap.com/zh-cn/a/product/trc.html" target="_blank" rel="noopener">SuperMap 技术资源中心 &rarr;</a></p>
+</div>
+</div>
+
+<h3>2.3 MapGIS（中地数码）</h3>
+
+<p>MapGIS 是由中地数码集团开发的国产大型 GIS 平台软件，公司前身源于中国地质大学（武汉）的信息工程系，1999 年正式成立武汉中地信息工程有限公司，后整合为中地数码集团。由于其诞生于地质学科背景，MapGIS 天然在地质调查、矿产资源评价、三维地质建模、工程地质分析等领域具备不可替代的优势，被中国地质调查局、各省地调院、矿业公司广泛采用，是地质行业的事实标准 GIS 平台。</p>
+
+<p>MapGIS 10 系列重写了底层内核，采用面向对象架构，支持海量空间数据管理、全空间一体化数据模型（覆盖地上、地面、地下）、高性能地图渲染和分布式服务框架。其 IGServer 提供 GIS 服务，MapGIS Pro 提供桌面制图，MapGIS Developer Kit 提供二次开发能力。相比 SuperMap 偏向通用 GIS，MapGIS 更强调地学专业性——地质图自动编绘、钻孔数据建模、矿体三维可视化、地质剖面生成等功能几乎是其独有特色。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>公司背景</h4>
+<p>中地数码集团，1999 年成立于武汉，由中国地质大学（武汉）孵化。</p>
+</div>
+<div class="card">
+<h4>首发与版本</h4>
+<p>MapGIS 最早可追溯至 1992 年，目前最新版本为 MapGIS 10.7 系列。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐ 中高，地学专业概念较多，非地质背景用户需要先补充专业知识。</p>
+</div>
+<div class="card">
+<h4>价格模式</h4>
+<p>行业解决方案式销售，按项目规模议价；高校教学版可通过学校购买。</p>
+</div>
+<div class="card">
+<h4>社区活跃度</h4>
+<p>地质圈内部活跃度高，通用 GIS 圈渗透率低于 ArcGIS 和 SuperMap。</p>
+</div>
+<div class="card">
+<h4>适用人群</h4>
+<p>地质调查工作者、矿产公司技术人员、地质大学师生、国土资源领域从业者。</p>
+</div>
+</div>
+
+<div class="card-grid">
+<div class="card">
+<h4>官方网站</h4>
+<p><a href="http://www.mapgis.com/" target="_blank" rel="noopener">mapgis.com &rarr;</a></p>
+</div>
+<div class="card">
+<h4>B 站教程</h4>
+<p><a href="https://search.bilibili.com/all?keyword=MapGIS%20%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">搜索 "MapGIS 教程" &rarr;</a></p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第三节：开源桌面 GIS -->
+<!-- ============================================================ -->
+<h2>三、开源桌面 GIS</h2>
+
+<h3>3.1 QGIS</h3>
+
+<p>QGIS（原名 Quantum GIS）是开源 GIS 世界的旗舰作品，最早由 Gary Sherman 在 2002 年启动开发，2007 年加入 OSGeo（Open Source Geospatial Foundation）基金会，现为其官方项目。QGIS 完全免费，采用 GNU GPL 协议开源，支持 Windows、macOS、Linux 全平台。经过二十余年迭代，QGIS 的功能已经可以和商业 ArcGIS Pro 分庭抗礼，尤其在矢量数据编辑、制图出图、Python 扩展、插件生态等方面毫不逊色。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/QGIS_Interface_Screenshot_with_Map_of_Median_Income_in_Houston_%282010%29.png" alt="QGIS 界面截图">
+<p class="caption">QGIS 桌面界面展示休斯顿中位数收入地图，直观呈现专题制图能力</p>
+
+<p>QGIS 最强大的武器是其 <strong>800+ 第三方插件生态</strong>。通过 Plugin Manager 用户可以一键安装地形分析、路径规划、遥感影像处理、地图自动化等扩展。QGIS 的 Python 接口 PyQGIS 让整个桌面应用可编程化，你既可以用 Python 写独立脚本，也可以在 QGIS 的 Python Console 中直接执行表达式，甚至开发完整的自定义工具栏。此外 QGIS 内置集成了 GRASS GIS 和 SAGA GIS 的全部算法，这意味着装一个 QGIS 相当于同时获得了三套分析引擎。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>OSGeo 基金会官方项目，Gary Sherman 于 2002 年发起，全球志愿者和赞助方共同维护。</p>
+</div>
+<div class="card">
+<h4>首发与版本</h4>
+<p>2002 年 7 月首次发布 0.0.1，2026 年最新长期支持版本为 QGIS 3.40 LTR。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐ 中等，新手 2-4 周即可掌握基本制图与分析，精通则需 3-6 个月。</p>
+</div>
+<div class="card">
+<h4>价格模式</h4>
+<p>完全免费（GNU GPL v2+），无任何商业授权费或功能阉割。</p>
+</div>
+<div class="card">
+<h4>社区活跃度</h4>
+<p>极高，GitHub 仓库每月数百次提交，全球每年举办 QGIS User Conference。</p>
+</div>
+<div class="card">
+<h4>适用人群</h4>
+<p>学生、研究者、NGO、预算有限的企业、自由职业者、开源爱好者。</p>
+</div>
+</div>
+
+<div class="card-grid">
+<div class="card">
+<h4>官方网站</h4>
+<p><a href="https://qgis.org/" target="_blank" rel="noopener">qgis.org &rarr;</a></p>
+</div>
+<div class="card">
+<h4>B 站教程</h4>
+<p><a href="https://search.bilibili.com/all?keyword=QGIS%20%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">搜索 "QGIS 教程" &rarr;</a></p>
+</div>
+<div class="card">
+<h4>YouTube 频道</h4>
+<p><a href="https://www.youtube.com/@QGISofficial" target="_blank" rel="noopener">QGIS Official YouTube &rarr;</a></p>
+</div>
+</div>
+
+<h3>3.2 GRASS GIS</h3>
+
+<p>GRASS GIS（Geographic Resources Analysis Support System）是现存最古老、仍然活跃的开源 GIS 之一，其历史可以追溯到 1982 年由美国陆军工兵研究实验室（CERL）开发，最初用于土地管理与军事地形分析。GRASS 于 1999 年完成 GPL 化转型，成为完全开源项目，如今也是 OSGeo 基金会的核心成员。经过四十多年的迭代，GRASS GIS 9.x 版本已经重构为现代模块化架构，但依然保持了其命令式、脚本友好、算法严谨的学术基因。</p>
+
+<p>GRASS 最大的特色是 <strong>500+ 预置分析模块</strong>，覆盖栅格运算、矢量处理、影像分析、三维体素建模、水文分析、地形分析等方面。尤其在水文与地形分析领域，r.watershed、r.flow、r.lake 等模块被全球水文学家和地貌学家广泛引用，几乎是学术研究的标准工具。相较 QGIS 的"易用优先"，GRASS 更偏向"学术精准"，适合追求可复现科研工作流的研究者。需要注意的是，GRASS 的数据库结构（Location、Mapset、Region）与常规 GIS 不同，初学者需要花时间理解其数据组织逻辑。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>OSGeo 项目，最早由美国陆军 CERL 于 1982 年开发，1999 年转为 GPL 开源。</p>
+</div>
+<div class="card">
+<h4>首发与版本</h4>
+<p>GRASS 1.0 于 1984 年内部发布，2026 年最新稳定版为 GRASS GIS 8.4/9.0 系列。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐⭐ 陡峭，命令与数据模型对新手不友好，但学术深度无与伦比。</p>
+</div>
+<div class="card">
+<h4>价格模式</h4>
+<p>完全免费（GNU GPL），源代码全部公开。</p>
+</div>
+<div class="card">
+<h4>社区活跃度</h4>
+<p>中高，核心开发者多为欧美大学的学者和博士生，论文引用率极高。</p>
+</div>
+<div class="card">
+<h4>适用人群</h4>
+<p>水文学家、地貌学家、生态学家、博士研究生、需要可复现科研工作流的学者。</p>
+</div>
+</div>
+
+<div class="card-grid">
+<div class="card">
+<h4>官方网站</h4>
+<p><a href="https://grass.osgeo.org/" target="_blank" rel="noopener">grass.osgeo.org &rarr;</a></p>
+</div>
+<div class="card">
+<h4>B 站教程</h4>
+<p><a href="https://search.bilibili.com/all?keyword=GRASS%20GIS" target="_blank" rel="noopener">搜索 "GRASS GIS" &rarr;</a></p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第四节：云端 GIS 与遥感 -->
+<!-- ============================================================ -->
+<h2>四、云端 GIS 与遥感分析平台</h2>
+
+<h3>4.1 Google Earth Engine (GEE)</h3>
+
+<p>Google Earth Engine 于 2010 年由 Google 在坎昆联合国气候大会上首次亮相，2016 年正式开放公共访问，是当今最具影响力的云端遥感分析平台。它的核心理念是将 PB 级（数千 TB）的全球公开遥感数据档案（Landsat 全历史、Sentinel-1/2/3/5P、MODIS、VIIRS、NAIP、气候再分析数据等）连同 Google 云基础设施打包提供给研究者，让用户无需下载影像就可以直接在云端完成运算。一次需要在本地跑数周的全球植被指数分析，在 GEE 上可能只需要几分钟。</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Google_Earth_icon.png" alt="Google Earth Engine 生态">
+<p class="caption">Google Earth Engine 是全球遥感研究者使用最广泛的云端分析平台</p>
+
+<p>GEE 提供两种编程接口：<strong>JavaScript Code Editor</strong> 是其标志性的在线 IDE，支持代码自动补全、地图可视化、任务导出、脚本共享；<strong>Python API</strong> 则允许用户在本地 Jupyter Notebook 或服务器中调用 GEE 能力，方便与机器学习工作流整合（如结合 TensorFlow、scikit-learn、geemap 库使用）。GEE 的编程模型基于惰性求值（Lazy Evaluation）和分布式计算，用户描述"要做什么"而不必关心"怎么算"，这种函数式的思维方式需要一定学习适应。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>公司背景</h4>
+<p>Google LLC，Earth Engine 团队隶属于 Google Geo 部门，2010 年立项，2016 年公开。</p>
+</div>
+<div class="card">
+<h4>首发与版本</h4>
+<p>公开发布 2016 年，平台持续滚动更新，无传统版本号概念。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐ 中高，函数式编程思维是最大门槛，熟悉后效率极高。</p>
+</div>
+<div class="card">
+<h4>价格模式</h4>
+<p>学术与 NGO 免费（需申请），商业用户按计算资源收费，起步价约 $500/月起。</p>
+</div>
+<div class="card">
+<h4>社区活跃度</h4>
+<p>极高，Google Earth Engine Developers 论坛每日数百条讨论，Awesome-GEE 列表汇聚海量教程。</p>
+</div>
+<div class="card">
+<h4>适用人群</h4>
+<p>遥感研究者、环境科学家、生态学者、气候研究员、做全球尺度分析的团队。</p>
+</div>
+</div>
+
+<div class="card-grid">
+<div class="card">
+<h4>官方网站</h4>
+<p><a href="https://earthengine.google.com/" target="_blank" rel="noopener">earthengine.google.com &rarr;</a></p>
+</div>
+<div class="card">
+<h4>B 站教程</h4>
+<p><a href="https://search.bilibili.com/all?keyword=Google%20Earth%20Engine%20%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">搜索 "GEE 教程" &rarr;</a></p>
+</div>
+<div class="card">
+<h4>YouTube 官方</h4>
+<p><a href="https://www.youtube.com/@googleearth" target="_blank" rel="noopener">Google Earth YouTube &rarr;</a></p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第五节：空间数据库 -->
+<!-- ============================================================ -->
+<h2>五、空间数据库</h2>
+
+<h3>5.1 PostGIS</h3>
+
+<p>PostGIS 是 PostgreSQL 数据库的开源空间扩展，由加拿大公司 Refractions Research 于 2001 年首次发布，当前由全球志愿者社区维护。它将 PostgreSQL 这个成熟的企业级关系数据库转变为强大的空间数据库，支持符合 OGC Simple Features 规范的几何与地理数据类型、500+ 空间函数、空间索引（GiST、SP-GiST、BRIN）以及完整的拓扑、路由、光栅处理能力。PostGIS 是事实上的空间数据库行业标准，被包括 Instagram、Uber、Airbnb、OpenStreetMap 在内的大量互联网公司作为空间后端。</p>
+
+<p>从功能上看，PostGIS 支持几何运算（ST_Intersection、ST_Union、ST_Buffer）、关系判断（ST_Contains、ST_Within、ST_Intersects）、距离与方向（ST_Distance、ST_Azimuth）、投影变换（ST_Transform）以及栅格代数（pgraster）。结合扩展 <strong>pgRouting</strong> 可以实现 Dijkstra、A*、TSP 等路径规划算法；结合 <strong>h3-pg</strong>、<strong>Tile38</strong>、<strong>TimescaleDB</strong> 又可以扩展为时空大数据平台。几乎所有主流 GIS 桌面软件（QGIS、ArcGIS Pro、SuperMap）都原生支持 PostGIS 作为数据源，这让它成为跨平台数据共享的理想枢纽。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>OSGeo 官方项目，2001 年由 Refractions Research 发起，现由 PostGIS PSC 管理。</p>
+</div>
+<div class="card">
+<h4>首发与版本</h4>
+<p>2001 年首发，2026 年最新稳定版为 PostGIS 3.5.x，配合 PostgreSQL 16/17。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐ 中等，需要懂 SQL，理解了 ST_ 系列函数后上手非常快。</p>
+</div>
+<div class="card">
+<h4>价格模式</h4>
+<p>完全免费（GNU GPL v2），PostgreSQL 与 PostGIS 均开源。</p>
+</div>
+<div class="card">
+<h4>社区活跃度</h4>
+<p>极高，StackOverflow、GIS StackExchange、PostgreSQL 邮件列表讨论密集。</p>
+</div>
+<div class="card">
+<h4>适用人群</h4>
+<p>后端开发者、数据工程师、Web GIS 架构师、互联网地图服务团队。</p>
+</div>
+</div>
+
+<div class="card-grid">
+<div class="card">
+<h4>官方网站</h4>
+<p><a href="https://postgis.net/" target="_blank" rel="noopener">postgis.net &rarr;</a></p>
+</div>
+<div class="card">
+<h4>B 站教程</h4>
+<p><a href="https://search.bilibili.com/all?keyword=PostGIS%20%E6%95%99%E7%A8%8B" target="_blank" rel="noopener">搜索 "PostGIS 教程" &rarr;</a></p>
+</div>
+<div class="card">
+<h4>官方文档</h4>
+<p><a href="https://postgis.net/documentation/" target="_blank" rel="noopener">PostGIS Documentation &rarr;</a></p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第六节：Web GIS 前端框架 -->
+<!-- ============================================================ -->
+<h2>六、Web GIS 前端框架</h2>
+
+<p>Web 地图前端开发是当今 GIS 工程师需求增长最快的方向之一。无论你要做的是一个简单的 POI 展示页面，还是一个复杂的智慧城市三维大屏，都离不开 JavaScript 地图库的支持。下面介绍 5 个最重要的 Web GIS 前端框架，它们分别代表了不同的设计哲学与性能曲线。</p>
+
+<h3>6.1 Leaflet</h3>
+
+<p>Leaflet 由乌克兰开发者 Vladimir Agafonkin 于 2011 年创建，后被 Mapbox 赞助，并最终成为事实上的社区项目。它以"简单、轻量、可靠"为设计理念，核心库压缩后仅约 <strong>42 KB</strong>，即使在 2G 网络上也能秒开。Leaflet 主要面向 2D 栅格瓦片地图场景，提供极简 API——一两行代码就能显示一张世界地图并添加标记点，这种"开箱即用"的体验让它成为入门 Web GIS 的首选。</p>
+
+<p>Leaflet 的插件生态同样令人印象深刻，社区贡献了 <strong>1000+ 插件</strong>，覆盖热力图、聚合、路径绘制、测量、WMS/WMTS 支持、离线瓦片、全屏、画中画等几乎所有常见需求。唯一的短板是它原生不支持矢量瓦片（需借助 Mapbox GL Leaflet 或 VectorGrid 插件）且不具备 WebGL 渲染能力，面对大数据量或复杂三维场景力不从心。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>Vladimir Agafonkin 2011 年创建，MIT 许可，社区驱动。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐ 非常低，一个下午就能上手。</p>
+</div>
+<div class="card">
+<h4>价格</h4>
+<p>完全免费（MIT）。</p>
+</div>
+<div class="card">
+<h4>官网</h4>
+<p><a href="https://leafletjs.com/" target="_blank" rel="noopener">leafletjs.com &rarr;</a></p>
+</div>
+</div>
+
+<h3>6.2 OpenLayers</h3>
+
+<p>OpenLayers 由 MetaCarta 公司于 2006 年发布，后捐给 OSGeo 基金会成为官方项目。它是最古老、功能最全面的开源 Web 地图库，支持矢量瓦片、WMS、WMTS、WFS、GeoJSON、TopoJSON、KML、GML 等几乎所有 OGC 标准。相比 Leaflet 的"极简主义"，OpenLayers 走的是"大而全"路线，适合需要处理复杂地理协议、多种投影、高级交互的专业 WebGIS 项目。OpenLayers 6.x 引入了 WebGL 加速渲染，一定程度上弥补了此前性能偏弱的短板。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>OSGeo 项目，2006 年由 MetaCarta 发起，BSD 2-Clause 许可。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐ 较陡，API 概念多，官方示例是最好的学习入口。</p>
+</div>
+<div class="card">
+<h4>价格</h4>
+<p>完全免费（BSD）。</p>
+</div>
+<div class="card">
+<h4>官网</h4>
+<p><a href="https://openlayers.org/" target="_blank" rel="noopener">openlayers.org &rarr;</a></p>
+</div>
+</div>
+
+<h3>6.3 Mapbox GL JS 与 MapLibre GL JS</h3>
+
+<p>Mapbox GL JS 由美国 Mapbox 公司于 2014 年首次发布，是第一个主流的基于 <strong>WebGL 矢量瓦片</strong>的地图库。它彻底改变了 Web 地图的渲染方式：不再下载预渲染的 PNG 切片，而是下载二进制的矢量瓦片（Protobuf Tile，简称 MVT），在浏览器端实时用 WebGL 渲染。这种架构带来了无级缩放、平滑旋转、3D 建筑挤出、动态样式切换等以往栅格瓦片无法实现的功能。</p>
+
+<p>2020 年 12 月 Mapbox GL JS 2.0 切换为闭源商业许可，促使社区 fork 了最后一个开源版本并命名为 <strong>MapLibre GL JS</strong>，由 Linux 基金会下属的 MapLibre Organization 维护，完全开源、API 与原版高度兼容，是目前推荐的开源替代品。无论是 Mapbox 还是 MapLibre，都是矢量瓦片时代 Web GIS 的主力选手。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>Mapbox 2014 年发布，MapLibre 2020 年社区 fork 开源版本。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐ 中等，样式语言 Style Spec 需要时间掌握。</p>
+</div>
+<div class="card">
+<h4>价格</h4>
+<p>MapLibre 完全免费（BSD 3）；Mapbox 按地图加载量计费。</p>
+</div>
+<div class="card">
+<h4>官网</h4>
+<p><a href="https://maplibre.org/" target="_blank" rel="noopener">maplibre.org</a> / <a href="https://www.mapbox.com/" target="_blank" rel="noopener">mapbox.com &rarr;</a></p>
+</div>
+</div>
+
+<h3>6.4 CesiumJS</h3>
+
+<p>CesiumJS 由美国 Cesium GS 公司（原 AGI）于 2012 年开源发布，是全球范围内最流行的开源三维地球引擎，采用 Apache 2.0 许可。CesiumJS 基于 WebGL 技术从零构建了一套虚拟地球渲染体系，原生支持 3D Tiles（Cesium 主导的 OGC 标准）、glTF、KML、CZML 等数据格式。在 GIS 领域，它几乎是三维 WebGIS 的事实标准，智慧城市大屏、数字孪生、BIM+GIS 融合、数字地球等项目普遍选用 CesiumJS 作为渲染内核。</p>
+
+<p>CesiumJS 能够流畅加载 TB 级的倾斜摄影、点云、BIM 模型，这得益于其 3D Tiles 分级 LOD 流式加载机制。配合 <strong>Cesium Ion</strong>（Cesium 的云端资产服务）或自建的瓦片切片服务（如 <strong>3D Tiles Next</strong>、<strong>Titiler</strong>），可以轻松构建完整的三维数据管线。国内流行的 <strong>Mars3D</strong> 就是基于 CesiumJS 二次封装的产品，降低了中文开发者的入门门槛。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>Cesium GS 公司 2012 年发布，Apache 2.0 开源，也是 3D Tiles 标准主导者。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐ 较高，涉及 3D 数学、坐标系、着色器与 3D Tiles 概念。</p>
+</div>
+<div class="card">
+<h4>价格</h4>
+<p>库本身开源免费；Cesium Ion 云服务按流量/存储计费。</p>
+</div>
+<div class="card">
+<h4>官网</h4>
+<p><a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">cesium.com/cesiumjs &rarr;</a></p>
+</div>
+</div>
+
+<h3>6.5 Deck.gl</h3>
+
+<p>Deck.gl 由 Uber 可视化团队于 2016 年开源，是专门为大规模地理数据可视化设计的 WebGL 框架。不同于 Leaflet/Mapbox 主要面向地图本身，Deck.gl 将自己定位为"图层框架"——它可以作为 Mapbox GL JS、MapLibre、Google Maps、甚至 CesiumJS 的 WebGL 图层叠加层运行。Deck.gl 最大的亮点是可以流畅渲染数百万乃至千万级别的数据点、线段和面要素，并支持热力图、ArcLayer、HexagonLayer、3D GridLayer 等酷炫的可视化表达方式。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>项目背景</h4>
+<p>Uber 2016 年开源，现由 OpenJS 基金会托管，MIT 许可。</p>
+</div>
+<div class="card">
+<h4>学习曲线</h4>
+<p>⭐⭐⭐⭐ 需懂 React 与一定的 WebGL 概念。</p>
+</div>
+<div class="card">
+<h4>价格</h4>
+<p>完全免费（MIT）。</p>
+</div>
+<div class="card">
+<h4>官网</h4>
+<p><a href="https://deck.gl/" target="_blank" rel="noopener">deck.gl &rarr;</a></p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第七节：移动 GIS -->
+<!-- ============================================================ -->
+<h2>七、移动 GIS</h2>
+
+<p>野外数据采集、实地巡检、资产盘点等场景离不开移动 GIS 应用。相比桌面软件，移动 GIS 更强调离线能力、GPS 定位精度、表单录入体验和与后端系统的同步能力。</p>
+
+<h3>7.1 ArcGIS Field Maps</h3>
+
+<p>ArcGIS Field Maps 是 Esri 在 2020 年推出的整合型野外应用，合并了此前的 Collector、Explorer、Tracker 三个产品。它与 ArcGIS Online / ArcGIS Enterprise 深度集成，通过预先配置的 Web Map 下发到手机端，支持离线采集、要素编辑、智能表单、高精度 GNSS、航迹记录等功能。对于已经采用 ArcGIS 生态的企业和政府，Field Maps 是野外工作流的默认选项。它运行于 iOS 与 Android，需要 ArcGIS 命名用户授权。</p>
+
+<h3>7.2 QField</h3>
+
+<p>QField 是 QGIS 官方的移动端，由瑞士 OPENGIS.ch 团队开发并开源（GPL v2）。它的核心卖点是"桌面即移动"——用户在 QGIS 桌面上配置好的项目、图层符号、表单逻辑、Python 表达式可以原样导出到手机上使用。QField 支持离线底图、基于 GeoPackage 的双向同步、高精度外接 GNSS 接收机（如 Emlid Reach、u-blox 模块），是开源阵营中完全能对标 ArcGIS Field Maps 的移动解决方案。</p>
+
+<h3>7.3 Locus Map</h3>
+
+<p>Locus Map 是捷克 Asamm Software 开发的移动地图应用，面向户外运动爱好者（徒步、越野、骑行、越野跑）和业余 GIS 用户。它支持离线地图（OpenStreetMap 或其他地图源）、轨迹记录、航点管理、路径规划、甚至地质罗盘等功能。相比专业 GIS，Locus Map 更易用、UI 更现代，是轻量野外采集和户外探险的理想选择。</p>
+
+<div class="card-grid">
+<div class="card">
+<h4>ArcGIS Field Maps</h4>
+<p>需要 ArcGIS 授权，适合企业级工作流。<a href="https://www.esri.com/en-us/arcgis/products/arcgis-field-maps/overview" target="_blank" rel="noopener">官网 &rarr;</a></p>
+</div>
+<div class="card">
+<h4>QField</h4>
+<p>免费开源，深度整合 QGIS 桌面。<a href="https://qfield.org/" target="_blank" rel="noopener">qfield.org &rarr;</a></p>
+</div>
+<div class="card">
+<h4>Locus Map</h4>
+<p>商业化移动应用，免费版 + 付费 Pro 功能。<a href="https://www.locusmap.app/" target="_blank" rel="noopener">locusmap.app &rarr;</a></p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第八节：综合对比表 -->
+<!-- ============================================================ -->
+<h2>八、综合对比表</h2>
+
+<p>下表将本章涉及的 15 款 GIS 软件从价格、学习曲线、平台支持、社区活跃度和典型用途五个维度进行横向对比，方便你一眼看清它们的定位差异。</p>
+
+<table>
+<tr><th>软件</th><th>类别</th><th>价格</th><th>学习曲线</th><th>平台</th><th>社区</th><th>典型用途</th></tr>
+<tr><td><strong>ArcGIS Pro</strong></td><td>商业桌面</td><td>$700~$4,500/年</td><td>⭐⭐⭐⭐</td><td>Win</td><td>极高</td><td>企业/政府 GIS 全能平台</td></tr>
+<tr><td><strong>SuperMap</strong></td><td>国产桌面</td><td>企业议价</td><td>⭐⭐⭐⭐</td><td>Win/Linux</td><td>中高</td><td>国产信创，三维 GIS</td></tr>
+<tr><td><strong>MapGIS</strong></td><td>国产桌面</td><td>行业方案</td><td>⭐⭐⭐⭐</td><td>Win</td><td>中</td><td>地质调查、矿产</td></tr>
+<tr><td><strong>QGIS</strong></td><td>开源桌面</td><td>免费</td><td>⭐⭐⭐</td><td>全平台</td><td>极高</td><td>通用 GIS，学术研究</td></tr>
+<tr><td><strong>GRASS GIS</strong></td><td>开源桌面</td><td>免费</td><td>⭐⭐⭐⭐⭐</td><td>全平台</td><td>中高</td><td>水文/地形学术分析</td></tr>
+<tr><td><strong>Google Earth Engine</strong></td><td>云端遥感</td><td>学术免费/商业收费</td><td>⭐⭐⭐⭐</td><td>浏览器</td><td>极高</td><td>全球尺度遥感分析</td></tr>
+<tr><td><strong>PostGIS</strong></td><td>空间数据库</td><td>免费</td><td>⭐⭐⭐</td><td>全平台</td><td>极高</td><td>后端空间数据存储</td></tr>
+<tr><td><strong>Leaflet</strong></td><td>Web 2D</td><td>免费</td><td>⭐⭐</td><td>浏览器</td><td>极高</td><td>轻量 Web 地图展示</td></tr>
+<tr><td><strong>OpenLayers</strong></td><td>Web 2D</td><td>免费</td><td>⭐⭐⭐⭐</td><td>浏览器</td><td>高</td><td>复杂 OGC 兼容 WebGIS</td></tr>
+<tr><td><strong>Mapbox GL JS</strong></td><td>Web 2D/3D</td><td>按量计费</td><td>⭐⭐⭐</td><td>浏览器</td><td>高</td><td>商业矢量瓦片地图</td></tr>
+<tr><td><strong>MapLibre GL JS</strong></td><td>Web 2D/3D</td><td>免费</td><td>⭐⭐⭐</td><td>浏览器</td><td>高</td><td>开源矢量瓦片地图</td></tr>
+<tr><td><strong>CesiumJS</strong></td><td>Web 3D</td><td>免费/Ion 付费</td><td>⭐⭐⭐⭐</td><td>浏览器</td><td>高</td><td>三维地球、数字孪生</td></tr>
+<tr><td><strong>Deck.gl</strong></td><td>Web 大数据</td><td>免费</td><td>⭐⭐⭐⭐</td><td>浏览器</td><td>高</td><td>百万级点线面可视化</td></tr>
+<tr><td><strong>ArcGIS Field Maps</strong></td><td>移动</td><td>含 ArcGIS 授权</td><td>⭐⭐</td><td>iOS/Android</td><td>高</td><td>企业野外采集</td></tr>
+<tr><td><strong>QField</strong></td><td>移动</td><td>免费</td><td>⭐⭐⭐</td><td>iOS/Android</td><td>中高</td><td>开源野外采集</td></tr>
+<tr><td><strong>Locus Map</strong></td><td>移动</td><td>Freemium</td><td>⭐</td><td>Android</td><td>中</td><td>户外运动、业余 GIS</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- 第九节：决策树 -->
+<!-- ============================================================ -->
+<h2>九、决策树：我到底该选哪个？</h2>
+
+<p>面对上面这张长长的对比表，新手最常问的问题是："我这个情况到底该选哪个？" 下面这棵决策树将帮助你从身份与需求出发，在 60 秒内锁定最适合的软件。它不是唯一答案，但能把候选清单从 15 个缩减到 2~3 个，大幅降低选择成本。</p>
+
+<svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;background:#0d1526;border:1px solid #1e2d4a;border-radius:12px;margin:1.5rem 0">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b8def"/>
+    </marker>
+    <style>
+      .q { fill:#111d33; stroke:#5b8def; stroke-width:1.5 }
+      .a { fill:#111d33; stroke:#00e5b0; stroke-width:1.5 }
+      .r { fill:#111d33; stroke:#f7b731; stroke-width:1.5 }
+      .t { font-family:'Noto Sans SC',sans-serif; font-size:13px; fill:#e4e8f1; text-anchor:middle }
+      .ts { font-family:'Noto Sans SC',sans-serif; font-size:11px; fill:#8b95a8; text-anchor:middle }
+      .lbl { font-family:'JetBrains Mono',monospace; font-size:11px; fill:#00e5b0; text-anchor:middle }
+      .line { stroke:#5b8def; stroke-width:1.5; fill:none }
+    </style>
+  </defs>
+
+  <!-- Root question -->
+  <rect class="q" x="330" y="20" width="240" height="50" rx="8"/>
+  <text class="t" x="450" y="42">你的主要工作场景是？</text>
+  <text class="ts" x="450" y="58">（从下面五个分支中选择）</text>
+
+  <!-- Branch 1: Student/Research -->
+  <line class="line" x1="450" y1="70" x2="110" y2="120" marker-end="url(#arr)"/>
+  <text class="lbl" x="230" y="90">学生 / 研究</text>
+  <rect class="a" x="20" y="130" width="180" height="50" rx="8"/>
+  <text class="t" x="110" y="152">预算为零？</text>
+  <text class="ts" x="110" y="168">偏制图还是偏水文分析</text>
+  <line class="line" x1="110" y1="180" x2="60" y2="230" marker-end="url(#arr)"/>
+  <line class="line" x1="110" y1="180" x2="170" y2="230" marker-end="url(#arr)"/>
+  <rect class="r" x="10" y="240" width="100" height="40" rx="8"/>
+  <text class="t" x="60" y="265">QGIS</text>
+  <rect class="r" x="120" y="240" width="100" height="40" rx="8"/>
+  <text class="t" x="170" y="265">GRASS GIS</text>
+
+  <!-- Branch 2: Enterprise/Gov -->
+  <line class="line" x1="450" y1="70" x2="290" y2="120" marker-end="url(#arr)"/>
+  <text class="lbl" x="360" y="90">企业 / 政府</text>
+  <rect class="a" x="230" y="130" width="180" height="50" rx="8"/>
+  <text class="t" x="320" y="152">是否信创国产化？</text>
+  <text class="ts" x="320" y="168">国家项目 / 涉密</text>
+  <line class="line" x1="320" y1="180" x2="270" y2="230" marker-end="url(#arr)"/>
+  <line class="line" x1="320" y1="180" x2="380" y2="230" marker-end="url(#arr)"/>
+  <rect class="r" x="220" y="240" width="110" height="40" rx="8"/>
+  <text class="t" x="275" y="265">ArcGIS Pro</text>
+  <rect class="r" x="340" y="240" width="110" height="40" rx="8"/>
+  <text class="t" x="395" y="265">SuperMap</text>
+  <rect class="r" x="280" y="290" width="110" height="30" rx="8"/>
+  <text class="t" x="335" y="310">或 MapGIS（地质）</text>
+
+  <!-- Branch 3: Remote Sensing Big Data -->
+  <line class="line" x1="450" y1="70" x2="540" y2="120" marker-end="url(#arr)"/>
+  <text class="lbl" x="520" y="90">遥感大数据</text>
+  <rect class="a" x="450" y="130" width="180" height="50" rx="8"/>
+  <text class="t" x="540" y="152">是否全球尺度？</text>
+  <text class="ts" x="540" y="168">多时相、多传感器</text>
+  <line class="line" x1="540" y1="180" x2="540" y2="230" marker-end="url(#arr)"/>
+  <rect class="r" x="470" y="240" width="140" height="40" rx="8"/>
+  <text class="t" x="540" y="265">Google Earth Engine</text>
+
+  <!-- Branch 4: Web Dev -->
+  <line class="line" x1="450" y1="70" x2="720" y2="120" marker-end="url(#arr)"/>
+  <text class="lbl" x="660" y="90">Web 地图开发</text>
+  <rect class="a" x="640" y="130" width="240" height="50" rx="8"/>
+  <text class="t" x="760" y="152">2D 还是 3D？</text>
+  <text class="ts" x="760" y="168">数据量 / 瓦片类型</text>
+  <line class="line" x1="720" y1="180" x2="680" y2="230" marker-end="url(#arr)"/>
+  <line class="line" x1="800" y1="180" x2="840" y2="230" marker-end="url(#arr)"/>
+  <rect class="r" x="620" y="240" width="120" height="40" rx="8"/>
+  <text class="t" x="680" y="265">Leaflet / MapLibre</text>
+  <rect class="r" x="770" y="240" width="140" height="40" rx="8"/>
+  <text class="t" x="840" y="265">CesiumJS (3D)</text>
+  <rect class="r" x="650" y="290" width="220" height="30" rx="8"/>
+  <text class="t" x="760" y="310">大数据叠加：+ Deck.gl</text>
+
+  <!-- Branch 5: Mobile -->
+  <line class="line" x1="450" y1="70" x2="450" y2="360" marker-end="url(#arr)"/>
+  <text class="lbl" x="470" y="340">野外 / 移动</text>
+  <rect class="a" x="330" y="370" width="240" height="50" rx="8"/>
+  <text class="t" x="450" y="392">你的后端是？</text>
+  <text class="ts" x="450" y="408">ArcGIS / QGIS / 纯户外</text>
+  <line class="line" x1="370" y1="420" x2="200" y2="470" marker-end="url(#arr)"/>
+  <line class="line" x1="450" y1="420" x2="450" y2="470" marker-end="url(#arr)"/>
+  <line class="line" x1="530" y1="420" x2="700" y2="470" marker-end="url(#arr)"/>
+  <rect class="r" x="120" y="480" width="170" height="40" rx="8"/>
+  <text class="t" x="205" y="505">ArcGIS Field Maps</text>
+  <rect class="r" x="380" y="480" width="140" height="40" rx="8"/>
+  <text class="t" x="450" y="505">QField</text>
+  <rect class="r" x="620" y="480" width="170" height="40" rx="8"/>
+  <text class="t" x="705" y="505">Locus Map</text>
+
+  <!-- Footer note -->
+  <text class="ts" x="450" y="570">后端数据库通用选项：PostGIS（开源推荐）/ Oracle Spatial（企业级）</text>
+  <text class="ts" x="450" y="590">所有方案都可以组合使用，例如 QGIS + PostGIS + Leaflet 是经典全开源组合</text>
+</svg>
+<p class="caption">GIS 软件选型决策树：根据身份、场景和数据类型快速锁定最合适的工具</p>
+
+<div class="info">
+<h4>快速结论：5 种典型身份的软件推荐</h4>
+<ul>
+  <li><strong>学生 / 研究者：</strong>QGIS（通用）+ GRASS GIS（水文地形）+ PostGIS（项目数据库）+ Google Earth Engine（遥感研究），完全 0 成本</li>
+  <li><strong>企业 / 政府从业者：</strong>ArcGIS Pro 或 SuperMap iDesktop（看信创要求），企业版授权有预算保障</li>
+  <li><strong>遥感科学家：</strong>Google Earth Engine + Python API + geemap，辅以 QGIS 做本地验证</li>
+  <li><strong>Web GIS 开发者：</strong>Leaflet 入门，Mapbox GL JS / MapLibre 进阶 2D，CesiumJS 走 3D 路线；后端 GeoServer 或 PostGIS + Martin/pg_tileserv</li>
+  <li><strong>中国国家级项目：</strong>SuperMap + iServer + iClient 全栈，涉及地质领域则选 MapGIS，保障国产自主可控</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第十节：学习路径建议 -->
+<!-- ============================================================ -->
+<h2>十、学习路径建议</h2>
+
+<p>如果你是 GIS 新手，不要一上来就试图同时掌握 ArcGIS Pro、QGIS、Python、PostGIS、Cesium。软件只是工具，重要的是先建立起正确的 GIS 思维模型（坐标系、矢量/栅格、投影、叠加分析），然后以一个主力工具为基石，逐步扩展到云端与前端。下面是一条被反复验证的"T 型"学习路径建议。</p>
+
+<div class="two-col">
+<div>
+<h4>第一阶段（0-3 个月）：扎根桌面 GIS</h4>
+<ul>
+  <li>选择 <strong>QGIS</strong>（开源零成本）作为主力桌面工具</li>
+  <li>学习矢量/栅格数据操作、投影变换、属性查询</li>
+  <li>完成 3-5 个完整制图项目（如校园地图、城市人口分布图）</li>
+  <li>熟悉 OGC 标准（Shapefile、GeoJSON、WMS）</li>
+</ul>
+</div>
+<div>
+<h4>第二阶段（3-6 个月）：掌握 Python GIS</h4>
+<ul>
+  <li>学习 PyQGIS 自动化常见工作流</li>
+  <li>上手 <strong>GeoPandas</strong> 和 <strong>Shapely</strong> 做数据处理</li>
+  <li>学习 <strong>Rasterio</strong> 处理遥感影像</li>
+  <li>尝试用 <strong>Folium</strong> 或 <strong>Kepler.gl</strong> 做交互可视化</li>
+</ul>
+</div>
+</div>
+
+<div class="two-col">
+<div>
+<h4>第三阶段（6-12 个月）：专精一个方向</h4>
+<ul>
+  <li>遥感方向：主攻 Google Earth Engine + Sentinel-2 时序分析</li>
+  <li>Web 方向：主攻 Leaflet → MapLibre → CesiumJS 递进</li>
+  <li>数据库方向：主攻 PostGIS + pgRouting + Martin/pg_tileserv</li>
+  <li>地学分析方向：主攻 GRASS GIS + R-spatial</li>
+</ul>
+</div>
+<div>
+<h4>第四阶段（12 个月后）：接触商业平台</h4>
+<ul>
+  <li>试用 ArcGIS Pro（学生版或试用许可）理解商业工作流</li>
+  <li>如在中国工作，了解 SuperMap 的全栈架构</li>
+  <li>关注 GeoAI、数字孪生、时空大数据等前沿方向</li>
+  <li>参与开源贡献或考取行业认证（GISP、Esri Tech Cert）</li>
+</ul>
+</div>
+</div>
+
+<div class="warn">
+<h4>给初学者的三条避坑建议</h4>
+<ol>
+  <li><strong>不要贪多：</strong>一开始就学 5 款软件只会让你什么都学不会。选一款（推荐 QGIS），练熟再说。</li>
+  <li><strong>不要跳过基础理论：</strong>再好的软件也不能弥补坐标系与投影的盲区，花一周时间认真啃《地图投影》是值得的。</li>
+  <li><strong>不要迷信商业软件：</strong>ArcGIS Pro 很强，但 QGIS 在 95% 的场景已经够用，关键是思维和工作流，而不是贵不贵。</li>
+</ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- 第十一节：总结 -->
+<!-- ============================================================ -->
+<h2>十一、本章小结</h2>
+
+<p>本章我们系统梳理了 GIS 软件生态的六大层级和 15 款主流产品：从商业桌面双雄 ArcGIS Pro 和 SuperMap，到国产地学王牌 MapGIS；从开源标杆 QGIS 到学术精品 GRASS；从云端遥感 Google Earth Engine 到空间数据库基石 PostGIS；从 Web 2D 的 Leaflet/OpenLayers/Mapbox/MapLibre 到 Web 3D 的 CesiumJS 与大数据可视化 Deck.gl；从移动端的 ArcGIS Field Maps/QField/Locus Map。每一款软件都有其独特的定位与最佳使用场景，没有"最好"，只有"最合适"。</p>
+
+<p>选型的核心逻辑可以归结为四个问题：<strong>预算多少</strong>（决定开源/商业）、<strong>用户身份</strong>（学生/企业/国家项目）、<strong>数据规模</strong>（小数据/大数据/全球尺度）、<strong>交付形态</strong>（桌面/服务端/Web/移动）。在实际工作中，绝大多数项目并不会只用一款软件，而是多款组合形成完整的数据管线——例如"PostGIS 存储 + QGIS 编辑 + GeoServer 发布 + Leaflet 展示"就是一条经典的全开源 Web GIS 链路。</p>
+
+<p>随着 AI GIS、数字孪生、实景三维中国等概念兴起，GIS 软件正朝着<strong>云原生化、三维化、AI 化</strong>三个方向加速演进。未来的 GIS 工程师不仅要会用工具，更要理解背后的数据流、算法与架构决策。下一章我们将进入 GIS 的应用世界，看看这些软件是如何在智慧城市、环境监测、应急管理、精准农业等各个行业落地生根的。</p>
+
+<div class="ref">
+推荐延伸阅读：Esri Press《GIS Tutorial for ArcGIS Pro》、Anita Graser《Learning QGIS》、Regina Obe 与 Leo Hsu《PostGIS in Action》、Cesium 官方《3D Tiles Specification》。本章所有软件介绍基于笔者对行业的长期观察与公开资料，版本号与价格随厂商官网更新为准。
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="remote-sensing.html">&larr; 遥感技术详解</a>
+  <a href="../index.html">目录</a>
+  <a href="applications.html">GIS 应用领域 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>

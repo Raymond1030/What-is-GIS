@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIS 研究前沿：2024-2026 年最新论文索引 - GIS百科全书</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080e1a;--bg2:#0d1526;--card:#111d33;--accent:#00e5b0;--accent2:#f7b731;--accent3:#5b8def;--accent4:#e056a0;--text:#e4e8f1;--text2:#8b95a8;--muted:#5a6478;--border:#1e2d4a;--grad:linear-gradient(135deg,#00e5b0,#5b8def);--ff:'Syne',sans-serif;--fb:'Noto Sans SC',sans-serif;--fm:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.85;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent2)}
+img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#00b88e;border-radius:3px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{color:var(--text2);font-size:.82rem;display:flex;align-items:center;gap:.4rem}
+.nav-back:hover{color:var(--accent)}
+
+/* Chapter header */
+.ch-hero{padding:7rem 2rem 3rem;text-align:center;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ch-hero .tag{font-family:var(--fm);font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:2px;background:rgba(0,229,176,.08);padding:.3rem 1rem;border-radius:4px;display:inline-block;margin-bottom:1rem}
+.ch-hero h1{font-family:var(--ff);font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.8rem}
+.ch-hero p{color:var(--text2);max-width:700px;margin:0 auto;font-size:1rem}
+.ch-hero .hero-img{max-width:700px;margin:2rem auto 0;border-radius:16px;overflow:hidden}
+.ch-hero .hero-img img{border:none;border-radius:0;margin:0}
+
+/* Content */
+.content{max-width:900px;margin:0 auto;padding:3rem 2rem 4rem}
+.content h2{font-family:var(--ff);font-size:1.6rem;font-weight:700;color:var(--accent);margin:3rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid rgba(0,229,176,.15)}
+.content h3{font-family:var(--ff);font-size:1.2rem;font-weight:600;color:var(--accent3);margin:2rem 0 .8rem}
+.content h4{font-size:1rem;font-weight:600;color:var(--accent2);margin:1.5rem 0 .5rem}
+.content p{color:var(--text2);margin-bottom:1rem;text-align:justify;font-size:.93rem}
+.content strong{color:var(--text)}
+.content ul,.content ol{color:var(--text2);margin:.5rem 0 1.2rem 1.5rem;font-size:.93rem}
+.content li{margin-bottom:.4rem}
+.content img{margin:1.5rem 0;display:block}
+.content .caption{text-align:center;font-size:.75rem;color:var(--muted);margin-top:-.8rem;margin-bottom:1.5rem;font-style:italic}
+
+/* Special blocks */
+.formula{background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.12);border-radius:10px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-family:var(--fm);font-size:.85rem;color:var(--text);overflow-x:auto;line-height:1.9}
+.ref{background:rgba(247,183,49,.04);border-left:3px solid var(--accent2);padding:.8rem 1.2rem;margin:1.2rem 0;border-radius:0 8px 8px 0;font-size:.78rem;color:var(--muted);line-height:1.7}
+.info{background:rgba(91,141,239,.05);border:1px solid rgba(91,141,239,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.info h4{color:var(--accent3);margin-top:0}
+.warn{background:rgba(247,183,49,.05);border:1px solid rgba(247,183,49,.12);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.84rem}
+th{background:rgba(91,141,239,.1);color:var(--accent3);padding:.6rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid rgba(91,141,239,.25)}
+td{padding:.55rem .8rem;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:rgba(0,229,176,.02)}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.card h4{color:var(--accent2);margin-top:0;font-size:.95rem}
+.card p{font-size:.85rem;margin-bottom:0}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
+
+/* Chapter nav */
+.ch-nav{display:flex;justify-content:space-between;align-items:center;padding:2rem;border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+.ch-nav a{color:var(--text2);font-size:.85rem;display:flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.ch-nav a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.75rem}
+
+/* Responsive */
+@media(max-width:768px){.two-col{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">GIS Encyclopedia</a>
+  <a href="../index.html" class="nav-back">&larr; 返回主页</a>
+</div></nav>
+
+<div class="ch-hero">
+  <div class="tag">// Chapter 15</div>
+  <h1>GIS 研究前沿：2024-2026 年最新论文索引</h1>
+  <p>面向研究生与科研人员的论文导航手册——覆盖 GeoAI 基础模型、时空计算、地理大语言模型、遥感深度解译四大方向，精选近三年代表性工作，助你快速建立研究地图。</p>
+  <div class="hero-img"><img src="../images/geoai_concept.png" alt="GIS 研究前沿"></div>
+</div>
+
+<article class="content">
+
+<div class="info">
+  <h4>本章定位与使用方式</h4>
+  <p style="color:var(--text2);font-size:.9rem;margin-bottom:.6rem">这一章不是教程，而是给已经入门 GIS/遥感并想进入科研的同学准备的"前沿地图"。每一节包含：(1) 100 字左右的理论背景综述，帮助你快速定位该方向在 GIS 学科谱系中的位置；(2) 若干代表性论文，以"标题 + 机构 + 会议/期刊 + 年份 + 链接 + 一句话原创要点"的卡片式格式呈现，便于你按图索骥。</p>
+  <p style="color:var(--text2);font-size:.9rem;margin-bottom:0"><strong>重要声明：</strong>所有论文要点均为作者原创的一句话总结，仅作为导航提示，绝不代替摘要。请务必访问原始链接阅读全文，并以论文作者声明为准。如发现信息误差，欢迎以官方出版物为准修订。</p>
+</div>
+
+<h2>0. 开场：GIS / 遥感 / GeoAI 顶会期刊速查表</h2>
+
+<p>在进入论文清单前，先把"游戏场地"弄清楚。GIS 与遥感相关研究横跨计算机视觉、机器学习、地理信息科学、摄影测量、地球科学等多个子领域，不同场地的"规则"和审稿口味差别极大。一般来说：追 <strong>算法新意</strong>，去 CV / ML 顶会；追 <strong>地学贡献</strong>，去 ISPRS、RSE 等专业期刊；追 <strong>应用落地</strong>，看 SIGSPATIAL 和行业会议。以下表格是各主流投稿场地的速查。</p>
+
+<h3>0.1 计算机视觉 / 机器学习顶会（遥感 AI、GeoAI 常投）</h3>
+
+<table>
+<thead><tr><th>会议</th><th>周期</th><th>主办</th><th>对遥感 / GIS 方向的友好度</th></tr></thead>
+<tbody>
+<tr><td><strong>CVPR</strong></td><td>每年 6 月</td><td>IEEE / CVF</td><td>近年设有 "EarthVision" Workshop，主会逐年增多遥感基础模型论文</td></tr>
+<tr><td><strong>ICCV</strong></td><td>每两年（奇数年）</td><td>IEEE / CVF</td><td>与 CVPR 齐名，场景理解、3D 重建论文对 GIS 价值高</td></tr>
+<tr><td><strong>ECCV</strong></td><td>每两年（偶数年）</td><td>欧洲计算机视觉协会</td><td>欧洲遥感组常投，场景分割、图像检索方向活跃</td></tr>
+<tr><td><strong>NeurIPS</strong></td><td>每年 12 月</td><td>NeurIPS Foundation</td><td>Datasets &amp; Benchmarks Track 适合发布大规模遥感数据集</td></tr>
+<tr><td><strong>ICLR</strong></td><td>每年 5 月</td><td>ICLR 社区</td><td>表示学习、自监督方向欢迎遥感基础模型论文</td></tr>
+<tr><td><strong>ICML</strong></td><td>每年 7 月</td><td>IMLS</td><td>偏理论，适合投空间表示学习、图神经网络方向</td></tr>
+<tr><td><strong>AAAI / IJCAI</strong></td><td>每年</td><td>AAAI / IJCAI</td><td>对应用型 GeoAI 较友好，审稿速度较快</td></tr>
+<tr><td><strong>ACL / EMNLP</strong></td><td>每年</td><td>ACL 协会</td><td>GeoLLM、地理文本挖掘方向的主场地</td></tr>
+</tbody>
+</table>
+
+<h3>0.2 GIS / 遥感专业期刊</h3>
+
+<table>
+<thead><tr><th>期刊缩写</th><th>全称</th><th>影响因子 (IF，近年)</th><th>特点</th></tr></thead>
+<tbody>
+<tr><td><strong>ISPRS J. P&amp;RS</strong></td><td>ISPRS Journal of Photogrammetry and Remote Sensing</td><td>≈ 11–12</td><td>摄影测量与遥感领域最顶级期刊之一，方法+应用兼重</td></tr>
+<tr><td><strong>RSE</strong></td><td>Remote Sensing of Environment</td><td>≈ 13</td><td>偏地学应用和定量遥感，算法论文需紧扣环境科学</td></tr>
+<tr><td><strong>IEEE TGRS</strong></td><td>IEEE Transactions on Geoscience and Remote Sensing</td><td>≈ 7–8</td><td>遥感方法学主阵地，SAR、高光谱、深度学习论文极多</td></tr>
+<tr><td><strong>IEEE GRSL</strong></td><td>IEEE Geoscience and Remote Sensing Letters</td><td>≈ 4</td><td>TGRS 的 short paper 版，审稿周期短</td></tr>
+<tr><td><strong>IEEE JSTARS</strong></td><td>IEEE JSTARS (Selected Topics in Applied Earth Observations)</td><td>≈ 5</td><td>面向应用和系统，对数据集论文友好</td></tr>
+<tr><td><strong>IJGIS</strong></td><td>International Journal of Geographical Information Science</td><td>≈ 5</td><td>GIScience 主阵地，偏空间分析、地理建模理论</td></tr>
+<tr><td><strong>TGIS</strong></td><td>Transactions in GIS</td><td>≈ 2–3</td><td>地理信息系统应用研究</td></tr>
+<tr><td><strong>CEUS</strong></td><td>Computers, Environment and Urban Systems</td><td>≈ 7</td><td>城市 GIS、智慧城市方向</td></tr>
+<tr><td><strong>C&amp;G</strong></td><td>Computers &amp; Geosciences</td><td>≈ 4</td><td>偏地学软件、算法实现</td></tr>
+<tr><td><strong>Remote Sensing (MDPI)</strong></td><td>Remote Sensing</td><td>≈ 4–5</td><td>开放获取，审稿快，论文量大</td></tr>
+<tr><td><strong>测绘学报</strong></td><td>Acta Geodaetica et Cartographica Sinica</td><td>中文 EI</td><td>中国测绘地理信息领域最顶级期刊</td></tr>
+<tr><td><strong>遥感学报</strong></td><td>Journal of Remote Sensing (中国)</td><td>中文</td><td>国内遥感领域代表性期刊</td></tr>
+<tr><td><strong>武汉大学学报·信息科学版</strong></td><td>Geomatics and Information Science of Wuhan University</td><td>中文 EI</td><td>偏摄影测量、GNSS、GIS 理论</td></tr>
+</tbody>
+</table>
+
+<h3>0.3 专业会议</h3>
+
+<table>
+<thead><tr><th>会议</th><th>周期</th><th>领域</th></tr></thead>
+<tbody>
+<tr><td><strong>ACM SIGSPATIAL</strong></td><td>每年 11 月</td><td>空间数据库、空间数据挖掘、轨迹、地图匹配的顶会</td></tr>
+<tr><td><strong>GIScience</strong></td><td>每两年</td><td>GIScience 理论与方法的国际旗舰会议</td></tr>
+<tr><td><strong>ISPRS Congress</strong></td><td>每四年</td><td>国际摄影测量与遥感学会大会，覆盖面最广</td></tr>
+<tr><td><strong>IGARSS</strong></td><td>每年</td><td>IEEE 地球科学与遥感年会，规模最大的遥感会议</td></tr>
+<tr><td><strong>AGILE</strong></td><td>每年</td><td>欧洲 GIS 研究协会年会</td></tr>
+<tr><td><strong>COSIT</strong></td><td>每两年</td><td>空间信息理论国际会议，偏认知与形式化</td></tr>
+<tr><td><strong>AutoCarto / Cartography</strong></td><td>不定期</td><td>地图学与可视化</td></tr>
+<tr><td><strong>中国 GIS 大会 / 遥感大会</strong></td><td>每年</td><td>国内交流主阵地</td></tr>
+</tbody>
+</table>
+
+<div class="ref">小提示：如果你是研究生刚起步，建议把"目标会议"缩到 2–3 个。例如："CVPR + IEEE TGRS + SIGSPATIAL"就是一个典型的 GeoAI 博士的投稿组合。先盯住这几个场地的近三年 accept list，读完 30 篇代表作，你就拥有了整个方向的地图。</div>
+
+<h2>1. 方向一：GeoAI 与基础大模型（Foundation Models）</h2>
+
+<h3>1.1 经典理论基础（背景综述）</h3>
+
+<p>"基础模型"（Foundation Model）概念由斯坦福 HAI 于 2021 年提出，指在大规模数据上预训练、可通过少量下游数据迁移到多任务的大模型。在遥感领域，代表思路有两条：一是把 MAE（Masked Autoencoder）这类<strong>自监督像素级预训练</strong>引入多光谱、多时相、多分辨率影像；二是把 CLIP 这类<strong>视觉–语言对比学习</strong>扩展到"遥感图像 + 自然语言描述"。由此催生了 SatMAE、Scale-MAE、SatCLIP、RemoteCLIP、SkySense 等工作。基础模型的核心诉求是：<em>一次预训练，处处适配</em>——分类、分割、变化检测、检索、回归都能"即插即用"。</p>
+
+<h3>1.2 代表性论文（按时间倒序）</h3>
+
+<div class="warn" style="font-size:.85rem;color:var(--muted)">下列论文均为业内广泛引用的代表性工作；arXiv 编号按公开记录列出，如与最新版本略有出入请以原始网站为准。每篇"要点"是作者原创的一句话导航提示，不代替摘要。</div>
+
+<div class="card-grid">
+
+<div class="card">
+  <h4>SkySense: A Multi-Modal Remote Sensing Foundation Model</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Guo et al. · Ant Group / WHU · CVPR 2024 · <a href="https://arxiv.org/abs/2312.10115" target="_blank">arxiv.org/abs/2312.10115</a></p>
+  <p>一句话要点：用 21.5 亿参数在时序光学 + SAR + 高分影像上联合自监督预训练，把"多模态 + 多时相"塞进同一个遥感基础模型骨干。</p>
+</div>
+
+<div class="card">
+  <h4>SatMAE: Pre-training Transformers for Temporal and Multi-Spectral Satellite Imagery</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Cong et al. · Stanford · NeurIPS 2022 · <a href="https://arxiv.org/abs/2207.08051" target="_blank">arxiv.org/abs/2207.08051</a></p>
+  <p>一句话要点：把 MAE 的"掩码重建"思想扩展到多光谱波段与时间序列，开启遥感自监督预训练的大航海时代。</p>
+</div>
+
+<div class="card">
+  <h4>Scale-MAE: A Scale-Aware Masked Autoencoder for Multiscale Geospatial Representation Learning</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Reed et al. · UC Berkeley · ICCV 2023 · <a href="https://arxiv.org/abs/2212.14532" target="_blank">arxiv.org/abs/2212.14532</a></p>
+  <p>一句话要点：显式把"地面采样距离（GSD）"作为位置编码注入 MAE，让同一个模型能在不同分辨率的影像之间优雅迁移。</p>
+</div>
+
+<div class="card">
+  <h4>SatCLIP: Global, General-Purpose Location Embeddings with Satellite Imagery</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Klemmer et al. · Microsoft Research · AAAI 2025 · <a href="https://arxiv.org/abs/2311.17179" target="_blank">arxiv.org/abs/2311.17179</a></p>
+  <p>一句话要点：把"任意经纬度"对齐到预训练的卫星影像向量空间，得到可以直接当特征用于下游任务的全球位置嵌入。</p>
+</div>
+
+<div class="card">
+  <h4>RemoteCLIP: A Vision-Language Foundation Model for Remote Sensing</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Liu et al. · PolyU · IEEE TGRS 2024 · <a href="https://arxiv.org/abs/2306.11029" target="_blank">arxiv.org/abs/2306.11029</a></p>
+  <p>一句话要点：把 CLIP 的图文对齐搬到遥感，构建大规模"遥感图–自然语言"对，支持零样本分类、检索与跨模态问答。</p>
+</div>
+
+<div class="card">
+  <h4>GeoCLIP: Clip-Inspired Alignment between Locations and Images for Effective Worldwide Geo-localization</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Vivanco Cepeda et al. · UCF · NeurIPS 2023 · <a href="https://arxiv.org/abs/2309.16020" target="_blank">arxiv.org/abs/2309.16020</a></p>
+  <p>一句话要点：用 CLIP 风格对比学习对齐"地面照片"与"经纬度编码"，实现不依赖数据库检索的全球尺度图像地理定位。</p>
+</div>
+
+<div class="card">
+  <h4>SpectralGPT: Spectral Remote Sensing Foundation Model</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Hong et al. · DLR / HKU · IEEE TPAMI 2024 · <a href="https://arxiv.org/abs/2311.07113" target="_blank">arxiv.org/abs/2311.07113</a></p>
+  <p>一句话要点：把"掩码自编码 + 3D 光谱–空间联合建模"引入高光谱预训练，面向光谱丰富场景设计的遥感基础模型。</p>
+</div>
+
+<div class="card">
+  <h4>DOFA: Dynamic One-For-All Foundation Model for Earth Observation</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Xiong et al. · TUM · 2024 · <a href="https://arxiv.org/abs/2403.15356" target="_blank">arxiv.org/abs/2403.15356</a></p>
+  <p>一句话要点：用动态权重生成的思路让单个模型同时"吃"光学、SAR、高光谱等异构模态，实现模态可变的统一遥感编码器。</p>
+</div>
+
+<div class="card">
+  <h4>Clay Foundation Model v1 (Open-Source Earth FM)</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Clay Foundation · 2024 · <a href="https://clay-foundation.github.io/model/" target="_blank">clay-foundation.github.io/model</a></p>
+  <p>一句话要点：一个开源的多传感器遥感 MAE 基础模型，目标是成为地球观测领域的"HuggingFace 基座"，强调开放权重与可复现。</p>
+</div>
+
+<div class="card">
+  <h4>Prithvi: A Foundation Model for Earth Observation (NASA &amp; IBM)</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Jakubik et al. · NASA / IBM · 2023 · <a href="https://arxiv.org/abs/2310.18660" target="_blank">arxiv.org/abs/2310.18660</a></p>
+  <p>一句话要点：NASA 与 IBM 联合发布的 Sentinel 时序 ViT-MAE 模型，专为洪水、烧毁面积等地球系统任务准备预训练权重。</p>
+</div>
+
+<div class="card">
+  <h4>Presto: Lightweight Pretrained Transformers for Remote Sensing Pixel Time Series</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Tseng et al. · NASA Harvest · IJCAI 2023 · <a href="https://arxiv.org/abs/2304.14065" target="_blank">arxiv.org/abs/2304.14065</a></p>
+  <p>一句话要点：以"单像素时间序列"为输入的轻量级 Transformer，证明不用海量算力也能把遥感时序基础模型做出来。</p>
+</div>
+
+<div class="card">
+  <h4>RingMo: A Remote Sensing Foundation Model with Masked Image Modeling</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Sun et al. · CASIA · IEEE TGRS 2023 · <a href="https://arxiv.org/abs/2208.03987" target="_blank">arxiv.org/abs/2208.03987</a></p>
+  <p>一句话要点：国内代表性的遥感基础模型，针对遥感影像密集小目标特点改造 MIM 掩码策略。</p>
+</div>
+
+<div class="card">
+  <h4>CROMA: Remote Sensing Representations with Contrastive Radar-Optical Masked Autoencoders</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Fuller et al. · McGill · NeurIPS 2023 · <a href="https://arxiv.org/abs/2311.00566" target="_blank">arxiv.org/abs/2311.00566</a></p>
+  <p>一句话要点：把"光学 × SAR 对比 + 掩码重建"组合为统一预训练目标，得到跨模态稳健的遥感表征。</p>
+</div>
+
+<div class="card">
+  <h4>GASSL: Geography-Aware Self-Supervised Learning</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Ayush et al. · Stanford · ICCV 2021 · <a href="https://arxiv.org/abs/2011.09980" target="_blank">arxiv.org/abs/2011.09980</a></p>
+  <p>一句话要点：把"同一地点不同时相"作为自监督正样本对，是最早把地理先验显式用进对比学习的工作之一。</p>
+</div>
+
+<div class="card">
+  <h4>SeCo: Seasonal Contrast for Unsupervised Remote Sensing Representation Learning</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Mañas et al. · Element AI · ICCV 2021 · <a href="https://arxiv.org/abs/2103.16607" target="_blank">arxiv.org/abs/2103.16607</a></p>
+  <p>一句话要点：利用季节变化构建正负样本对，使模型在学习表征时对"季节噪声"天然免疫。</p>
+</div>
+
+<div class="card">
+  <h4>MMEarth: Exploring Multi-Modal Pretext Tasks for Geospatial Representation Learning</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Nedungadi et al. · Copenhagen · ECCV 2024 · <a href="https://arxiv.org/abs/2405.02771" target="_blank">arxiv.org/abs/2405.02771</a></p>
+  <p>一句话要点：把多种地球观测模态（光学、气象、地形、夜光等）作为互相预测的多任务前置任务，训练通用 Earth 表征。</p>
+</div>
+
+<div class="card">
+  <h4>SatMAE++: Rethinking Multiscale SatMAE</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Noman et al. · MBZUAI · CVPR 2024 · <a href="https://arxiv.org/abs/2403.05419" target="_blank">arxiv.org/abs/2403.05419</a></p>
+  <p>一句话要点：在 SatMAE 基础上显式引入多尺度重建目标，在多分辨率评测集上刷新精度。</p>
+</div>
+
+<div class="card">
+  <h4>GFM: Geospatial Foundation Model via Continual Pretraining</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Mendieta et al. · UCF · ICCV 2023 · <a href="https://arxiv.org/abs/2302.04476" target="_blank">arxiv.org/abs/2302.04476</a></p>
+  <p>一句话要点：研究"先拿 ImageNet 权重再在遥感上持续预训练"这种低成本路线，给预算有限的研究组提供了一条可行路径。</p>
+</div>
+
+<div class="card">
+  <h4>GeoPile / Towards Geospatial Foundation Models via Continual Pretraining</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Mendieta et al. · UCF · 2023 · 附 Data Benchmark</p>
+  <p>一句话要点：发布了 GeoPile 多源遥感数据池，配套研究"哪些数据对遥感预训练最划算"。</p>
+</div>
+
+<div class="card">
+  <h4>USat: Unified Self-Supervised Framework for Multi-Sensor Satellite Imagery</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Irvin et al. · Stanford · 2023 · <a href="https://arxiv.org/abs/2312.02199" target="_blank">arxiv.org/abs/2312.02199</a></p>
+  <p>一句话要点：设计统一编码器同时处理 Sentinel-1、Sentinel-2、Landsat 等多传感器输入，为后续多源融合基础模型铺路。</p>
+</div>
+
+<div class="card">
+  <h4>OmniSat: Self-Supervised Modalities Alignment for Earth Observation</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Astruc et al. · IGN France · ECCV 2024 · <a href="https://arxiv.org/abs/2404.08351" target="_blank">arxiv.org/abs/2404.08351</a></p>
+  <p>一句话要点：面向"任意多源遥感组合"的对齐式自监督框架，强调缺模态情况下的鲁棒迁移。</p>
+</div>
+
+<div class="card">
+  <h4>Galileo: Learning Global and Local Features in Pretrained Remote Sensing Models</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Tseng et al. · NASA Harvest · 2024 · <a href="https://arxiv.org/abs/2502.09356" target="_blank">arxiv.org/abs/2502.09356</a></p>
+  <p>一句话要点：同时刻画"场景级"和"像素级"表征，让同一个预训练模型既能做分类又能做精细分割。</p>
+</div>
+
+<div class="card">
+  <h4>SatlasPretrain: A Large-Scale Dataset for Remote Sensing Image Understanding</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Bastani et al. · AI2 · ICCV 2023 · <a href="https://arxiv.org/abs/2211.15660" target="_blank">arxiv.org/abs/2211.15660</a></p>
+  <p>一句话要点：发布覆盖全球的大规模遥感多任务数据集 Satlas，推动"遥感界的 ImageNet"基础设施建设。</p>
+</div>
+
+</div>
+
+<h2>2. 方向二：GIS 空间分析与时空计算</h2>
+
+<h3>2.1 经典理论基础</h3>
+
+<p>这是 GIScience 的"老本行"。理论基石包括 <strong>空间自相关</strong>（Moran's I、Geary's C）、<strong>空间异质性</strong>与 <strong>地理加权回归（GWR/MGWR）</strong>、<strong>空间交互模型</strong>、<strong>元胞自动机与 Agent-Based Model</strong>、<strong>时空统计</strong>（STARIMA、时空 Kriging）等。近年来，这些传统方法与 <em>图神经网络（GNN）、时序 Transformer、生成模型</em> 等深度学习范式融合，形成"Spatio-Temporal Deep Learning"这一子方向，广泛用于城市计算、交通预测、轨迹挖掘、空气质量建模等任务。研究的核心问题始终围绕 Tobler 第一定律："近的更相似"如何被显式建模到网络结构与损失函数里。</p>
+
+<h3>2.2 代表性论文</h3>
+
+<div class="card-grid">
+
+<div class="card">
+  <h4>STGCN: Spatio-Temporal Graph Convolutional Networks for Traffic Forecasting</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Yu et al. · PKU · IJCAI 2018 · <a href="https://arxiv.org/abs/1709.04875" target="_blank">arxiv.org/abs/1709.04875</a></p>
+  <p>一句话要点：把图卷积用于交通路网节点、时域卷积用于时间序列，奠定了"时空 GNN"范式的基本形态。</p>
+</div>
+
+<div class="card">
+  <h4>DCRNN: Diffusion Convolutional Recurrent Neural Network</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Li et al. · USC · ICLR 2018 · <a href="https://arxiv.org/abs/1707.01926" target="_blank">arxiv.org/abs/1707.01926</a></p>
+  <p>一句话要点：用有向随机游走的"扩散卷积"建模交通路网空间关系，是交通预测基线家族中的长青树。</p>
+</div>
+
+<div class="card">
+  <h4>Graph WaveNet for Deep Spatial-Temporal Graph Modeling</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wu et al. · Monash · IJCAI 2019 · <a href="https://arxiv.org/abs/1906.00121" target="_blank">arxiv.org/abs/1906.00121</a></p>
+  <p>一句话要点：结合自适应邻接矩阵和膨胀因果卷积，用一个"数据驱动的图"来代替人工路网邻接。</p>
+</div>
+
+<div class="card">
+  <h4>ASTGCN: Attention Based Spatial-Temporal Graph Convolutional Networks</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Guo et al. · BJTU · AAAI 2019</p>
+  <p>一句话要点：在时空 GNN 中引入空间 / 时间双重注意力，让模型学会"在哪儿关注 + 什么时候关注"。</p>
+</div>
+
+<div class="card">
+  <h4>GMAN: A Graph Multi-Attention Network for Traffic Prediction</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zheng et al. · Monash · AAAI 2020 · <a href="https://arxiv.org/abs/1911.08415" target="_blank">arxiv.org/abs/1911.08415</a></p>
+  <p>一句话要点：用堆叠的多重注意力捕捉远距离时空依赖，缓解长时预测中误差累计问题。</p>
+</div>
+
+<div class="card">
+  <h4>Urban2Vec: Incorporating Street View Imagery and POIs for Multi-Modal Urban Neighborhood Embedding</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · CMU · AAAI 2020 · <a href="https://arxiv.org/abs/2001.11101" target="_blank">arxiv.org/abs/2001.11101</a></p>
+  <p>一句话要点：融合街景、POI、遥感等多模态生成"社区向量"，是城市计算中 embedding 思路的代表作之一。</p>
+</div>
+
+<div class="card">
+  <h4>Region2Vec: Urban Region Embedding with Heterogeneous Graph</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zhang et al. · 相关研究组 · SIGSPATIAL 2021 前后</p>
+  <p>一句话要点：把一个城市切分成区域并在异质图上学习向量表示，下游可用于用地分类、房价预测等。</p>
+</div>
+
+<div class="card">
+  <h4>Spatial-Temporal Transformer Networks for Traffic Flow Forecasting</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Xu et al. · BIT · 2020 · <a href="https://arxiv.org/abs/2001.02908" target="_blank">arxiv.org/abs/2001.02908</a></p>
+  <p>一句话要点：最早一批把 Transformer 架构全面引入交通预测的工作，替代 RNN 作为时序主干。</p>
+</div>
+
+<div class="card">
+  <h4>PDFormer: Propagation Delay-Aware Dynamic Long-Range Transformer for Traffic Flow Prediction</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Jiang et al. · BJTU · AAAI 2023 · <a href="https://arxiv.org/abs/2301.07945" target="_blank">arxiv.org/abs/2301.07945</a></p>
+  <p>一句话要点：显式建模"交通传播延迟"这一物理量，让自注意力机制对道路网络的真实拓扑更敏感。</p>
+</div>
+
+<div class="card">
+  <h4>PatchTST: A Time Series Worth 64 Words for Long Horizon Forecasting</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Nie et al. · Princeton / IBM · ICLR 2023 · <a href="https://arxiv.org/abs/2211.14730" target="_blank">arxiv.org/abs/2211.14730</a></p>
+  <p>一句话要点：把一维时间序列切成 patch 当 token，启发了大量 GIS 时序预测模型的"Patch 化"改造。</p>
+</div>
+
+<div class="card">
+  <h4>TrajGDM: Generative Diffusion Models for Trajectory Generation</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">相关研究组 · 2023–2024 · 扩散模型应用</p>
+  <p>一句话要点：用扩散模型学习轨迹分布并生成逼真合成轨迹，为隐私保护与数据增广提供新路径。</p>
+</div>
+
+<div class="card">
+  <h4>DiffTraj: Generating GPS Trajectory with Diffusion Probabilistic Model</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zhu et al. · HKUST · NeurIPS 2023 · <a href="https://arxiv.org/abs/2304.11582" target="_blank">arxiv.org/abs/2304.11582</a></p>
+  <p>一句话要点：以扩散概率模型建模城市级 GPS 轨迹生成问题，可条件生成特定时段、特定区域的合成轨迹。</p>
+</div>
+
+<div class="card">
+  <h4>TrajFormer: Efficient Trajectory Classification with Transformers</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Liang et al. · CIKM 2022</p>
+  <p>一句话要点：专为 GPS 轨迹设计的 Transformer 分类器，引入连续时间位置编码以适配不规则采样。</p>
+</div>
+
+<div class="card">
+  <h4>DeepMove: Predicting Human Mobility with Attentional Recurrent Networks</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Feng et al. · THU · WWW 2018</p>
+  <p>一句话要点：早期代表作，把长短期偏好以注意力形式融合进循环网络，用于下一个位置预测。</p>
+</div>
+
+<div class="card">
+  <h4>ST-SSL: Spatio-Temporal Self-Supervised Learning for Traffic Flow Prediction</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Ji et al. · BJTU · AAAI 2023 · <a href="https://arxiv.org/abs/2212.04475" target="_blank">arxiv.org/abs/2212.04475</a></p>
+  <p>一句话要点：把自监督对比学习引入交通时空图，缓解标签稀缺场景下的泛化问题。</p>
+</div>
+
+<div class="card">
+  <h4>UniST: A Prompt-Empowered Universal Model for Urban Spatio-Temporal Prediction</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Yuan et al. · THU · KDD 2024 · <a href="https://arxiv.org/abs/2402.11838" target="_blank">arxiv.org/abs/2402.11838</a></p>
+  <p>一句话要点：用 Prompt 机制把多城市、多任务的时空预测统一到一个 foundation 模型里。</p>
+</div>
+
+<div class="card">
+  <h4>UrbanCLIP: Learning Text-Enhanced Urban Region Profiling with Contrastive Language-Image Pretraining</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Yan et al. · WWW 2024 · <a href="https://arxiv.org/abs/2310.18340" target="_blank">arxiv.org/abs/2310.18340</a></p>
+  <p>一句话要点：把 LLM 生成的文本描述与卫星图做 CLIP 式对齐，得到可解释的城市区域画像。</p>
+</div>
+
+<div class="card">
+  <h4>MGeo: Multi-Modal Geographic Pre-Training</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Ding et al. · Alibaba · SIGIR 2023 · <a href="https://arxiv.org/abs/2301.04283" target="_blank">arxiv.org/abs/2301.04283</a></p>
+  <p>一句话要点：联合地理文本 + 空间结构做预训练，用于地址匹配、POI 检索等产业级任务。</p>
+</div>
+
+<div class="card">
+  <h4>LibCity: An Open Library for Traffic Prediction</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · BJTU · SIGSPATIAL 2021 · <a href="https://github.com/LibCity/Bigscity-LibCity" target="_blank">github.com/LibCity</a></p>
+  <p>一句话要点：开源时空预测基准库，让新论文可以公平对比几十个模型，极大加速该方向研究节奏。</p>
+</div>
+
+</div>
+
+<h2>3. 方向三：GIS × 大语言模型（LLM for Spatial Reasoning）</h2>
+
+<h3>3.1 背景综述</h3>
+
+<p>随着 GPT-4、Claude、Gemini、Llama、Qwen 等通用大语言模型能力爆发，地理信息科学出现了一个新子领域：<strong>GeoLLM</strong>。研究问题包括：LLM 是否拥有"空间推理"能力？它们对地名、方向、距离、地理关系的理解有多准确？能否让它们写 GIS 代码、查空间数据库、解读地图？能否把它们接入多模态使其"看图说地理"？进一步，研究者还在尝试 <strong>把遥感影像和 LLM 融合</strong>，构建 Remote Sensing VLM（视觉–语言多模态大模型）。这一领域既是热点也是雷区，需要谨慎区分"真推理"与"模式记忆"。</p>
+
+<h3>3.2 代表性论文</h3>
+
+<div class="card-grid">
+
+<div class="card">
+  <h4>GeoLLM: Extracting Geospatial Knowledge from Large Language Models</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Manvi et al. · Stanford · ICLR 2024 · <a href="https://arxiv.org/abs/2310.06213" target="_blank">arxiv.org/abs/2310.06213</a></p>
+  <p>一句话要点：系统评估通用 LLM 对地理属性（人口、资产、犯罪等）的隐式知识，并提出以地名 Prompt 作"特征提取器"的新范式。</p>
+</div>
+
+<div class="card">
+  <h4>K2: A Foundation Language Model for Geoscience Knowledge Understanding</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Deng et al. · CAS / CUG · WSDM 2024 · <a href="https://arxiv.org/abs/2306.05064" target="_blank">arxiv.org/abs/2306.05064</a></p>
+  <p>一句话要点：在地质与地球科学文本上继续训练 LLaMA，验证"领域继续预训练 + 指令微调"路线在地学知识问答上的效果。</p>
+</div>
+
+<div class="card">
+  <h4>GPT4GEO: How a Language Model Sees the World's Geography</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Roberts et al. · Cambridge · 2023 · <a href="https://arxiv.org/abs/2306.00020" target="_blank">arxiv.org/abs/2306.00020</a></p>
+  <p>一句话要点：系统探针式地测量 GPT-4 对全球地名、地理关系、空间推理的掌握程度，结论喜忧参半。</p>
+</div>
+
+<div class="card">
+  <h4>Can Language Models Solve Graph Problems in Natural Language?</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · NeurIPS 2023 · <a href="https://arxiv.org/abs/2305.10037" target="_blank">arxiv.org/abs/2305.10037</a></p>
+  <p>一句话要点：虽然不是纯 GIS 论文，但它回答了"LLM 到底会不会做图/空间推理"这个本质问题，常被 GeoLLM 论文引用。</p>
+</div>
+
+<div class="card">
+  <h4>Assessing the Geographic Knowledge of ChatGPT</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Mooney et al. · 多所高校 · Transactions in GIS 2023</p>
+  <p>一句话要点：以地理教师视角系统测验 ChatGPT 的地理事实、地图阅读与空间推理能力，给出定量与案例分析。</p>
+</div>
+
+<div class="card">
+  <h4>Autonomous GIS: the Next-Generation AI-Powered GIS</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Li &amp; Ning · ASU · IJDE 2023 · <a href="https://arxiv.org/abs/2305.06453" target="_blank">arxiv.org/abs/2305.06453</a></p>
+  <p>一句话要点：提出"自治 GIS"愿景——让 LLM 驱动的代理自动分解地理分析任务、调用工具并返回结果，是 GeoAI Agent 概念的代表作。</p>
+</div>
+
+<div class="card">
+  <h4>LLM-Geo: A Large Language Model-Based GIS Agent</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Li et al. · ASU · 2023 · <a href="https://arxiv.org/abs/2307.09241" target="_blank">arxiv.org/abs/2307.09241</a></p>
+  <p>一句话要点：把 LLM 接上 GIS 工具链，让它能规划"下载数据—空间连接—出图"等多步骤地理分析流程。</p>
+</div>
+
+<div class="card">
+  <h4>MapGPT: An Autonomous Framework for Mapping Using Large Language Models</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zhang et al. · 2024 前后 · 相关预印本</p>
+  <p>一句话要点：用 LLM 作中枢，自动完成地图制图中的样式选择、投影设置、图例生成等环节。</p>
+</div>
+
+<div class="card">
+  <h4>UrbanGPT: Spatio-Temporal Large Language Models</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Li et al. · HKU · KDD 2024 · <a href="https://arxiv.org/abs/2403.00813" target="_blank">arxiv.org/abs/2403.00813</a></p>
+  <p>一句话要点：为城市时空预测场景定制的 LLM 框架，支持零样本跨城市泛化，主打"讲故事式"的解释输出。</p>
+</div>
+
+<div class="card">
+  <h4>GeoChat: Grounded Large Vision-Language Model for Remote Sensing</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Kuckreja et al. · MBZUAI · CVPR 2024 · <a href="https://arxiv.org/abs/2311.15826" target="_blank">arxiv.org/abs/2311.15826</a></p>
+  <p>一句话要点：面向遥感影像的多模态对话模型，支持区域定位、属性问答、变化描述等"与图对话"任务。</p>
+</div>
+
+<div class="card">
+  <h4>RSGPT: A Remote Sensing Vision Language Model and Benchmark</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Hu et al. · ISPRS J. 2025 · <a href="https://arxiv.org/abs/2307.15266" target="_blank">arxiv.org/abs/2307.15266</a></p>
+  <p>一句话要点：构建遥感图文对数据集并微调一个"遥感 GPT"，可以生成描述、执行问答与场景解释。</p>
+</div>
+
+<div class="card">
+  <h4>RS-GPT4V: A Unified Multimodal Instruction-Following Dataset for Remote Sensing</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Xu et al. · 2024 · <a href="https://arxiv.org/abs/2406.12479" target="_blank">arxiv.org/abs/2406.12479</a></p>
+  <p>一句话要点：以 GPT-4V 为标注器构造大规模遥感多模态指令数据集，推动开源遥感 VLM 的训练。</p>
+</div>
+
+<div class="card">
+  <h4>EarthGPT: A Universal Multi-Modal Large Language Model for Multi-Sensor Image Comprehension in Remote Sensing</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zhang et al. · NUDT · IEEE TGRS 2024 · <a href="https://arxiv.org/abs/2401.16822" target="_blank">arxiv.org/abs/2401.16822</a></p>
+  <p>一句话要点：统一处理光学、红外、SAR 等多传感器遥感图像理解任务的多模态大模型。</p>
+</div>
+
+<div class="card">
+  <h4>SkyEyeGPT: Unifying Remote Sensing Vision-Language Tasks via Instruction Tuning</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zhan et al. · 2024 · <a href="https://arxiv.org/abs/2401.09712" target="_blank">arxiv.org/abs/2401.09712</a></p>
+  <p>一句话要点：用指令微调整合 caption、VQA、grounding 等多个遥感视觉语言任务到同一模型。</p>
+</div>
+
+<div class="card">
+  <h4>LHRS-Bot: Empowering Remote Sensing with VGI-Enhanced Large Multimodal Language Model</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Muhtar et al. · ECCV 2024 · <a href="https://arxiv.org/abs/2402.02544" target="_blank">arxiv.org/abs/2402.02544</a></p>
+  <p>一句话要点：利用 OpenStreetMap 等志愿地理信息作为监督，构建"遥感 × LMM"数据集和模型。</p>
+</div>
+
+<div class="card">
+  <h4>GeoGalactica: A Scientific Large Language Model in Geoscience</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Lin et al. · SJTU · 2024 · <a href="https://arxiv.org/abs/2401.00434" target="_blank">arxiv.org/abs/2401.00434</a></p>
+  <p>一句话要点：在 Galactica 科学语言模型基础上针对地学文献继续训练，面向地质/地球科学的专业问答。</p>
+</div>
+
+<div class="card">
+  <h4>Evaluating the Spatial Reasoning Abilities of Large Language Models</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">多项实证研究 · 2023–2025</p>
+  <p>一句话要点：一系列工作通过"迷宫寻路 / 方向描述 / 地图任务"等 benchmark 系统测量 LLM 的空间推理上限。</p>
+</div>
+
+</div>
+
+<h2>4. 方向四：遥感解译算法（深度学习）</h2>
+
+<h3>4.1 经典理论基础</h3>
+
+<p>遥感深度解译的近代史从 2015 年 FCN 与 U-Net 开始。<strong>FCN</strong>（Long et al., CVPR 2015）首次把全卷积网络引入语义分割；<strong>U-Net</strong>（Ronneberger et al., MICCAI 2015）以编码–解码 + 跳跃连接的结构成为遥感分割的事实标准骨架；<strong>DeepLab 系列</strong>（2016–2018）引入空洞卷积与 ASPP；<strong>Mask R-CNN</strong>（2017）统一目标检测与实例分割；<strong>HRNet</strong>（2019）保持高分辨率特征。2020 年后，Vision Transformer（ViT）、Swin Transformer、SegFormer 等架构迅速占据榜首。2023 年 Meta 的 <strong>Segment Anything Model (SAM)</strong> 带来了"通用分割"范式，衍生出一大批遥感 SAM 变体。</p>
+
+<h3>4.2 代表性论文</h3>
+
+<div class="card-grid">
+
+<div class="card">
+  <h4>U-Net: Convolutional Networks for Biomedical Image Segmentation</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Ronneberger et al. · MICCAI 2015 · <a href="https://arxiv.org/abs/1505.04597" target="_blank">arxiv.org/abs/1505.04597</a></p>
+  <p>一句话要点：编码器–解码器 + 跳跃连接的简洁架构，原本用于医学图像，却成了遥感语义分割的"通用底座"。</p>
+</div>
+
+<div class="card">
+  <h4>Fully Convolutional Networks for Semantic Segmentation (FCN)</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Long et al. · UC Berkeley · CVPR 2015 · <a href="https://arxiv.org/abs/1411.4038" target="_blank">arxiv.org/abs/1411.4038</a></p>
+  <p>一句话要点：把分类网的全连接层换成卷积，首次实现端到端像素级预测，宣告深度学习时代语义分割的开幕。</p>
+</div>
+
+<div class="card">
+  <h4>DeepLab v3+: Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Chen et al. · Google · ECCV 2018 · <a href="https://arxiv.org/abs/1802.02611" target="_blank">arxiv.org/abs/1802.02611</a></p>
+  <p>一句话要点：空洞空间金字塔池化（ASPP） + 解码器，在分辨率和感受野之间找到了一个极佳折中，广泛用于土地覆盖分类。</p>
+</div>
+
+<div class="card">
+  <h4>HRNet: Deep High-Resolution Representation Learning for Visual Recognition</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · MSRA · IEEE TPAMI 2020 · <a href="https://arxiv.org/abs/1908.07919" target="_blank">arxiv.org/abs/1908.07919</a></p>
+  <p>一句话要点：始终维持多分辨率特征并行计算，在需要细节的遥感小目标识别中表现突出。</p>
+</div>
+
+<div class="card">
+  <h4>SegFormer: Simple and Efficient Design for Semantic Segmentation with Transformers</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Xie et al. · NVIDIA · NeurIPS 2021 · <a href="https://arxiv.org/abs/2105.15203" target="_blank">arxiv.org/abs/2105.15203</a></p>
+  <p>一句话要点：轻量级 MLP 解码器 + 分层 Transformer 编码器，速度和精度兼顾，是遥感分割的现代基线。</p>
+</div>
+
+<div class="card">
+  <h4>Swin Transformer: Hierarchical Vision Transformer using Shifted Windows</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Liu et al. · MSRA · ICCV 2021 · <a href="https://arxiv.org/abs/2103.14030" target="_blank">arxiv.org/abs/2103.14030</a></p>
+  <p>一句话要点：窗口注意力 + 层级结构，使 ViT 架构第一次在密集预测任务上全面压倒 CNN。</p>
+</div>
+
+<div class="card">
+  <h4>Segment Anything (SAM)</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Kirillov et al. · Meta AI · ICCV 2023 · <a href="https://arxiv.org/abs/2304.02643" target="_blank">arxiv.org/abs/2304.02643</a></p>
+  <p>一句话要点：用 11 亿掩码训练得到"可提示分割"通用模型，把"点一点就分出来"变成现实，直接引爆遥感 SAM 大变种。</p>
+</div>
+
+<div class="card">
+  <h4>SAM 2: Segment Anything in Images and Videos</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Ravi et al. · Meta · 2024 · <a href="https://arxiv.org/abs/2408.00714" target="_blank">arxiv.org/abs/2408.00714</a></p>
+  <p>一句话要点：SAM 的续集，把能力拓展到视频与时序，对遥感时序变化检测意义直接。</p>
+</div>
+
+<div class="card">
+  <h4>SAMRS: Scaling-up Remote Sensing Segmentation Dataset with Segment Anything Model</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · WHU · NeurIPS 2023 · <a href="https://arxiv.org/abs/2305.02034" target="_blank">arxiv.org/abs/2305.02034</a></p>
+  <p>一句话要点：借助 SAM 的掩码生成能力把现有遥感检测框转为大规模分割标签，构建百万级遥感分割数据集。</p>
+</div>
+
+<div class="card">
+  <h4>RSPrompter: Learning to Prompt for Remote Sensing Instance Segmentation</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Chen et al. · BUAA · IEEE TGRS 2024 · <a href="https://arxiv.org/abs/2306.16269" target="_blank">arxiv.org/abs/2306.16269</a></p>
+  <p>一句话要点：针对 SAM 缺少类别感知的问题，学习一组可训练 Prompt，让 SAM 具备遥感实例分割能力。</p>
+</div>
+
+<div class="card">
+  <h4>RingMo-SAM: A Foundation Model for Segment Anything in Multimodal Remote Sensing Images</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Yan et al. · CASIA · IEEE TGRS 2023</p>
+  <p>一句话要点：把 RingMo 的遥感预训练权重和 SAM 的提示分割结合起来，针对多模态遥感输入做"通用分割"。</p>
+</div>
+
+<div class="card">
+  <h4>Text2Seg: Remote Sensing Image Semantic Segmentation via Text-Guided Vision Foundation Models</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zhang et al. · 2023 · <a href="https://arxiv.org/abs/2304.10597" target="_blank">arxiv.org/abs/2304.10597</a></p>
+  <p>一句话要点：用 Grounding DINO + SAM 等组合，实现"输入一句自然语言就能分出对应地物"的零样本遥感分割。</p>
+</div>
+
+<div class="card">
+  <h4>Change Detection Meets Visual Question Answering on Multi-Temporal Remote Sensing Images</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Yuan et al. · IEEE TGRS 2024</p>
+  <p>一句话要点：把变化检测建模为"多时相图像 VQA"任务，让模型回答"发生了什么变化"而不仅仅给出一张二值图。</p>
+</div>
+
+<div class="card">
+  <h4>BIT: Remote Sensing Image Change Detection with Transformers</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Chen et al. · IEEE TGRS 2021 · <a href="https://arxiv.org/abs/2103.00208" target="_blank">arxiv.org/abs/2103.00208</a></p>
+  <p>一句话要点：Bitemporal Image Transformer，是"把 Transformer 引入变化检测"的代表性早期工作。</p>
+</div>
+
+<div class="card">
+  <h4>ChangeFormer: A Transformer-based Siamese Network for Change Detection</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Bandara &amp; Patel · IGARSS 2022 · <a href="https://arxiv.org/abs/2201.01293" target="_blank">arxiv.org/abs/2201.01293</a></p>
+  <p>一句话要点：孪生 Transformer 架构，被后续大量变化检测论文作为强基线使用。</p>
+</div>
+
+<div class="card">
+  <h4>ChangeOS: Object-Based Change Detection via Deep Learning for Urban Scenes</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">相关研究组 · 2022 前后</p>
+  <p>一句话要点：面向城市场景的"对象级"变化检测，把对象分割与变化推理耦合起来。</p>
+</div>
+
+<div class="card">
+  <h4>Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · Tencent ARC · ICCV 2021 · <a href="https://arxiv.org/abs/2107.10833" target="_blank">arxiv.org/abs/2107.10833</a></p>
+  <p>一句话要点：虽来自通用图像域，但在遥感影像超分方向被大量改造应用，是真实退化建模的代表作。</p>
+</div>
+
+<div class="card">
+  <h4>DiffusionSat: A Generative Foundation Model for Satellite Imagery</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Khanna et al. · Stanford · ICLR 2024 · <a href="https://arxiv.org/abs/2312.03606" target="_blank">arxiv.org/abs/2312.03606</a></p>
+  <p>一句话要点：以扩散模型为基础训练"遥感生成大模型"，支持时序补全、超分、条件生成等多任务。</p>
+</div>
+
+<div class="card">
+  <h4>CDDFuse: Correlation-Driven Dual-Branch Feature Decomposition for Multi-Modality Image Fusion</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zhao et al. · CVPR 2023 · <a href="https://arxiv.org/abs/2211.14461" target="_blank">arxiv.org/abs/2211.14461</a></p>
+  <p>一句话要点：红外/可见光图像融合代表作，被广泛迁移到遥感多源影像融合任务。</p>
+</div>
+
+<div class="card">
+  <h4>OBIA-DL: Combining Object-Based Image Analysis with Deep Learning for Remote Sensing</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">综述类工作 · ISPRS J. P&amp;RS 近年</p>
+  <p>一句话要点：讨论"面向对象分析 OBIA + 深度学习"的联合范式，是连接传统遥感与现代深度学习的桥梁。</p>
+</div>
+
+<div class="card">
+  <h4>Farseg: Foreground-Aware Relation Network for Geospatial Object Segmentation in High Spatial Resolution Remote Sensing Imagery</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Zheng et al. · WHU · CVPR 2020 · <a href="https://arxiv.org/abs/2011.09766" target="_blank">arxiv.org/abs/2011.09766</a></p>
+  <p>一句话要点：显式建模前景–背景关系，缓解遥感语义分割中前景稀疏、背景主导的类别不平衡问题。</p>
+</div>
+
+<div class="card">
+  <h4>UNetFormer: A UNet-like Transformer for Efficient Semantic Segmentation of Remote Sensing Urban Scene Imagery</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · ISPRS J. P&amp;RS 2022 · <a href="https://arxiv.org/abs/2109.08937" target="_blank">arxiv.org/abs/2109.08937</a></p>
+  <p>一句话要点：把 U-Net 的形式与 Transformer 的特征结合，在城市语义分割 benchmark 上同时追求精度与速度。</p>
+</div>
+
+<div class="card">
+  <h4>ViTAE-Transformer for Remote Sensing</h4>
+  <p style="color:var(--muted);font-size:.72rem;font-family:var(--fm)">Wang et al. · Sydney · IEEE TGRS 2023 · <a href="https://arxiv.org/abs/2208.03987" target="_blank">相关系列</a></p>
+  <p>一句话要点：带归纳偏置的 ViT 变体在遥感场景分类、分割、检测上实现统一高精度骨干。</p>
+</div>
+
+</div>
+
+<h2>5. 如何找到最新论文？</h2>
+
+<p>论文清单会过时，检索能力不会。以下是研究生常用的"论文雷达"组合，越往后越"上游"，越接近论文发表的源头。</p>
+
+<div class="card-grid">
+
+<div class="card">
+  <h4>arXiv cs.CV / cs.LG / physics.geo-ph</h4>
+  <p>每日更新的预印本源头。推荐订阅 daily RSS，或使用 arxiv-sanity 等过滤工具按关键词筛选。绝大多数 CV / GeoAI 论文第一次出现在这里。</p>
+</div>
+
+<div class="card">
+  <h4>Papers with Code</h4>
+  <p>按任务与 benchmark 聚合论文与开源代码。在"Remote Sensing"、"Semantic Segmentation"、"Traffic Prediction"等页面上可以看到清晰的 SOTA 演化图。</p>
+</div>
+
+<div class="card">
+  <h4>Google Scholar Alerts</h4>
+  <p>为关键作者、关键词设置邮件提醒。对于跟踪"某个小方向谁又发新文"非常有效，比手动搜索节省大量时间。</p>
+</div>
+
+<div class="card">
+  <h4>Semantic Scholar &amp; Connected Papers</h4>
+  <p>通过引用图快速发现"相似论文"与"谁引用了它"。在选定一篇核心论文后，可以围绕它快速扩张阅读半径。</p>
+</div>
+
+<div class="card">
+  <h4>顶会 Accepted Paper List</h4>
+  <p>CVPR / ICCV / NeurIPS / KDD / SIGSPATIAL 等会议公开录用名单。每次大会之后，用 Ctrl-F 搜"remote sensing / geospatial / satellite / urban"能快速定位该年相关论文。</p>
+</div>
+
+<div class="card">
+  <h4>HuggingFace Papers / Daily Papers</h4>
+  <p>由 HuggingFace 社区每日精选，尤其适合跟踪"带开源代码 / 权重"的新论文，对于基础模型方向尤其高效。</p>
+</div>
+
+<div class="card">
+  <h4>Twitter / X 与 LinkedIn</h4>
+  <p>关注领域内的研究者和实验室账号，很多新论文会在发表第一时间被作者自己 po 出。缺点是噪声大，需要自己过滤。</p>
+</div>
+
+<div class="card">
+  <h4>知乎 / 小红书 / B站 专业号</h4>
+  <p>中文社区对 GeoAI、遥感深度学习的解读越来越及时。适合初学者阶段快速建立直觉，但要注意交叉核对原始论文。</p>
+</div>
+
+<div class="card">
+  <h4>专业期刊 RSS / 目录订阅</h4>
+  <p>在 ISPRS J.、RSE、IEEE TGRS、IJGIS 等期刊官网订阅 RSS 或"New Issue Alerts"，确保不漏掉正式发表的"定稿版本"。</p>
+</div>
+
+</div>
+
+<h2>6. 推荐研究路径（给刚起步的研究生）</h2>
+
+<div class="info">
+  <h4>三阶段读论文法</h4>
+  <p><strong>Stage 1：打地基（2015–2020 的经典）</strong>。先把 U-Net、FCN、DeepLab、ResNet、Mask R-CNN、SegNet、BiSeNet、STGCN、DCRNN、DeepMove、Word2Vec、BERT 等"里程碑"论文读透。这些论文的数学推导并不吓人，但它们定义了整个方向的词汇表。花一两个月把它们全部精读一遍，未来读新论文时你会发现"大多数新论文只是在往这个框架上挂组件"。</p>
+  <p><strong>Stage 2：追浪潮（2021–2024 的 Transformer &amp; Foundation Model）</strong>。第二阶段跟 ViT、Swin、MAE、CLIP、SAM、ChatGPT 以及它们在遥感上的变体（SatMAE、Scale-MAE、SatCLIP、RemoteCLIP、SkySense、GeoChat、DiffusionSat 等）。此阶段重点不是推导公式，而是理解"为什么旧架构被替换、新架构到底新在哪里"。</p>
+  <p><strong>Stage 3：冲前沿（2025–2026 的 GeoLLM × Agent × Generative Earth）</strong>。最后阶段把注意力投向 GeoLLM、多模态 VLM、Autonomous GIS、Generative Earth Observation 等方向。这些领域还没有教科书，需要你自己建立品味——判断哪些是真突破、哪些是"换皮套壳"。</p>
+</div>
+
+<h3>6.1 一份 8 周读论文计划（示例）</h3>
+
+<table>
+<thead><tr><th>周次</th><th>主题</th><th>建议阅读</th></tr></thead>
+<tbody>
+<tr><td>Week 1</td><td>图像分割地基</td><td>FCN + U-Net + DeepLab v3+</td></tr>
+<tr><td>Week 2</td><td>遥感专用分割</td><td>HRNet + SegFormer + FarSeg + UNetFormer</td></tr>
+<tr><td>Week 3</td><td>Transformer 与多模态基础</td><td>ViT + Swin + MAE + CLIP</td></tr>
+<tr><td>Week 4</td><td>遥感基础模型</td><td>SatMAE + Scale-MAE + SatCLIP + RemoteCLIP</td></tr>
+<tr><td>Week 5</td><td>多模态遥感大模型</td><td>SkySense + SpectralGPT + DOFA</td></tr>
+<tr><td>Week 6</td><td>遥感 VLM 与对话</td><td>GeoChat + RSGPT + EarthGPT + LHRS-Bot</td></tr>
+<tr><td>Week 7</td><td>时空 GNN 与城市计算</td><td>STGCN + DCRNN + Graph WaveNet + UniST</td></tr>
+<tr><td>Week 8</td><td>GeoLLM 与 Autonomous GIS</td><td>GeoLLM + LLM-Geo + Autonomous GIS + UrbanGPT</td></tr>
+</tbody>
+</table>
+
+<h3>6.2 三个容易踩的坑</h3>
+
+<ol>
+<li><strong>只追"最新"不追"最经典"</strong>。新论文常常是对老方法的微小扩展，不读老论文你会看不懂新论文的动机。</li>
+<li><strong>只读摘要不跑代码</strong>。GeoAI 的很多结论对数据集非常敏感，没有复现过就没法评估"这篇真的有用"还是"选了个友好的 benchmark"。</li>
+<li><strong>只追 CV 顶会不读地学期刊</strong>。如果你最终写的是博士论文，地学期刊上对"物理意义、误差分析、真实影响"的要求会让你成长更快。</li>
+</ol>
+
+<div class="warn">
+  <h4 style="color:var(--accent2);margin-top:0">一句忠告</h4>
+  <p style="color:var(--muted);font-size:.9rem;margin-bottom:0">论文索引只是"地图"，不是"目的地"。真正让你在这个领域立足的，是一个被你彻底跑通、彻底 debug 过、彻底理解清楚的小方向 —— 哪怕只是"某一种地物在某一颗卫星上的变化检测"。先把一小块打透，再谈"前沿综述"。</p>
+</div>
+
+<div class="ref">
+免责声明：本页所列论文仅为学术导航，arXiv 编号与出版信息以原始网页为准。所有"一句话要点"为本页作者的原创概括，不构成对原论文观点的代表或引用。若发现信息不准确，请以论文官方出版版本为准，并欢迎来 issue / email 反馈修订。
+</div>
+
+</article>
+
+<div class="ch-nav">
+  <a href="learning-resources.html">&larr; 学习资源</a>
+  <a href="../index.html">目录</a>
+  <a href="../index.html">返回主页 &rarr;</a>
+</div>
+
+<footer class="footer">GIS Encyclopedia &copy; 2026</footer>
+</body>
+</html>
