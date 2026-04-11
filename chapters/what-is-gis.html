@@ -93,6 +93,21 @@ tr:hover td{background:rgba(0,229,176,.02)}
 .video-card .btn:hover{background:var(--accent2);color:var(--bg)}
 .video-card .platform{font-family:var(--fm);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-left:.6rem}
 
+/* Vector vs Raster comparison */
+.vr-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0}
+.vr-col{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;display:flex;flex-direction:column}
+.vr-label{font-family:var(--ff);font-weight:700;font-size:1rem;color:var(--accent);margin-bottom:.8rem;text-align:center;padding-bottom:.6rem;border-bottom:1px solid var(--border)}
+.vr-col:nth-child(2) .vr-label{color:var(--accent2)}
+.vr-svg{width:100%;height:auto;background:#0d1526;border-radius:10px;border:1px solid var(--border);display:block}
+.vr-caption{font-size:.78rem;color:var(--text2);text-align:center;margin-top:.8rem;line-height:1.7}
+.vr-examples{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:1.5rem 0}
+.vr-ex{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem}
+.vr-ex-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-weight:800;font-size:1.3rem;margin-bottom:.8rem}
+.vr-ex h4{margin:0 0 .6rem;color:var(--text);font-size:.95rem}
+.vr-ex ul{margin:0;padding-left:1.2rem;font-size:.82rem;color:var(--text2);line-height:1.9}
+.vr-ex li{margin-bottom:.3rem}
+@media(max-width:768px){.vr-compare,.vr-examples{grid-template-columns:1fr}}
+
 /* Two col */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin:1.5rem 0}
 
@@ -275,28 +290,314 @@ tr:hover td{background:rgba(0,229,176,.02)}
 </div>
 
 <h2>GIS 的两种核心数据：矢量 vs 栅格</h2>
-<p>如果你决定再往前走一小步，就会发现 GIS 里所有数据其实都可以分成两大家族：<strong>矢量（Vector）</strong>和<strong>栅格（Raster）</strong>。它们的差别用一个艺术比喻就能瞬间理解。</p>
+<p>如果你决定再往前走一小步，就会发现 GIS 里所有数据其实都可以分成两大家族：<strong>矢量（Vector）</strong>和<strong>栅格（Raster）</strong>。下面我们用同一个"小镇地图"的场景，让你一眼看出它们的区别。</p>
 
-<div class="two-col">
+<!-- Side-by-side SVG comparison of the SAME scene -->
+<div class="vr-compare">
+  <div class="vr-col">
+    <div class="vr-label">矢量 (Vector) = 像画画</div>
+    <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg" class="vr-svg">
+      <rect width="300" height="220" fill="#0d1526"/>
+      <!-- 公园 (绿色多边形) -->
+      <polygon points="30,30 95,25 110,65 80,95 35,85" fill="#2d7d4a" stroke="#00e5b0" stroke-width="1.5" opacity="0.7"/>
+      <text x="55" y="62" fill="#fff" font-size="9" font-family="sans-serif">公园</text>
+      <!-- 湖泊 (蓝色多边形) -->
+      <polygon points="200,140 260,135 275,175 255,200 205,190" fill="#2563eb" stroke="#5b8def" stroke-width="1.5" opacity="0.7"/>
+      <text x="225" y="170" fill="#fff" font-size="9" font-family="sans-serif">湖泊</text>
+      <!-- 河流 (蓝色线) -->
+      <path d="M 10,110 Q 80,130 130,115 T 230,140 Q 260,150 290,145" fill="none" stroke="#5b8def" stroke-width="3" stroke-linecap="round"/>
+      <text x="100" y="108" fill="#5b8def" font-size="8" font-family="sans-serif">河流</text>
+      <!-- 道路 (白色线) -->
+      <path d="M 0,180 L 300,50" fill="none" stroke="#e4e8f1" stroke-width="2" stroke-dasharray="4,3"/>
+      <path d="M 150,0 L 150,220" fill="none" stroke="#e4e8f1" stroke-width="2" stroke-dasharray="4,3"/>
+      <!-- 建筑点 -->
+      <circle cx="170" cy="70" r="4" fill="#f7b731"/>
+      <circle cx="195" cy="95" r="4" fill="#f7b731"/>
+      <circle cx="145" cy="155" r="4" fill="#f7b731"/>
+      <circle cx="95" cy="170" r="4" fill="#f7b731"/>
+      <circle cx="55" cy="135" r="4" fill="#f7b731"/>
+      <text x="175" y="58" fill="#f7b731" font-size="8" font-family="sans-serif">建筑</text>
+      <!-- 顶点标注 (显示矢量的"顶点"概念) -->
+      <circle cx="30" cy="30" r="2.5" fill="#e056a0"/>
+      <circle cx="95" cy="25" r="2.5" fill="#e056a0"/>
+      <circle cx="110" cy="65" r="2.5" fill="#e056a0"/>
+      <circle cx="80" cy="95" r="2.5" fill="#e056a0"/>
+      <circle cx="35" cy="85" r="2.5" fill="#e056a0"/>
+    </svg>
+    <div class="vr-caption">
+      由 <span style="color:#f7b731">●点</span> + <span style="color:#5b8def">━线</span> + <span style="color:#2d7d4a">■面</span> 三种几何对象组成<br>
+      <span style="color:#e056a0">粉色小圆</span>是多边形的顶点坐标
+    </div>
+  </div>
+
+  <div class="vr-col">
+    <div class="vr-label">栅格 (Raster) = 拼马赛克</div>
+    <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg" class="vr-svg">
+      <rect width="300" height="220" fill="#0d1526"/>
+      <!-- 20x15 grid with colored cells - representing same scene but pixelated -->
+      <g id="raster-grid">
+        <!-- Row 1 -->
+        <rect x="0" y="0" width="20" height="20" fill="#2d5a38"/>
+        <rect x="20" y="0" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="40" y="0" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="60" y="0" width="20" height="20" fill="#4a8a55"/>
+        <rect x="80" y="0" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="100" y="0" width="20" height="20" fill="#2d5a38"/>
+        <rect x="120" y="0" width="20" height="20" fill="#6b7280"/>
+        <rect x="140" y="0" width="20" height="20" fill="#9ca3af"/>
+        <rect x="160" y="0" width="20" height="20" fill="#6b7280"/>
+        <rect x="180" y="0" width="20" height="20" fill="#d4a574"/>
+        <rect x="200" y="0" width="20" height="20" fill="#e0b080"/>
+        <rect x="220" y="0" width="20" height="20" fill="#d4a574"/>
+        <rect x="240" y="0" width="20" height="20" fill="#c89560"/>
+        <rect x="260" y="0" width="20" height="20" fill="#b88550"/>
+        <rect x="280" y="0" width="20" height="20" fill="#a87540"/>
+        <!-- Row 2 -->
+        <rect x="0" y="20" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="20" y="20" width="20" height="20" fill="#4a8a55"/>
+        <rect x="40" y="20" width="20" height="20" fill="#5a9a65"/>
+        <rect x="60" y="20" width="20" height="20" fill="#5a9a65"/>
+        <rect x="80" y="20" width="20" height="20" fill="#4a8a55"/>
+        <rect x="100" y="20" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="120" y="20" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="20" width="20" height="20" fill="#9ca3af"/>
+        <rect x="160" y="20" width="20" height="20" fill="#6b7280"/>
+        <rect x="180" y="20" width="20" height="20" fill="#d4a574"/>
+        <rect x="200" y="20" width="20" height="20" fill="#e0b080"/>
+        <rect x="220" y="20" width="20" height="20" fill="#e8b888"/>
+        <rect x="240" y="20" width="20" height="20" fill="#d4a574"/>
+        <rect x="260" y="20" width="20" height="20" fill="#c89560"/>
+        <rect x="280" y="20" width="20" height="20" fill="#b88550"/>
+        <!-- Row 3 -->
+        <rect x="0" y="40" width="20" height="20" fill="#4a8a55"/>
+        <rect x="20" y="40" width="20" height="20" fill="#5a9a65"/>
+        <rect x="40" y="40" width="20" height="20" fill="#6baa75"/>
+        <rect x="60" y="40" width="20" height="20" fill="#5a9a65"/>
+        <rect x="80" y="40" width="20" height="20" fill="#4a8a55"/>
+        <rect x="100" y="40" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="40" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="40" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="40" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="40" width="20" height="20" fill="#c89560"/>
+        <rect x="200" y="40" width="20" height="20" fill="#d4a574"/>
+        <rect x="220" y="40" width="20" height="20" fill="#e0b080"/>
+        <rect x="240" y="40" width="20" height="20" fill="#e8b888"/>
+        <rect x="260" y="40" width="20" height="20" fill="#d4a574"/>
+        <rect x="280" y="40" width="20" height="20" fill="#b88550"/>
+        <!-- Row 4 -->
+        <rect x="0" y="60" width="20" height="20" fill="#4a8a55"/>
+        <rect x="20" y="60" width="20" height="20" fill="#4a8a55"/>
+        <rect x="40" y="60" width="20" height="20" fill="#5a9a65"/>
+        <rect x="60" y="60" width="20" height="20" fill="#4a8a55"/>
+        <rect x="80" y="60" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="100" y="60" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="60" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="60" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="60" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="60" width="20" height="20" fill="#b88550"/>
+        <rect x="200" y="60" width="20" height="20" fill="#c89560"/>
+        <rect x="220" y="60" width="20" height="20" fill="#d4a574"/>
+        <rect x="240" y="60" width="20" height="20" fill="#c89560"/>
+        <rect x="260" y="60" width="20" height="20" fill="#a87540"/>
+        <rect x="280" y="60" width="20" height="20" fill="#8e5f30"/>
+        <!-- Row 5 -->
+        <rect x="0" y="80" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="20" y="80" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="40" y="80" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="60" y="80" width="20" height="20" fill="#2d5a38"/>
+        <rect x="80" y="80" width="20" height="20" fill="#3d7a4a"/>
+        <rect x="100" y="80" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="80" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="80" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="80" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="80" width="20" height="20" fill="#a87540"/>
+        <rect x="200" y="80" width="20" height="20" fill="#b88550"/>
+        <rect x="220" y="80" width="20" height="20" fill="#c89560"/>
+        <rect x="240" y="80" width="20" height="20" fill="#b88550"/>
+        <rect x="260" y="80" width="20" height="20" fill="#8e5f30"/>
+        <rect x="280" y="80" width="20" height="20" fill="#6e4520"/>
+        <!-- Row 6 -->
+        <rect x="0" y="100" width="20" height="20" fill="#2563eb"/>
+        <rect x="20" y="100" width="20" height="20" fill="#3b82f6"/>
+        <rect x="40" y="100" width="20" height="20" fill="#60a5fa"/>
+        <rect x="60" y="100" width="20" height="20" fill="#60a5fa"/>
+        <rect x="80" y="100" width="20" height="20" fill="#3b82f6"/>
+        <rect x="100" y="100" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="100" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="100" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="100" width="20" height="20" fill="#3b82f6"/>
+        <rect x="180" y="100" width="20" height="20" fill="#60a5fa"/>
+        <rect x="200" y="100" width="20" height="20" fill="#3b82f6"/>
+        <rect x="220" y="100" width="20" height="20" fill="#2563eb"/>
+        <rect x="240" y="100" width="20" height="20" fill="#3b82f6"/>
+        <rect x="260" y="100" width="20" height="20" fill="#6e4520"/>
+        <rect x="280" y="100" width="20" height="20" fill="#5e3510"/>
+        <!-- Row 7 -->
+        <rect x="0" y="120" width="20" height="20" fill="#d4a574"/>
+        <rect x="20" y="120" width="20" height="20" fill="#c89560"/>
+        <rect x="40" y="120" width="20" height="20" fill="#d4a574"/>
+        <rect x="60" y="120" width="20" height="20" fill="#e0b080"/>
+        <rect x="80" y="120" width="20" height="20" fill="#d4a574"/>
+        <rect x="100" y="120" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="120" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="120" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="120" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="120" width="20" height="20" fill="#2563eb"/>
+        <rect x="200" y="120" width="20" height="20" fill="#3b82f6"/>
+        <rect x="220" y="120" width="20" height="20" fill="#60a5fa"/>
+        <rect x="240" y="120" width="20" height="20" fill="#3b82f6"/>
+        <rect x="260" y="120" width="20" height="20" fill="#2563eb"/>
+        <rect x="280" y="120" width="20" height="20" fill="#1e40af"/>
+        <!-- Row 8 -->
+        <rect x="0" y="140" width="20" height="20" fill="#e0b080"/>
+        <rect x="20" y="140" width="20" height="20" fill="#d4a574"/>
+        <rect x="40" y="140" width="20" height="20" fill="#c89560"/>
+        <rect x="60" y="140" width="20" height="20" fill="#b88550"/>
+        <rect x="80" y="140" width="20" height="20" fill="#c89560"/>
+        <rect x="100" y="140" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="140" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="140" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="140" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="140" width="20" height="20" fill="#3b82f6"/>
+        <rect x="200" y="140" width="20" height="20" fill="#60a5fa"/>
+        <rect x="220" y="140" width="20" height="20" fill="#60a5fa"/>
+        <rect x="240" y="140" width="20" height="20" fill="#3b82f6"/>
+        <rect x="260" y="140" width="20" height="20" fill="#2563eb"/>
+        <rect x="280" y="140" width="20" height="20" fill="#1e40af"/>
+        <!-- Row 9 -->
+        <rect x="0" y="160" width="20" height="20" fill="#c89560"/>
+        <rect x="20" y="160" width="20" height="20" fill="#b88550"/>
+        <rect x="40" y="160" width="20" height="20" fill="#a87540"/>
+        <rect x="60" y="160" width="20" height="20" fill="#8e5f30"/>
+        <rect x="80" y="160" width="20" height="20" fill="#a87540"/>
+        <rect x="100" y="160" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="160" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="160" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="160" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="160" width="20" height="20" fill="#2563eb"/>
+        <rect x="200" y="160" width="20" height="20" fill="#3b82f6"/>
+        <rect x="220" y="160" width="20" height="20" fill="#3b82f6"/>
+        <rect x="240" y="160" width="20" height="20" fill="#2563eb"/>
+        <rect x="260" y="160" width="20" height="20" fill="#1e40af"/>
+        <rect x="280" y="160" width="20" height="20" fill="#0f2a6f"/>
+        <!-- Row 10 -->
+        <rect x="0" y="180" width="20" height="20" fill="#b88550"/>
+        <rect x="20" y="180" width="20" height="20" fill="#a87540"/>
+        <rect x="40" y="180" width="20" height="20" fill="#8e5f30"/>
+        <rect x="60" y="180" width="20" height="20" fill="#6e4520"/>
+        <rect x="80" y="180" width="20" height="20" fill="#8e5f30"/>
+        <rect x="100" y="180" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="180" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="180" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="180" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="180" width="20" height="20" fill="#1e40af"/>
+        <rect x="200" y="180" width="20" height="20" fill="#2563eb"/>
+        <rect x="220" y="180" width="20" height="20" fill="#1e40af"/>
+        <rect x="240" y="180" width="20" height="20" fill="#0f2a6f"/>
+        <rect x="260" y="180" width="20" height="20" fill="#0f2a6f"/>
+        <rect x="280" y="180" width="20" height="20" fill="#08194a"/>
+        <!-- Row 11 -->
+        <rect x="0" y="200" width="20" height="20" fill="#8e5f30"/>
+        <rect x="20" y="200" width="20" height="20" fill="#6e4520"/>
+        <rect x="40" y="200" width="20" height="20" fill="#5e3510"/>
+        <rect x="60" y="200" width="20" height="20" fill="#4e2500"/>
+        <rect x="80" y="200" width="20" height="20" fill="#6e4520"/>
+        <rect x="100" y="200" width="20" height="20" fill="#6b7280"/>
+        <rect x="120" y="200" width="20" height="20" fill="#9ca3af"/>
+        <rect x="140" y="200" width="20" height="20" fill="#e4e8f1"/>
+        <rect x="160" y="200" width="20" height="20" fill="#9ca3af"/>
+        <rect x="180" y="200" width="20" height="20" fill="#0f2a6f"/>
+        <rect x="200" y="200" width="20" height="20" fill="#1e40af"/>
+        <rect x="220" y="200" width="20" height="20" fill="#0f2a6f"/>
+        <rect x="240" y="200" width="20" height="20" fill="#08194a"/>
+        <rect x="260" y="200" width="20" height="20" fill="#08194a"/>
+        <rect x="280" y="200" width="20" height="20" fill="#000000"/>
+      </g>
+      <!-- Grid lines overlay -->
+      <g stroke="#080e1a" stroke-width="0.5" opacity="0.5">
+        <line x1="20" y1="0" x2="20" y2="220"/><line x1="40" y1="0" x2="40" y2="220"/>
+        <line x1="60" y1="0" x2="60" y2="220"/><line x1="80" y1="0" x2="80" y2="220"/>
+        <line x1="100" y1="0" x2="100" y2="220"/><line x1="120" y1="0" x2="120" y2="220"/>
+        <line x1="140" y1="0" x2="140" y2="220"/><line x1="160" y1="0" x2="160" y2="220"/>
+        <line x1="180" y1="0" x2="180" y2="220"/><line x1="200" y1="0" x2="200" y2="220"/>
+        <line x1="220" y1="0" x2="220" y2="220"/><line x1="240" y1="0" x2="240" y2="220"/>
+        <line x1="260" y1="0" x2="260" y2="220"/><line x1="280" y1="0" x2="280" y2="220"/>
+        <line x1="0" y1="20" x2="300" y2="20"/><line x1="0" y1="40" x2="300" y2="40"/>
+        <line x1="0" y1="60" x2="300" y2="60"/><line x1="0" y1="80" x2="300" y2="80"/>
+        <line x1="0" y1="100" x2="300" y2="100"/><line x1="0" y1="120" x2="300" y2="120"/>
+        <line x1="0" y1="140" x2="300" y2="140"/><line x1="0" y1="160" x2="300" y2="160"/>
+        <line x1="0" y1="180" x2="300" y2="180"/><line x1="0" y1="200" x2="300" y2="200"/>
+      </g>
+    </svg>
+    <div class="vr-caption">
+      由 15&times;11 = 165 个<strong>像元(pixel)</strong>组成<br>
+      每个格子存储一个颜色值（这里可以想象成卫星影像）
+    </div>
+  </div>
+</div>
+
+<!-- Real-world examples -->
+<div class="vr-examples">
+  <div class="vr-ex">
+    <div class="vr-ex-icon" style="background:rgba(0,229,176,.12);color:#00e5b0">V</div>
+    <h4>矢量数据的真实例子</h4>
+    <ul>
+      <li>📍 高德地图上的 <strong>POI 兴趣点</strong>（餐厅、地铁站、加油站）</li>
+      <li>🛣️ 导航 APP 里的 <strong>道路网络</strong>（可以算最短路径）</li>
+      <li>🏞️ 百度地图的 <strong>行政区划边界</strong>（北京市、朝阳区）</li>
+      <li>🏢 房产 APP 的 <strong>建筑物轮廓</strong></li>
+      <li>🚇 地铁线路图上的 <strong>线路和站点</strong></li>
+    </ul>
+  </div>
+  <div class="vr-ex">
+    <div class="vr-ex-icon" style="background:rgba(247,183,49,.12);color:#f7b731">R</div>
+    <h4>栅格数据的真实例子</h4>
+    <ul>
+      <li>🛰️ Google Earth 上的 <strong>卫星影像</strong>（每个像元记录颜色值）</li>
+      <li>🏔️ 地形图上的 <strong>DEM 数字高程</strong>（每个像元记录海拔）</li>
+      <li>🌡️ 天气 APP 的 <strong>温度/降雨分布图</strong></li>
+      <li>🌿 农田里的 <strong>NDVI 植被指数图</strong>（监测作物健康）</li>
+      <li>📷 无人机航拍的 <strong>正射影像</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Comparison with features -->
+<h3 style="margin-top:2rem">矢量 vs 栅格：一张表看懂区别</h3>
+<table>
+  <thead>
+    <tr><th>对比点</th><th>矢量（Vector）</th><th>栅格（Raster）</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>本质</td><td>用几何图形描述</td><td>用网格单元描述</td></tr>
+    <tr><td>组成</td><td>点、线、面 + 顶点坐标</td><td>一堆像元 + 每个像元的值</td></tr>
+    <tr><td>适合表达</td><td>边界清晰的对象（道路、建筑、行政区）</td><td>连续变化的现象（温度、海拔、影像）</td></tr>
+    <tr><td>放大效果</td><td>无限放大不失真 ✓</td><td>放大后出现锯齿/马赛克</td></tr>
+    <tr><td>文件大小</td><td>小（只存顶点坐标）</td><td>大（要存每个像元）</td></tr>
+    <tr><td>计算面积/距离</td><td>精确</td><td>近似（按格子数）</td></tr>
+    <tr><td>典型文件</td><td>Shapefile (.shp), GeoJSON</td><td>GeoTIFF (.tif), JPEG2000</td></tr>
+    <tr><td>典型应用</td><td>导航、行政边界、POI</td><td>卫星影像、DEM、气象数据</td></tr>
+  </tbody>
+</table>
+
+<div class="two-col" style="margin-top:1.5rem">
   <div>
-    <h3>矢量数据 = 画画</h3>
-    <p>想象你用铅笔在纸上画一张地图：先画一条弯曲的线表示河流，再画几个方块表示建筑，然后画一个多边形表示公园的边界。每一个要素都是一个<strong>明确的几何对象</strong>，有精确的顶点坐标。这就是矢量数据。</p>
-    <p>矢量有三种基本类型：<strong>点（Point）</strong>用来表示加油站、地铁站；<strong>线（Line）</strong>用来表示道路、河流；<strong>面（Polygon）</strong>用来表示行政区、湖泊。</p>
-    <p>优点是精度高、文件小、可以无限放大不失真；缺点是不适合表达连续变化的现象（比如气温、海拔）。</p>
-    <p>→ 想深入了解？看 <a href="vector-data.html">矢量数据专题</a></p>
+    <h3>矢量数据 = 像画画</h3>
+    <p>想象你用铅笔在纸上画一张地图：先画一条弯曲的线表示河流，再用一个多边形框出公园。每一个对象都是<strong>明确的几何图形</strong>，有精确的顶点坐标。</p>
+    <p>矢量有三种基本类型：<strong>点（Point）</strong>表示加油站、地铁站；<strong>线（Line）</strong>表示道路、河流；<strong>面（Polygon）</strong>表示行政区、湖泊。</p>
+    <p>👉 想深入了解原理、拓扑、格式？看 <a href="vector-data.html"><strong>矢量数据专题 →</strong></a></p>
   </div>
   <div>
     <h3>栅格数据 = 拼马赛克</h3>
-    <p>现在换一种画法：你找来一堆大小相同的方格子，每个格子染上不同的颜色，从远处看就拼出了一张图。这就是栅格数据的思路 —— 用一个二维网格（grid），每个格子（pixel/cell）存储一个数值。</p>
-    <p>卫星影像、航拍照片、数字高程模型（DEM）、温度场、降雨量分布，几乎所有"连续变化的现象"都适合用栅格存储。</p>
-    <p>优点是表达力强、能描述任何连续量；缺点是文件巨大、几何精度受格子大小限制。</p>
-    <p>→ 想深入了解？看 <a href="raster-data.html">栅格数据专题</a></p>
+    <p>现在换一种画法：找来一堆大小相同的方格子，每个格子染上颜色，从远处看就拼出了一张图。这就是栅格的思路——用一个<strong>二维网格</strong>，每个格子（pixel/cell）存储一个数值。</p>
+    <p>卫星影像、无人机照片、数字高程、温度场、降雨分布……几乎所有"连续变化的现象"都适合用栅格存储。</p>
+    <p>👉 想深入了解分辨率、DEM、地图代数？看 <a href="raster-data.html"><strong>栅格数据专题 →</strong></a></p>
   </div>
 </div>
 
 <div class="warn">
-  <h4>小贴士</h4>
-  <p>在真实项目里，矢量和栅格几乎永远是搭配使用的。举个例子：用栅格存卫星影像当底图，再用矢量叠加道路和行政边界 —— 这也是你在导航 APP 里看到的"卫星图+道路线"模式。</p>
+  <h4>💡 小贴士：真实项目里两者配合使用</h4>
+  <p>在真实项目里，矢量和栅格几乎永远是<strong>搭配使用</strong>的。举个例子：用栅格存卫星影像当底图，再用矢量叠加道路、行政边界、POI——这就是你在导航 APP 里看到的"卫星图 + 道路线"模式。就像画画时既要有<strong>水彩背景</strong>（栅格），又要有<strong>钢笔勾线</strong>（矢量）。</p>
 </div>
 
 <h2>GIS 的五大"超能力"</h2>
